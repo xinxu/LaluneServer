@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Session">
+      <UniqueIdentifier>{dbe4a887-f032-4398-b603-09e644960e22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server">
+      <UniqueIdentifier>{e073744b-3691-464c-9a91-8091711164f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client">
+      <UniqueIdentifier>{a95cfe63-956d-4b29-bf7d-273ac42c6cef}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NetLib_Connected_TcpSession.h">
+      <Filter>Session</Filter>
+    </ClInclude>
+    <ClInclude Include="NetLib_Client_Imp.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="NetLib_Server_Imp.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="NetLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetLib_Server_Connected_TcpSession.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="NetLib_Packet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetLib_ServerSession_Imp.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="NetLib_Session_Owner.h">
+      <Filter>Session</Filter>
+    </ClInclude>
+    <ClInclude Include="NetLib_Error.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetLib_Params.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ioservice_thread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetLibPlus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetLibPlusClient.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="NetLib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetLib_Connected_TcpSession.cpp">
+      <Filter>Session</Filter>
+    </ClCompile>
+    <ClCompile Include="NetLib_Client_Imp.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="NetLib_Server_Imp.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="NetLib_ServerSession_Imp.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="NetLib_Params.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetLibPlusClient.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="NetLibPlus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
