@@ -12,6 +12,23 @@
 class MySessionDelegate : public NetLib_ServerSession_Delegate
 {	
 public:	
+	void ConnectedHandler(NetLib_ServerSession_ptr sessionptr)
+	{
+		{
+			char data[6];
+			*(int32_t*)data = 6;
+			memset(data + 4, 'A', 2);
+			sessionptr->SendCopyAsync(data);
+		}
+	
+		{
+			char data[7];
+			*(int32_t*)data = 7;
+			memset(data + 4, 'A', 3);
+			sessionptr->SendCopyAsync(data);
+		}
+	}
+
 	//RecvFinishHandler一旦返回，data的内容就会被释放
 	void RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data)
 	{
@@ -20,19 +37,39 @@ public:
 		sessionptr->GetRemoteAddress(ip, port);
 		LOGEVENTL("address", log_::n("ip") << ip << log_::n("port") << port);
 		int len = *(int32_t*)data;
-		std::string s(data + 4, len - 4);
+	/*	std::string s(data + 4, len - 4);
 		for (int i = 0; i < s.size(); ++i) s[i] += 48;
 		LOGEVENTL("info", log_::n("len") << len << log_::n("content") << s);
+		*/
+		LOGEVENTL("info", log_::n("len") << len);
 
-		char* reply_data = new char[20];
-		memset(reply_data, 0, sizeof(reply_data));
+		//send the data back to the client
+		sessionptr->SendCopyAsync(data);
 
-		*(int*)reply_data = 20;
-		*(reply_data + 4) = 'A';
-		*(reply_data + 5) = 'B';
-		*(reply_data + 6) = 'C';
+		if (*(int32_t*)data > 4)
+		{
+			(*(int32_t*)data)--;
 
-		sessionptr->SendCopyAsync(reply_data);
+			//modified, and send the data back to the client
+			sessionptr->SendCopyAsync(data);
+		}
+	}
+
+	bool SendCopyFailedHandler(NetLib_ServerSession_ptr clientptr, const char* data_copy, void* pHint) 
+	{ 
+		LOGEVENTL("sendfail", "");
+		return true; 
+	}
+
+	virtual void DisconnectedHandler(NetLib_ServerSession_ptr sessionptr, NetLib_Error error, int inner_error_code)
+	{
+		LOGEVENTL("Connected", "someone disconnected.");
+		
+		std::string remote_ip;
+		uint16_t remote_port;
+		sessionptr->GetRemoteAddress(remote_ip, remote_port);
+		LOGEVENTL("Disconnected", log_::n("RemoteIP") << remote_ip << log_::n("RemotePort") << remote_port
+			<< log_::n("error") << error << log_::n("inner_error") << inner_error_code);
 	}
 };
 
@@ -70,7 +107,7 @@ int main(int argc, char* argv[])
 	NetLib_Server_ptr server = NetLib_NewServer<MySessionDelegate>();
 	timer = new boost::asio::deadline_timer(*server->GetWorkIoService());
 
-	if (!server->StartTCP(23, 1, 300)) //端口，线程数，超时时间
+	if (!server->StartTCP(2345, 1, 300)) //端口，线程数，超时时间
 	{
 		LOGEVENTL("Error", "Server Start Failed !");
 	}

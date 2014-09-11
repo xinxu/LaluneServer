@@ -13,7 +13,7 @@ public:
 	//RecvFinishHandler一旦返回，data的内容就会被释放
 	void RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data)
 	{
-		switch (
+		//switch (
 	}
 };
 
