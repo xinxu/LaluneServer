@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\const_time.h" />
+    <ClInclude Include="..\include\SimpleIni.h" />
     <ClInclude Include="..\protobuf\log\log.pb.h" />
     <ClInclude Include="BasicLogStream.h" />
     <ClInclude Include="CmdDefine.h" />

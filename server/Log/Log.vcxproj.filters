@@ -19,6 +19,9 @@
     <Filter Include="Query">
       <UniqueIdentifier>{6388c77a-73c0-434e-9bbe-a895b5934d5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rdparty">
+      <UniqueIdentifier>{b8e4ebd0-5edf-4347-9833-90e71c70050f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SemanticStream.h">
@@ -86,6 +89,9 @@
     </ClInclude>
     <ClInclude Include="..\protobuf\log\log.pb.h">
       <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleIni.h">
+      <Filter>3rdparty</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
