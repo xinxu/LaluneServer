@@ -1,0 +1,71 @@
+package kit.log;
+
+message LexicalEntry
+{
+	optional string entry_name	= 2;
+	required int32 value_type = 1;
+	optional uint64 u	= 3;
+	optional sint64 i	= 4;
+	optional string s	= 5;
+	optional bytes b	= 6;
+	optional double d	= 7;
+}
+
+message LogDetail
+{
+	repeated LexicalEntry entry		= 1;
+}
+
+message LogEvent
+{
+	optional string index1		= 4; //如果不带这两个字段(的某一个)，则用Login时带的默认值；
+	optional string index2		= 5; //QueryResult这两个参数肯定会带
+	required string index3		= 1;
+	required uint64 time		= 2;
+	required bytes data			= 3;
+}
+
+message Login
+{
+	optional string index1		= 1;
+	optional string	index2		= 2;
+	optional string username	= 3;
+	optional string password	= 4;
+}
+
+message LogOption
+{
+	required string index3		= 1;
+	required uint32 log_level	= 2;
+	required uint32 count_interval	= 3;
+	required uint32 enable_detail	= 4;
+}
+
+message LogOptions
+{
+	optional uint32 log_level		= 2;
+	optional uint32 count_interval	= 3;
+	optional uint32 enable_detail	= 4;
+	repeated LogOption log_option	= 1;
+}
+
+message Query
+{
+	required string index1		= 1;
+	optional string index2		= 2; //是否has_index2()不影响语义。由CmdID决定查询的类型
+	optional string index3		= 3; //index3到底当完整的字符串用还是当prefix来用，由CmdID来决定
+	optional uint64 begin_time	= 7;
+	optional uint64 end_time	= 8;
+	optional int32	no_sort		= 4;
+	optional string condition_clause	= 5;
+	optional int32	is_count	= 6;
+	optional int32	limit_a		= 9;
+	optional int32	limit_b		= 10; //limit_a, limit_b，只有a，则是top n；只有b，则是last n；a、b都有，则是limit a,b。尚未实现
+	optional string username	= 11;
+	optional string password	= 12; //主要用于来自Web的请求，通常每次都带密码
+}
+
+message QueryResult
+{
+	repeated LogEvent log_event		= 1;
+}
