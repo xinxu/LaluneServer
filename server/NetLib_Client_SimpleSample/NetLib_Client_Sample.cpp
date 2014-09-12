@@ -186,7 +186,7 @@ int main(int argc, char* argv[])
 		}
 	}
 	
-	google::protobuf::ShutdownProtobufLibrary(); 
+	google_lalune::protobuf::ShutdownProtobufLibrary(); 
 
 	return 0;
 }

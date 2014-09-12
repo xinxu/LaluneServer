@@ -2,7 +2,7 @@
 #include <boost/thread/locks.hpp>
 #include "to_LS_ClientDelegate.h"
 #include "LogQuery.h"
-#include "../protobuf/src-gen/cpp/log/log.pb.h"
+#include "../protobuf/log/log.pb.h"
 #include "HeaderDefine.h"
 #include <map>
 #include <set>

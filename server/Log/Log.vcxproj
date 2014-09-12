@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\const_time.h" />
-    <ClInclude Include="..\protobuf\src-gen\cpp\log\log.pb.h" />
+    <ClInclude Include="..\protobuf\log\log.pb.h" />
     <ClInclude Include="BasicLogStream.h" />
     <ClInclude Include="CmdDefine.h" />
     <ClInclude Include="Counter.h" />
@@ -43,7 +43,7 @@
     <ClInclude Include="to_LS_ClientDelegate.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\protobuf\src-gen\cpp\log\log.pb.cc" />
+    <ClCompile Include="..\protobuf\log\log.pb.cc" />
     <ClCompile Include="BasicLogStream.cpp" />
     <ClCompile Include="Counter.cpp" />
     <ClCompile Include="Log.cpp" />
@@ -145,7 +145,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=0x0501;_STATIC_NETLIB_;_LIB;_NOT_LINK_NETLIB_LIB_;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)../include/;$(ProjectDir)../;../protobuf/;$(ProjectDir)..\..\3rdparty\protobuf\src\;$(ProjectDir)..\protobuf\src-gen\cpp\;..\..\3rdparty\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../include/;$(ProjectDir)../;../protobuf/;$(ProjectDir)..\..\..\LaluneCommon\3rdparty\protobuf\src\;$(ProjectDir)..\protobuf\src-gen\cpp\;..\..\3rdparty\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -160,7 +160,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=0x0501;_STATIC_NETLIB_;_LIB;_NOT_LINK_NETLIB_LIB_;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)../include/;$(ProjectDir)../;../protobuf/;$(ProjectDir)..\..\3rdparty\protobuf\src\;$(ProjectDir)..\protobuf\src-gen\cpp\;..\..\3rdparty\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../include/;$(ProjectDir)../;../protobuf/;$(ProjectDir)..\..\..\LaluneCommon\3rdparty\protobuf\src\;$(ProjectDir)..\protobuf\src-gen\cpp\;..\..\3rdparty\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -177,7 +177,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=0x0501;_STATIC_NETLIB_;_LIB;_NOT_LINK_NETLIB_LIB_;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)../include/;$(ProjectDir)../;../protobuf/;$(ProjectDir)..\..\3rdparty\protobuf\src\;$(ProjectDir)..\protobuf\src-gen\cpp\;..\..\3rdparty\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../include/;$(ProjectDir)../;../protobuf/;$(ProjectDir)..\..\..\LaluneCommon\3rdparty\protobuf\src\;$(ProjectDir)..\protobuf\src-gen\cpp\;..\..\3rdparty\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -196,7 +196,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=0x0501;_STATIC_NETLIB_;_LIB;_NOT_LINK_NETLIB_LIB_;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)../include/;$(ProjectDir)../;../protobuf/;$(ProjectDir)..\..\3rdparty\protobuf\src\;$(ProjectDir)..\protobuf\src-gen\cpp\;..\..\3rdparty\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../include/;$(ProjectDir)../;../protobuf/;$(ProjectDir)..\..\..\LaluneCommon\3rdparty\protobuf\src\;$(ProjectDir)..\protobuf\src-gen\cpp\;..\..\3rdparty\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>

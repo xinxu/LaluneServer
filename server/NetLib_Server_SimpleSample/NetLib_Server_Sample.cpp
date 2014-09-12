@@ -166,7 +166,7 @@ int main(int argc, char* argv[])
 
 	LogUnInitialize();
 	
-	google::protobuf::ShutdownProtobufLibrary(); 
+	google_lalune::protobuf::ShutdownProtobufLibrary(); 
 
 	return 0;
 }

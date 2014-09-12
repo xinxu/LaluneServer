@@ -14,7 +14,7 @@
 #include "to_LS_ClientDelegate.h"
 #include "Counter.h"
 #include "ToAbsolutePath.h"
-#include "../protobuf/src-gen/cpp/log/log.pb.h"
+#include "../protobuf/log/log.pb.h"
 #include "HeaderDefine.h"
 #include "Log.h"
 
@@ -161,7 +161,7 @@ void SendLoginToLS()
 	CMD_CAT(send_buf)			= CAT_LOGSVR;				// 命令分类
 	CMD_ID(send_buf)			= ID_LOGSVR_LOGIN;
 
-	pb.SerializeWithCachedSizesToArray((google::protobuf::uint8*)CMDEX0_DATA(send_buf));
+	pb.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)CMDEX0_DATA(send_buf));
 
 	//TODO: 应该给所有ls发
 	std::shared_ptr<NetLibPlus_Client> client = NetLibPlus_get_first_Client(__LS_ServerTypeName.c_str()); //LogOptions只对写Log有效，所以不用对ServerTypeForQuery发

@@ -7,7 +7,7 @@
 #include <map>
 #include "LexicalEntryValueType.h"
 #include <sstream>
-#include "../protobuf/src-gen/cpp/log/log.pb.h"
+#include "../protobuf/log/log.pb.h"
 #include "LexicalEntry.h"
 
 class LogDataReader

@@ -266,7 +266,7 @@ int main(int argc, char* argv[])
 
 	LogUnInitialize();
 	
-	google::protobuf::ShutdownProtobufLibrary(); 
+	google_lalune::protobuf::ShutdownProtobufLibrary(); 
 
 #ifndef _STATIC_NETLIB_
 	NetLib_Shutdown();

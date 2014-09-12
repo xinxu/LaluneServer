@@ -2,7 +2,7 @@
 #include <boost/thread/locks.hpp>
 #include <boost/asio/placeholders.hpp>
 #include "ptime2.h"
-#include "../protobuf/src-gen/cpp/log/log.pb.h"
+#include "../protobuf/log/log.pb.h"
 #ifndef _LOG_DLL_
 #include "NetLib/NetLib.h"
 #endif
@@ -89,7 +89,7 @@ void BasicLogStream::LogToNet(const std::string& index3, const std::string& inde
 	CMD_CAT(send_buf)			= CAT_LOGSVR;				// 命令分类
 	CMD_ID(send_buf)			= ID_LOGSVR_LOG;
 
-	pb.SerializeWithCachedSizesToArray((google::protobuf::uint8*)CMDEX0_DATA(send_buf));
+	pb.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)CMDEX0_DATA(send_buf));
 
 	//TODO: 改成1000条换一次之类的
 	std::shared_ptr<NetLibPlus_Client> c = NetLibPlus_get_first_Client(__LS_ServerTypeName.c_str());

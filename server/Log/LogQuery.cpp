@@ -1,6 +1,6 @@
 #ifndef _LOG_DLL_
 
-#include "../protobuf/src-gen/cpp/log/log.pb.h"
+#include "../protobuf/log/log.pb.h"
 #include "ptime2.h"
 #include "NetLib/NetLib.h"
 #include "HeaderDefine.h"
@@ -133,7 +133,7 @@ void SendQuery(std::shared_ptr<ResultHandler> rh, uint16_t CmdID, const kit::log
 		result_handlers[tid] = rh;
 	}
 
-	pb.SerializeWithCachedSizesToArray((google::protobuf::uint8*)CMDEX0_DATA(send_buf));
+	pb.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)CMDEX0_DATA(send_buf));
 	
 	std::shared_ptr<NetLibPlus_Client> ls_client = NetLibPlus_get_first_Client(__LS_ServerTypeNameForQuery.c_str());
 
