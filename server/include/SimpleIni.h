@@ -4,8 +4,8 @@
         <tr><th>Library     <td>SimpleIni
         <tr><th>File        <td>SimpleIni.h
         <tr><th>Author      <td>Brodie Thiesfield [code at jellycan dot com]
-        <tr><th>Source      <td>http://code.jellycan.com/simpleini/
-        <tr><th>Version     <td>4.15
+        <tr><th>Source      <td>https://github.com/brofield/simpleini
+        <tr><th>Version     <td>4.17
     </table>
 
     Jump to the @link CSimpleIniTempl CSimpleIni @endlink interface documentation.
@@ -293,6 +293,8 @@ template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 class CSimpleIniTempl
 {
 public:
+    typedef SI_CHAR SI_CHAR_T;
+
     /** key entry */
     struct Entry {
         const SI_CHAR * pItem;
@@ -421,7 +423,7 @@ public:
             return *this;
         }
         bool ConvertToStore(const SI_CHAR * a_pszString) {
-            size_t uLen = SizeToStore(a_pszString);
+            size_t uLen = SI_CONVERTER::SizeToStore(a_pszString);
             if (uLen == (size_t)(-1)) {
                 return false;
             }
@@ -1354,10 +1356,15 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadFile(
     if (lSize == 0) {
         return SI_OK;
     }
-    char * pData = new char[lSize];
+    
+    // allocate and ensure NULL terminated
+    char * pData = new char[lSize+1];
     if (!pData) {
         return SI_NOMEM;
     }
+    pData[lSize] = 0;
+    
+    // load data into buffer
     fseek(a_fpFile, 0, SEEK_SET);
     size_t uRead = fread(pData, sizeof(char), lSize, a_fpFile);
     if (uRead != (size_t) lSize) {
@@ -2830,9 +2837,16 @@ public:
             // the source text.
             return a_uInputDataLen;
         }
-        else {
-            return mbstowcs(NULL, a_pInputData, a_uInputDataLen);
-        }
+
+#if defined(SI_NO_MBSTOWCS_NULL) || (!defined(_MSC_VER) && !defined(_linux))
+        // fall back processing for platforms that don't support a NULL dest to mbstowcs
+        // worst case scenario is 1:1, this will be a sufficient buffer size
+        (void)a_pInputData;
+        return a_uInputDataLen;
+#else
+        // get the actual required buffer size
+        return mbstowcs(NULL, a_pInputData, a_uInputDataLen);
+#endif
     }
 
     /** Convert the input string from the storage format to SI_CHAR.
@@ -2878,11 +2892,11 @@ public:
             }
             return retval == conversionOK;
         }
-        else {
-            size_t retval = mbstowcs(a_pOutputData,
-                a_pInputData, a_uOutputDataSize);
-            return retval != (size_t)(-1);
-        }
+
+        // convert to wchar_t
+        size_t retval = mbstowcs(a_pOutputData,
+            a_pInputData, a_uOutputDataSize);
+        return retval != (size_t)(-1);
     }
 
     /** Calculate the number of char required by the storage format of this
