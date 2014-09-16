@@ -2785,6 +2785,10 @@ public:
 // ---------------------------------------------------------------------------
 //                              SI_CONVERT_GENERIC
 // ---------------------------------------------------------------------------
+
+
+#include "ConvertUTF.h"
+
 #ifdef SI_CONVERT_GENERIC
 
 #define SI_Case     SI_GenericCase
