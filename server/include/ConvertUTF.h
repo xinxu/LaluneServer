@@ -131,7 +131,7 @@ ConversionResult ConvertUTF8toUTF16 (
   const UTF8** sourceStart, const UTF8* sourceEnd,
   UTF16** targetStart, UTF16* targetEnd, ConversionFlags flags);
 
-#ifdef CLANG_NEEDS_THESE_ONE_DAY
+//#ifdef CLANG_NEEDS_THESE_ONE_DAY
 ConversionResult ConvertUTF16toUTF8 (
   const UTF16** sourceStart, const UTF16* sourceEnd,
   UTF8** targetStart, UTF8* targetEnd, ConversionFlags flags);
@@ -151,7 +151,7 @@ ConversionResult ConvertUTF16toUTF32 (
 ConversionResult ConvertUTF32toUTF16 (
   const UTF32** sourceStart, const UTF32* sourceEnd,
   UTF16** targetStart, UTF16* targetEnd, ConversionFlags flags);
-#endif
+//#endif
 
 Boolean isLegalUTF8Sequence(const UTF8 *source, const UTF8 *sourceEnd);
 
