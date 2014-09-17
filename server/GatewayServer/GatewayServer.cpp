@@ -5,14 +5,22 @@
 #include "memory.h"
 #include "string.h"
 #include <google/protobuf/stubs/common.h>
+#include "../../LaluneCommon/include/Header.h"
 
 //实现一个SessionDelegate,至少要实现RecvFinishHandler
 class MySessionDelegate : public NetLib_ServerSession_Delegate
 {	
 public:	
+	void ConnectedHandler(NetLib_ServerSession_ptr sessionptr)
+	{
+
+	}
+
 	//RecvFinishHandler一旦返回，data的内容就会被释放
 	void RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data)
 	{
+		uint32_t len = MSG_LENGTH(data);
+
 		//switch (
 	}
 };
