@@ -1,6 +1,5 @@
 #include "NetLibPlusClient.h"
 #include "../include/ioservice_thread.h"
-#include <boost/thread/locks.hpp>
 #include "Log/Log.h"
 
 //暂不开启，否则打Log的时候太烦了
@@ -39,7 +38,6 @@ NetLibPlus_Client_Imp::~NetLibPlus_Client_Imp()
 
 void NetLibPlus_Client_Imp::ResetClient(const char* ip, uint16_t tcp_port, ioservice_thread* ioservice_th, uint64_t flags)
 {	
-	boost::lock_guard<boost::shared_mutex> lock_guard(client_mutex);
 	if (m_client)
 	{
 		m_client->Disconnect();
@@ -57,7 +55,6 @@ void NetLibPlus_Client_Imp::ResetClient(const char* ip, uint16_t tcp_port, ioser
 
 void NetLibPlus_Client_Imp::ReleaseClient()
 {
-	boost::lock_guard<boost::shared_mutex> lock_guard(client_mutex);
 	if (m_client)
 	{
 		m_client->Disconnect();
@@ -98,8 +95,6 @@ void NetLibPlus_Client_Imp::RecvFinishHandler(NetLib_Client_ptr clientptr, char*
 
 void NetLibPlus_Client_Imp::ResendFailedData()
 {
-	boost::lock_guard<boost::mutex> lock_guard(queue_mutex);
-
 	if (! failed_data_queue.empty())
 	{
 		std::string ip;
@@ -173,7 +168,6 @@ void NetLibPlus_Client_Imp::add_failed_data(const char* data, bool is_copy, void
 
 	LOGEVENTL("NetLib_Trace", "Client(to " << GetRemoteServerID() << ", " << IP << ":" << port << "): Add failed data to queue, will resend as connected");
 #endif
-	boost::lock_guard<boost::mutex> lock_guard(queue_mutex);
 	failed_data_queue.push(netlib_packet(data, is_copy, pHint));
 }
 
@@ -230,7 +224,6 @@ void NetLibPlus_Client_Imp::SendAsync(const char* data, void* pHint)
 	}
 #endif
 
-	boost::shared_lock<boost::shared_mutex> lock(client_mutex);
 	if (m_client)
 	{
 		if (pHint)
@@ -273,8 +266,6 @@ void NetLibPlus_Client_Imp::SendCopyAsync(const char* data)
 
 void NetLibPlus_Client_Imp::SendTheCopyAsync(const char* data_copy)
 {
-	boost::shared_lock<boost::shared_mutex> lock(client_mutex);
-
 	if (m_client)
 	{
 		m_client->SendAsync(data_copy, new std::pair<int, void*>(1, nullptr));
@@ -292,7 +283,6 @@ int NetLibPlus_Client_Imp::GetRemoteServerID() const
 
 void NetLibPlus_Client_Imp::GetRemoteServerAddress(std::string& IP, int& port)
 {	
-	boost::shared_lock<boost::shared_mutex> lock(client_mutex);
 	IP = m_RemoteServerIP;
 	port = m_RemoteServerPort;
 }

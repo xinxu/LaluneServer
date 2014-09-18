@@ -53,12 +53,6 @@
     <ClInclude Include="..\include\ioservice_thread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NetLibPlus.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NetLibPlusClient.h">
-      <Filter>Client</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -80,12 +74,6 @@
       <Filter>Server</Filter>
     </ClCompile>
     <ClCompile Include="NetLib_Params.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetLibPlusClient.cpp">
-      <Filter>Client</Filter>
-    </ClCompile>
-    <ClCompile Include="NetLibPlus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

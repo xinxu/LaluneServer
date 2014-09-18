@@ -18,7 +18,7 @@
 #define SERVER_MSG_HEADER_EX(d) (*(uint16_t*)((d) + SERVER_MSG_HEADER_BASE_SIZE))
 #define SERVER_MSG_DATA(d) (*(uint16_t*)((d) + SERVER_MSG_HEADER_BASE_SIZE + MSG_HEADER_EX_LEN(d)))
 
-#include "../protobuf/commonlib/HeaderEx.pb.h"
+#include "commonlib/HeaderEx.pb.h"
 
 class CommonLibDelegate
 {
@@ -64,6 +64,7 @@ bool SendMsg(uint32_t server_id, uint32_t msg_type, uint64_t related_user_id, ui
 	{
 		delete[] send_buf;
 	}
+	return true;
 }
 
 template<typename P>
@@ -98,23 +99,26 @@ bool SendMsg(uint32_t msg_type, uint64_t related_user_id, uint32_t op_id, P prot
 	{
 		delete[] send_buf;
 	}
+	return true;
 }
 
 template<typename P>
 bool SendMsg(uint32_t msg_type, P proto)
 {
 
+	return true;
 }
 
 bool SendMsg(uint32_t msg_type, uint32_t op_id, uint8_t error_code)
 {
 
+	return true;
 }
 
 template<typename P>
 bool SendMsg(uint32_t msg_type, uint32_t op_id, uint8_t error_code, P proto)
 {
-
+	return true;
 }
 
 

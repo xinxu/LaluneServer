@@ -280,8 +280,6 @@ class NetLib_ServerSession_Interface Thread Safety:
 	Shared objects:	  Safe.
 */
 
-#include "NetLibPlus.h"
-
 NETLIB_API bool NetLib_CheckVersion(const char* version);
 
 #define NETLIB_CHECK_VERSION NetLib_CheckVersion(_NETLIB_VERSION_)

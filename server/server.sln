@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GatewayServer", "GatewaySer
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServerCommonLib", "ServerCommonLib\ServerCommonLib.vcxproj", "{9F15547D-8152-4790-8519-8F12725CACF3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ControlServer", "ControlServer\ControlServer.vcxproj", "{89D45F9A-5F1B-4A2B-B500-49669A9E6808}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -69,6 +71,18 @@ Global
 		{9F15547D-8152-4790-8519-8F12725CACF3}.ReleaseLib|Win32.Build.0 = Release|Win32
 		{9F15547D-8152-4790-8519-8F12725CACF3}.ReleaseLibMT|Win32.ActiveCfg = Release|Win32
 		{9F15547D-8152-4790-8519-8F12725CACF3}.ReleaseLibMT|Win32.Build.0 = Release|Win32
+		{89D45F9A-5F1B-4A2B-B500-49669A9E6808}.Debug|Win32.ActiveCfg = Debug|Win32
+		{89D45F9A-5F1B-4A2B-B500-49669A9E6808}.Debug|Win32.Build.0 = Debug|Win32
+		{89D45F9A-5F1B-4A2B-B500-49669A9E6808}.DebugLib|Win32.ActiveCfg = Debug|Win32
+		{89D45F9A-5F1B-4A2B-B500-49669A9E6808}.DebugLib|Win32.Build.0 = Debug|Win32
+		{89D45F9A-5F1B-4A2B-B500-49669A9E6808}.DebugLibMT|Win32.ActiveCfg = Debug|Win32
+		{89D45F9A-5F1B-4A2B-B500-49669A9E6808}.DebugLibMT|Win32.Build.0 = Debug|Win32
+		{89D45F9A-5F1B-4A2B-B500-49669A9E6808}.Release|Win32.ActiveCfg = Release|Win32
+		{89D45F9A-5F1B-4A2B-B500-49669A9E6808}.Release|Win32.Build.0 = Release|Win32
+		{89D45F9A-5F1B-4A2B-B500-49669A9E6808}.ReleaseLib|Win32.ActiveCfg = Release|Win32
+		{89D45F9A-5F1B-4A2B-B500-49669A9E6808}.ReleaseLib|Win32.Build.0 = Release|Win32
+		{89D45F9A-5F1B-4A2B-B500-49669A9E6808}.ReleaseLibMT|Win32.ActiveCfg = Release|Win32
+		{89D45F9A-5F1B-4A2B-B500-49669A9E6808}.ReleaseLibMT|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -27,6 +27,12 @@
     <ClInclude Include="..\protobuf\commonlib\HeaderEx.pb.h">
       <Filter>protobuf</Filter>
     </ClInclude>
+    <ClInclude Include="NetLibPlus.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetLibPlusClient.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ServerCommon.cpp">
@@ -34,6 +40,12 @@
     </ClCompile>
     <ClCompile Include="..\protobuf\commonlib\HeaderEx.pb.cc">
       <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="NetLibPlus.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetLibPlusClient.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

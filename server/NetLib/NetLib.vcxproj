@@ -176,8 +176,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\ioservice_thread.h" />
-    <ClInclude Include="NetLibPlus.h" />
-    <ClInclude Include="NetLibPlusClient.h" />
     <ClInclude Include="NetLib.h" />
     <ClInclude Include="NetLib_Client_Imp.h" />
     <ClInclude Include="NetLib_Connected_TcpSession.h" />
@@ -192,8 +190,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NetLib.cpp" />
-    <ClCompile Include="NetLibPlus.cpp" />
-    <ClCompile Include="NetLibPlusClient.cpp" />
     <ClCompile Include="NetLib_Client_Imp.cpp" />
     <ClCompile Include="NetLib_Connected_TcpSession.cpp" />
     <ClCompile Include="NetLib_Params.cpp" />

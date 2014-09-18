@@ -1,8 +1,6 @@
 #include "NetLib.h"
 #include "NetLibPlus.h"
 #include <queue>
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/shared_mutex.hpp>
 #include "NetLib/NetLib_Packet.h"
 
 class NetLibPlus_Client_Imp : public NetLibPlus_Client, public NetLib_Client_Delegate, public std::enable_shared_from_this<NetLibPlus_Client_Imp>
@@ -14,8 +12,6 @@ private:
 	int m_RemoteServerPort;
 	NetLib_Client_ptr m_client;
 	std::queue< netlib_packet > failed_data_queue;
-	boost::shared_mutex client_mutex; //保护m_client不在使用中被释放
-	boost::mutex queue_mutex; //保护queue
 
 	void SendFinishHandler(NetLib_Client_ptr clientptr, char* data, void* pHint);
 	void RecvFinishHandler(NetLib_Client_ptr clientptr, char* data);
