@@ -9,23 +9,6 @@
 
 #define _NETLIB_VERSION_ "1_02"
 
-#ifdef _DYNAMIC_NETLIB_
-
-#ifdef NETLIB_EXPORTS
-#define NETLIB_API __declspec(dllexport)
-#else
-#define NETLIB_API __declspec(dllimport)
-#endif
-
-#else
-//static
-
-#ifndef _STATIC_NETLIB_
-#define _STATIC_NETLIB_
-#endif
-
-#define NETLIB_API
-
 #ifndef _NOT_LINK_NETLIB_LIB_
 #ifdef _DEBUG
 #define _NETLIB_LIBNAME_ "NetLibd"
@@ -34,7 +17,6 @@
 #endif
 #pragma comment(lib, _NETLIB_LIBNAME_)  //this is not cross-platform. you should write Makefile on linux.
 
-#endif
 
 #include <string>
 namespace boost { namespace asio { class io_service; } }
@@ -57,9 +39,9 @@ namespace boost { namespace asio { class io_service; } }
         //这个flag尚未支持													//无论怎样size为4的包都不触发Server的ReceiveFinishHandler
 //=====NetLib_Flags=====
 
-NETLIB_API void NetLib_Set_MaxPacketSize(unsigned int MaxPacketSize); //default: 512 * 1024
-NETLIB_API void NetLib_Set_Server_Recv_Buffer_Size(int Server_Recv_Buffer_Size); //default: 16 * 1024 * 1024
-NETLIB_API void NetLib_Set_Client_Recv_Buffer_Size(int Client_Recv_Buffer_Size); //default: 16 * 1024
+void NetLib_Set_MaxPacketSize(unsigned int MaxPacketSize); //default: 512 * 1024
+void NetLib_Set_Server_Recv_Buffer_Size(int Server_Recv_Buffer_Size); //default: 16 * 1024 * 1024
+void NetLib_Set_Client_Recv_Buffer_Size(int Client_Recv_Buffer_Size); //default: 16 * 1024
 
 #define NETLIBDataSize(A) (*(uint32_t*)(A))
 
@@ -93,10 +75,7 @@ public:
 
 	virtual void ResetFailedData() = 0;	
 	
-	//only static library can use this method
-#ifdef _STATIC_NETLIB_
 	virtual class boost::asio::io_service* GetWorkIoService() = 0;
-#endif
 
 	virtual void SetKeepAliveIntervalSeconds(int keepalive_interval_seconds = 240) = 0;
 };
@@ -144,10 +123,10 @@ class NetLib_Client_Imp Thread Safety:
 All the handlers share a single thread,
 So long-time-consuming work is ok but not recommended to be called within the handler.
 */
-NETLIB_API NetLib_Client_ptr NetLib_NewClient(std::shared_ptr<NetLib_Client_Delegate> d);
+NetLib_Client_ptr NetLib_NewClient(std::shared_ptr<NetLib_Client_Delegate> d);
 
 //如果使用外部传入的ioservice，务必要保证在Client完全停止前ioservice不能被释放。
-NETLIB_API NetLib_Client_ptr NetLib_NewClient(std::shared_ptr<NetLib_Client_Delegate> d, class ioservice_thread* thread); //dll版本的话只能传nullptr，否则会有问题，因为ioservice_thread是复杂类型
+NetLib_Client_ptr NetLib_NewClient(std::shared_ptr<NetLib_Client_Delegate> d, class ioservice_thread* thread); //dll版本的话只能传nullptr，否则会有问题，因为ioservice_thread是复杂类型
 
 template <typename ClientDelegate>
 NetLib_Client_ptr NetLib_NewClient(ioservice_thread* ioservice = nullptr)
@@ -159,7 +138,7 @@ NetLib_Client_ptr NetLib_NewClient(ioservice_thread* ioservice = nullptr)
 //不一定需要调用本方法。但不调用的话可能会有些一次性的内存泄漏 -- 调用的话会阻塞，直到所有东西都释放。
 //必须保证调用本方法前已经没有还处于连接状态的Client，否则会释放不掉。
 //服务器端使用的话，要先调用CTRL_ReleaseConnection()和NetLibPlus_UnInitializeClients()
-NETLIB_API void NetLib_Clients_WaitForStop(); //不得在Handler中调用，调用则死锁。
+void NetLib_Clients_WaitForStop(); //不得在Handler中调用，调用则死锁。
 
 
 //======= Server =========
@@ -176,11 +155,8 @@ public:
 	virtual bool GetRemoteAddress(char* ip, uint16_t& port) = 0; //ip must have a length of at least 16
 	virtual void Disconnect() = 0;
 
-	//only static library can use this method
-#ifdef _STATIC_NETLIB_
 	virtual bool GetRemoteAddress(std::string& ip, uint16_t& port) = 0;
 	virtual std::string GetLocalAddress() = 0;
-#endif
 };
 
 #define NetLib_ServerSession_ptr std::shared_ptr<NetLib_ServerSession_Interface>
@@ -215,10 +191,7 @@ public:
 	virtual bool StartUDP(int listen_port, int work_thread_num = 1, int timeout_seconds = 300, uint64_t flags = 0) = 0;
 	virtual void Stop() = 0;
 
-	//only static library can use this method
-#ifdef _STATIC_NETLIB_
 	virtual class boost::asio::io_service* GetWorkIoService() = 0;
-#endif
 
 	virtual ~NetLib_Server_Interface() {}
 };
@@ -240,13 +213,13 @@ public:
 	 }
 };
 
-NETLIB_API NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_Server_Delegate> d);
+NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_Server_Delegate> d);
 
-NETLIB_API NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_ServerSession_Delegate> d);
+NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_ServerSession_Delegate> d);
 
-NETLIB_API NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_Server_Delegate> d, class ioservice_thread* thread); //dll版本的话只能传nullptr，否则会有问题，因为ioservice_thread是复杂类型
+NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_Server_Delegate> d, class ioservice_thread* thread); //dll版本的话只能传nullptr，否则会有问题，因为ioservice_thread是复杂类型
 
-NETLIB_API NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_ServerSession_Delegate> d, class ioservice_thread* thread);
+NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_ServerSession_Delegate> d, class ioservice_thread* thread);
 
 template <typename SessionDelegate>
 class NetLib_Server_Default_Delegate : public NetLib_Server_Delegate
@@ -266,7 +239,7 @@ NetLib_Server_ptr NetLib_NewServer(class ioservice_thread* thread = nullptr)
 
 //不一定需要调用本方法。但不调用的话可能会有些一次性的内存泄漏 -- 调用的话会阻塞，直到和各Server相关的所有东西都释放。
 //调用前必须保证Server都已经调用过Stop方法，且外部已经没有Server的shared_ptr的引用，否则会一直阻塞在那儿
-NETLIB_API void NetLib_Servers_WaitForStop(); //不得在Handler中调用，调用则死锁
+void NetLib_Servers_WaitForStop(); //不得在Handler中调用，调用则死锁
 
 /*
 NetLib_NewServer() returns a new intance of NetLib_Server_Imp:
@@ -280,7 +253,7 @@ class NetLib_ServerSession_Interface Thread Safety:
 	Shared objects:	  Safe.
 */
 
-NETLIB_API bool NetLib_CheckVersion(const char* version);
+bool NetLib_CheckVersion(const char* version);
 
 #define NETLIB_CHECK_VERSION NetLib_CheckVersion(_NETLIB_VERSION_)
 
