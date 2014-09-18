@@ -10,31 +10,66 @@
 
 #define SERVER_MSG_LENGTH(d) (*(uint32_t*)(d))
 #define SERVER_MSG_TYPE(d) (*(uint32_t*)((d) + 4))
-#define SERVER_MSG_ERROR(d) (*(uint8_t*)((d) + 8)) //后端服务给前端服务返回的错误。如果有错误，那么默认后面的Protobuf就没有了，除非另有约定
-#define SERVER_MSG_HEADER_EX_LEN(d) (*(uint8_t*)((d) + 9))
-#define SERVER_MSG_RESERVED(d) (*(uint16_t*)((d) + 10))
-#define SERVER_MSG_HEADER_EX(d) (*(uint16_t*)((d) + 12))
-#define SERVER_MSG_DATA(d) (*(uint16_t*)((d) + 12 + MSG_HEADER_EX_LEN(d)))
+#define SERVER_MSG_OPERATION_ID(d) (*(uint32_t*))((d) + 8)
+#define SERVER_MSG_ERROR(d) (*(uint8_t*)((d) + 12)) //后端服务给前端服务返回的错误。如果有错误，那么默认后面的Protobuf就没有了，除非另有约定
+#define SERVER_MSG_HEADER_EX_LEN(d) (*(uint8_t*)((d) + 13))
+#define SERVER_MSG_RESERVED(d) (*(uint16_t*)((d) + 14))
+#define SERVER_MSG_HEADER_BASE_SIZE (16)
+#define SERVER_MSG_HEADER_EX(d) (*(uint16_t*)((d) + SERVER_MSG_HEADER_BASE_SIZE))
+#define SERVER_MSG_DATA(d) (*(uint16_t*)((d) + SERVER_MSG_HEADER_BASE_SIZE + MSG_HEADER_EX_LEN(d)))
 
 #include "../protobuf/commonlib/HeaderEx.pb.h"
 
-void UpdateAddrInfo(uint64_t user_id, const HeaderEx& header_ex);
-
-enum SendFlag
+class CommonLibDelegate
 {
-	RequireAddrInfo = 0,
-	OnlyUserId,
-	NoHeaderEx
+public:
+	virtual void onConfigRefresh(const std::string& content) = 0;
+	virtual void onGlobalConfigRefresh(const std::string& content) {}
+
+	virtual void onServerRemoved(int server_type, int server_id) {}
+	virtual void onServerAdded(int server_type, int server_id) {}
 };
 
-template<typename P>
-bool SendMsg(uint32_t msg_type, uint64_t related_user_id, P proto, SendFlag flag = SendFlag::RequireAddrInfo)
-{
-	switch (flag)
-	{
-		case RequireAddrInfo:
+void InitializeCommonLib(CommonLibDelegate* d);
 
+void ReportLoad(float load_factor);
+
+void UpdateCorrespondingServer(uint64_t user_id, const CorrespondingServer& header_ex);
+
+template<typename P>
+bool SendMsg(uint32_t server_id, uint32_t msg_type, uint64_t related_user_id, uint32_t op_id, const CorrespondingServer& cs, P proto)
+{
+	HeaderEx header_ex;
+	header_ex.mutable_servers()->CopyFrom(cs);
+	header_ex.set_uid(related_user_id);
+
+	int ex_size = header_ex.ByteSize();
+	int proto_size = proto.ByteSize();
+
+	char* send_buf = new char[SERVER_MSG_HEADER_BASE_SIZE + ex_size + proto_size];
+	SERVER_MSG_LENGTH(send_buf) = SERVER_MSG_HEADER_BASE_SIZE + ex_size + proto_size;		// 数据包的字节数（含msghead）
+	SERVER_MSG_TYPE(send_buf) = msg_type;
+	SERVER_MSG_OPERATION_ID(send_buf) = op_id;
+
+
+	pb.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)CMDEX0_DATA(send_buf));
+
+	std::shared_ptr<NetLibPlus_Client> ls_client = NetLibPlus_get_first_Client(__LS_ServerTypeNameForQuery.c_str());
+
+	if (ls_client)
+	{
+		ls_client->SendAsync(send_buf);
 	}
+	else
+	{
+		delete[] send_buf;
+	}
+}
+
+template<typename P>
+bool SendMsg(uint32_t msg_type, uint64_t related_user_id, uint32_t op_id, P proto, bool require_corresponding_server)
+{
+	
 
 	//TOMODIFY
 	int pb_size = proto.ByteSize();
@@ -64,5 +99,23 @@ bool SendMsg(uint32_t msg_type, uint64_t related_user_id, P proto, SendFlag flag
 		delete[] send_buf;
 	}
 }
+
+template<typename P>
+bool SendMsg(uint32_t msg_type, P proto)
+{
+
+}
+
+bool SendMsg(uint32_t msg_type, uint32_t op_id, uint8_t error_code)
+{
+
+}
+
+template<typename P>
+bool SendMsg(uint32_t msg_type, uint32_t op_id, uint8_t error_code, P proto)
+{
+
+}
+
 
 #endif
