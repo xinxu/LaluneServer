@@ -68,7 +68,7 @@ void try_start_a_client(const NetLibPlus_ServerInfo& ServerInfo) //±ÿ–Î‘⁄À¯ƒ⁄µ˜”
 }
 
 //∏√∑Ω∑®”…ControlServerConnectorµ˜”√
-NETLIB_API void _NetLibPlus_UpdateServerInfo(int ServerID, const char* Ip, int Port, const char* ServerType)
+void _NetLibPlus_UpdateServerInfo(int ServerID, const char* Ip, int Port, const char* ServerType)
 {	
 	boost::lock_guard<boost::shared_mutex> lock(_NetLibPlus_mutex); 
 
@@ -110,7 +110,7 @@ NETLIB_API void _NetLibPlus_UpdateServerInfo(int ServerID, const char* Ip, int P
 	LOGEVENTL("NetLib_Info", log_::n("ServerInfoSize") << serverinfos.size() << log_::n("ServerID") << ServerID << log_::n("IP") << Ip << log_::n("Port") << Port);
 }
 
-NETLIB_API void NetLibPlus_InitializeClients(std::shared_ptr<NetLibPlus_Client_Delegate> d, ioservice_thread* ioservice_th, uint64_t flags)
+void NetLibPlus_InitializeClients(std::shared_ptr<NetLibPlus_Client_Delegate> d, ioservice_thread* ioservice_th, uint64_t flags)
 {	
 	boost::lock_guard<boost::shared_mutex> lock(_NetLibPlus_mutex); 
 	
@@ -131,7 +131,7 @@ NETLIB_API void NetLibPlus_InitializeClients(std::shared_ptr<NetLibPlus_Client_D
 	global_delegate_info.flags = flags;
 }
 
-NETLIB_API void NetLibPlus_InitializeClients(const char* ServerType, std::shared_ptr<NetLibPlus_Client_Delegate> d, ioservice_thread* ioservice_th, uint64_t flags)
+void NetLibPlus_InitializeClients(const char* ServerType, std::shared_ptr<NetLibPlus_Client_Delegate> d, ioservice_thread* ioservice_th, uint64_t flags)
 {
 	boost::lock_guard<boost::shared_mutex> lock(_NetLibPlus_mutex); 
 
@@ -150,7 +150,7 @@ NETLIB_API void NetLibPlus_InitializeClients(const char* ServerType, std::shared
 	init_info[ServerType] = delegate_and_flag(d, ioservice_th, flags);
 }
 
-NETLIB_API std::shared_ptr<NetLibPlus_Client> NetLibPlus_getClient(int ServerID) //”…”⁄ «shared_ptr£¨À˘“‘÷ª“™get≥ˆ¿¥æÕ“ª∂®”––ß°£÷ª «ø…ƒ‹”√◊≈“ª∞Î¡¨Ω”∂œ¡À£¨’‚Œﬁ∑®±‹√‚°£
+std::shared_ptr<NetLibPlus_Client> NetLibPlus_getClient(int ServerID) //”…”⁄ «shared_ptr£¨À˘“‘÷ª“™get≥ˆ¿¥æÕ“ª∂®”––ß°£÷ª «ø…ƒ‹”√◊≈“ª∞Î¡¨Ω”∂œ¡À£¨’‚Œﬁ∑®±‹√‚°£
 {	
 	boost::shared_lock<boost::shared_mutex> lock(_NetLibPlus_mutex); 
 
@@ -179,7 +179,7 @@ NETLIB_API std::shared_ptr<NetLibPlus_Client> NetLibPlus_getClient(int ServerID)
 	return clients[ServerID];
 }
 
-NETLIB_API std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_first_Client(const char* ServerType)
+std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_first_Client(const char* ServerType)
 {
 	boost::shared_lock<boost::shared_mutex> lock(_NetLibPlus_mutex); 
 
@@ -221,7 +221,7 @@ NETLIB_API std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_first_Client(const 
 	return ret;
 }
 
-NETLIB_API std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_next_Client(const char* ServerType)
+std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_next_Client(const char* ServerType)
 {
 	boost::shared_lock<boost::shared_mutex> lock(_NetLibPlus_mutex); 
 
@@ -275,8 +275,6 @@ NETLIB_API std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_next_Client(const c
 
 	return ret;
 }
-
-#ifdef _STATIC_NETLIB_
 
 std::shared_ptr<NetLibPlus_Clients> NetLibPlus_getClients(const char* ServerType)
 {
@@ -360,9 +358,7 @@ void NetLibPlus_Clients::SendCopyAsync(const char* data)
 	}
 }
 
-#endif
-
-NETLIB_API void NetLibPlus_UnInitializeClients(const char* ServerType)
+void NetLibPlus_UnInitializeClients(const char* ServerType)
 {	
 	boost::lock_guard<boost::shared_mutex> lock(_NetLibPlus_mutex); 
 
@@ -386,7 +382,7 @@ NETLIB_API void NetLibPlus_UnInitializeClients(const char* ServerType)
 	}
 }
 
-NETLIB_API void NetLibPlus_UnInitializeClients()
+void NetLibPlus_UnInitializeClients()
 {	
 	boost::lock_guard<boost::shared_mutex> lock(_NetLibPlus_mutex); 
 
@@ -405,7 +401,7 @@ NETLIB_API void NetLibPlus_UnInitializeClients()
 	global_delegate_info.delegateptr.reset();
 }
 
-NETLIB_API void NetLibPlus_DisableClients()
+void NetLibPlus_DisableClients()
 {
 	NetLibPlus_UnInitializeClients();
 }

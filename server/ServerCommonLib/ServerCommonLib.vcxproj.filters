@@ -16,9 +16,9 @@
     <Filter Include="protobuf">
       <UniqueIdentifier>{30997deb-7b19-463c-abc0-e91ba7911b47}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <Filter Include="3rdparty">
+      <UniqueIdentifier>{86f64011-dac1-448e-bbfe-8e5caa948d05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ServerCommon.h">
@@ -32,6 +32,9 @@
     </ClInclude>
     <ClInclude Include="NetLibPlusClient.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleIni.h">
+      <Filter>3rdparty</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

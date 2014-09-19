@@ -30,7 +30,7 @@ public:
 	virtual void onServerAdded(int server_type, int server_id) {}
 };
 
-void InitializeCommonLib(CommonLibDelegate* d);
+void InitializeCommonLib(class ioservice_thread& thread, CommonLibDelegate* d, int argc = 0, char* argv[] = nullptr);
 
 void ReportLoad(float load_factor);
 

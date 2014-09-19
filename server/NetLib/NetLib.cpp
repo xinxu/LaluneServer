@@ -18,27 +18,27 @@ int clients_running_objs_count = 0;
 int servers_running_objs_count = 0;
 boost::mutex _NetLib_mutex;
 
-NETLIB_API void NetLib_Set_UDP_ReplyIntervalMS(int UDP_ReplyIntervalMS)
+void NetLib_Set_UDP_ReplyIntervalMS(int UDP_ReplyIntervalMS)
 {
 	UDP_REPLY_INTERVAL_MS = UDP_ReplyIntervalMS;
 }
 
-NETLIB_API void NetLib_Set_UDP_MaxConsecutiveResendTimes(int UDP_MaxConsecutiveResendTimes)
+void NetLib_Set_UDP_MaxConsecutiveResendTimes(int UDP_MaxConsecutiveResendTimes)
 {
 	UDP_MAX_CONSECUTIVE_RESEND_TIMES = UDP_MaxConsecutiveResendTimes;
 }
 
-NETLIB_API void NetLib_Set_MaxPacketSize(unsigned int MaxPacketSize)
+void NetLib_Set_MaxPacketSize(unsigned int MaxPacketSize)
 {
 	MAX_PACKET_SIZE = MaxPacketSize;
 }
 
-NETLIB_API void NetLib_Set_Server_Recv_Buffer_Size(int Server_Recv_Buffer_Size)
+void NetLib_Set_Server_Recv_Buffer_Size(int Server_Recv_Buffer_Size)
 {
 	SERVER_RECV_BUFFER_SIZE = Server_Recv_Buffer_Size;
 }
 
-NETLIB_API void NetLib_Set_Client_Recv_Buffer_Size(int Client_Recv_Buffer_Size)
+void NetLib_Set_Client_Recv_Buffer_Size(int Client_Recv_Buffer_Size)
 {
 	CLIENT_RECV_BUFFER_SIZE = Client_Recv_Buffer_Size;
 }
@@ -99,7 +99,7 @@ void start_ioservice_ifnot() //need in lock
 	}
 }
 
-NETLIB_API NetLib_Client_ptr NetLib_NewClient(std::shared_ptr<NetLib_Client_Delegate> d)
+NetLib_Client_ptr NetLib_NewClient(std::shared_ptr<NetLib_Client_Delegate> d)
 {	
 	{
 		boost::lock_guard<boost::mutex> lock(_NetLib_mutex); 
@@ -133,7 +133,7 @@ NETLIB_API NetLib_Client_ptr NetLib_NewClient(std::shared_ptr<NetLib_Client_Dele
 	);
 }
 
-NETLIB_API NetLib_Client_ptr NetLib_NewClient(std::shared_ptr<NetLib_Client_Delegate> d, ioservice_thread* thread)
+NetLib_Client_ptr NetLib_NewClient(std::shared_ptr<NetLib_Client_Delegate> d, ioservice_thread* thread)
 {
 	if (! thread) //thread为空表示用内部的ioservice
 	{
@@ -164,7 +164,7 @@ NETLIB_API NetLib_Client_ptr NetLib_NewClient(std::shared_ptr<NetLib_Client_Dele
 	);
 }
 
-NETLIB_API void NetLib_Clients_WaitForStop()
+void NetLib_Clients_WaitForStop()
 {
 	for (;;)
 	{
@@ -184,7 +184,7 @@ NETLIB_API void NetLib_Clients_WaitForStop()
 	}
 }
 
-NETLIB_API NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_Server_Delegate> d)
+NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_Server_Delegate> d)
 {
 	{	
 		boost::lock_guard<boost::mutex> lock(_NetLib_mutex); 
@@ -234,12 +234,12 @@ public:
 	}
 };
 
-NETLIB_API NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_ServerSession_Delegate> d)
+NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_ServerSession_Delegate> d)
 {
 	return NetLib_NewServer(std::make_shared<NetLib_Server_Delegate_all_session_one_delegate>(d));
 }
 
-NETLIB_API NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_ServerSession_Delegate> d, ioservice_thread* thread)
+NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_ServerSession_Delegate> d, ioservice_thread* thread)
 {
 	if (! thread)
 	{
@@ -251,7 +251,7 @@ NETLIB_API NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_ServerSessi
 	}
 }
 
-NETLIB_API NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_Server_Delegate> d, ioservice_thread* thread)
+NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_Server_Delegate> d, ioservice_thread* thread)
 {
 	if (! thread)
 	{
@@ -278,7 +278,7 @@ NETLIB_API NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_Server_Dele
 	);
 }
 
-NETLIB_API void NetLib_Servers_WaitForStop()
+void NetLib_Servers_WaitForStop()
 {
 	for (;;)
 	{
@@ -298,7 +298,7 @@ NETLIB_API void NetLib_Servers_WaitForStop()
 	}
 }
 
-NETLIB_API bool NetLib_CheckVersion(const char* version)
+bool NetLib_CheckVersion(const char* version)
 {
 	if (strcmp(version, _NETLIB_VERSION_) == 0)
 	{
