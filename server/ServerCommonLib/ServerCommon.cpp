@@ -7,6 +7,7 @@
 #include "Header.h"
 #include "Log/Log.h"
 #include <map>
+#include <boost/asio.hpp>
 
 CommonLibDelegate* __commonlib_delegate;
 int __my_listening_port, __my_server_type;
@@ -36,10 +37,38 @@ public:
 			switch (SERVER_MSG_TYPE(data))
 			{
 			case MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REFRESH:
+				{
+					common::AddressList list;
+					if (ParseMsg(data, list))
+					{
+						for (int i = 0; i < list.addr_size(); ++i)
+						{
+							const common::AddressInfo& addr = list.addr(i);
+							_NetLibPlus_UpdateServerInfo(addr.server_id(), addr.ip(), addr.port(), addr.server_type());
+							__commonlib_delegate->onServerAdded(addr.server_type(), addr.server_id());
+						}
+					}
+				}
 				break;
 			case MSG_TYPE_CONTROL_SERVER_ADDR_INFO_ADD:
+				{
+					common::AddressInfo addr;
+					if (ParseMsg(data, addr))
+					{
+						_NetLibPlus_UpdateServerInfo(addr.server_id(), addr.ip(), addr.port(), addr.server_type()); 
+						__commonlib_delegate->onServerAdded(addr.server_type(), addr.server_id());
+					}
+				}
 				break;
 			case MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REMOVE:
+				{
+					common::AddressInfo addr;
+					if (ParseMsg(data, addr))
+					{
+						_NetLibPlus_RemoveServerInfo(addr.server_id(), addr.ip(), addr.port(), addr.server_type());
+						__commonlib_delegate->onServerRemoved(addr.server_type(), addr.server_id());
+					}
+				}
 				break;
 			case MSG_TYPE_CONTROL_SERVER_ADDR_INFO_RESTART:
 				//RESTART先啥也不干
@@ -85,7 +114,7 @@ void InitializeCommonLib(ioservice_thread& thread, CommonLibDelegate* d, int my_
 		}
 	}
 
-	_NetLibPlus_UpdateServerInfo(CONTROL_SERVER_ID, control_server_ip.c_str(), control_server_port, SERVER_TYPE_CONTROL_SERVER);
+	_NetLibPlus_UpdateServerInfo(CONTROL_SERVER_ID,	boost::asio::ip::address_v4::from_string(control_server_ip).to_ulong(), control_server_port, SERVER_TYPE_CONTROL_SERVER);
 
 	SayHello2ControlServer();
 }

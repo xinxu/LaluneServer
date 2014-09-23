@@ -7,9 +7,7 @@ class NetLibPlus_Client_Imp : public NetLibPlus_Client, public NetLib_Client_Del
 {
 private:
 	std::shared_ptr<NetLibPlus_Client_Delegate> m_delegate;
-	int m_ServerID;
-	std::string m_RemoteServerIP;
-	int m_RemoteServerPort;
+	int m_ServerID, m_RemoteServerIP, m_RemoteServerPort;
 	NetLib_Client_ptr m_client;
 	std::queue< netlib_packet > failed_data_queue;
 
@@ -33,7 +31,7 @@ public:
 	NetLibPlus_Client_Imp(int ServerID);
 	virtual ~NetLibPlus_Client_Imp();
 	void InitializeDelegate(std::shared_ptr<NetLibPlus_Client_Delegate> d); //必须要在第一次ResetClient之前调用
-	void ResetClient(const char* ip, uint16_t tcp_port, class ioservice_thread* ioservice_th = nullptr, uint64_t flags = 0);
+	void ResetClient(uint32_t ip, uint16_t tcp_port, class ioservice_thread* ioservice_th = nullptr, uint64_t flags = 0);
 	void ReleaseClient();
 	void SendAsync(const char* data, void* pHint = nullptr);
 	void SendCopyAsync(const char* data);

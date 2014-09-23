@@ -9,7 +9,9 @@
 void _initialize_thread(class ioservice_thread* thread);
 
 //该方法通常由ServerCommonLib内部调用，也可以自行调用
-void _NetLibPlus_UpdateServerInfo(int ServerID, const char* Ip, int Port, int ServerType);
+void _NetLibPlus_UpdateServerInfo(int ServerID, int Ip, int Port, int ServerType);
+
+void _NetLibPlus_RemoveServerInfo(int ServerID, int Ip, int Port, int ServerType);
 
 class NetLibPlus_Client
 {
@@ -17,7 +19,7 @@ public:
 	virtual void SendAsync(const char* data, void* pHint = nullptr) = 0;
 	virtual void SendCopyAsync(const char* data) = 0;
 	virtual int GetRemoteServerID() const = 0; 
-	virtual void GetRemoteServerAddress(std::string& IP, int& port) = 0;
+	//virtual void GetRemoteServerAddress(std::string& IP, int& port) = 0;
 };
 
 class NetLibPlus_Client_Delegate
@@ -50,7 +52,7 @@ std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_next_Client(const char* Server
 
 typedef struct tagNetLibPlus_ServerInfo
 {
-	std::string IP;
+	int IP;
 	int port;
 	int ServerType;
 	int ServerID;	

@@ -61,7 +61,7 @@ void try_start_a_client(const NetLibPlus_ServerInfo& ServerInfo) //±ØÐëÔÚËøÄÚµ÷Ó
 		}
 		
 		it->second->InitializeDelegate(delegate_to_use.delegateptr);
-		it->second->ResetClient(ServerInfo.IP.c_str(), ServerInfo.port, __thread, delegate_to_use.flags);
+		it->second->ResetClient(ServerInfo.IP, ServerInfo.port, __thread, delegate_to_use.flags);
 	}
 	else
 	{
@@ -69,7 +69,7 @@ void try_start_a_client(const NetLibPlus_ServerInfo& ServerInfo) //±ØÐëÔÚËøÄÚµ÷Ó
 	}
 }
 
-void _NetLibPlus_UpdateServerInfo(int ServerID, const char* Ip, int Port, int ServerType)
+void _NetLibPlus_UpdateServerInfo(int ServerID, int Ip, int Port, int ServerType)
 {
 	if (NetLibPlus_Clients_Shutdown) return;
 
@@ -100,6 +100,44 @@ void _NetLibPlus_UpdateServerInfo(int ServerID, const char* Ip, int Port, int Se
 	serverid_groupby_type[ServerType].insert(ServerID);
 
 	LOGEVENTL("NetLib_Info", log_::n("ServerInfoSize") << serverinfos.size() << log_::n("ServerID") << ServerID << log_::n("IP") << Ip << log_::n("Port") << Port);
+}
+
+void _NetLibPlus_RemoveServerInfo(int ServerID, int Ip, int Port, int ServerType)
+{
+	if (NetLibPlus_Clients_Shutdown) return;
+
+	std::map<int, NetLibPlus_ServerInfo >::iterator it_info = serverinfos.find(ServerID);
+
+	if (it_info != serverinfos.end())
+	{
+		if (it_info->second.IP != Ip || it_info->second.port != Port || it_info->second.ServerType != ServerType)
+		{
+			LOGEVENTL("ERROR", "UNEXPECTED. Remove a server but detail info not match. " << _ln("server_id") << ServerID 
+				<< _ln("expected_ip") << it_info->second.IP << _ln("ip") << Ip 
+				<< _ln("expected_port") << it_info->second.port << _ln("port") << Port 
+				<< _ln("expected_server_type") << it_info->second.ServerType << _ln("server_type") << ServerType);
+		}
+		else
+		{
+			auto it_client = clients.find(ServerID);
+			if (it_client == clients.end())
+			{
+				LOGEVENTL("Fatal", "When _NetLibPlus_RemoveServerInfo, client to " << ServerID << " exist in serverinfos, but not exist in map clients");
+			}
+			else
+			{
+				it_client->second->ReleaseClient();
+				clients.erase(it_client);
+			}
+
+			serverid_groupby_type[ServerType].erase(ServerID);
+			serverinfos.erase(it_info);
+		}
+	}
+	else
+	{
+		LOGEVENTL("ERROR", "UNEXPECTED. Remove a server but not found in serverinfos. " << _ln("server_id") << ServerID << _ln("ip") << Ip << _ln("port") << Port);
+	}
 }
 
 void NetLibPlus_InitializeClients(std::shared_ptr<NetLibPlus_Client_Delegate> d, uint64_t flags)

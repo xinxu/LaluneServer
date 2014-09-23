@@ -36,7 +36,7 @@ NetLibPlus_Client_Imp::~NetLibPlus_Client_Imp()
 	}
 }
 
-void NetLibPlus_Client_Imp::ResetClient(const char* ip, uint16_t tcp_port, ioservice_thread* ioservice_th, uint64_t flags)
+void NetLibPlus_Client_Imp::ResetClient(uint32_t ip, uint16_t tcp_port, ioservice_thread* ioservice_th, uint64_t flags)
 {	
 	if (m_client)
 	{

@@ -51,7 +51,7 @@ void ReportLoad(float load_factor);
 #define CONTROL_SERVER_DEFAULT_PORT (5432)
 
 template<typename P>
-bool ParseMsg(char* data, P proto) //包头无UserID的版本
+bool ParseMsg(char* data, P& proto) //包头无UserID的版本
 {
 	return proto.ParseFromArray(SERVER_MSG_AFTER_HEADER_BASE(data), SERVER_MSG_LENGTH(data) - SERVER_MSG_HEADER_BASE_SIZE);
 }
