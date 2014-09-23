@@ -1,13 +1,13 @@
 #pragma once
 
-#include "NetLib.h"
+#include "NetLib/NetLib.h"
 #include <memory>
 #include <stdint.h>
 #include <string>
-#include "NetLib_Error.h"
+#include "NetLib/NetLib_Error.h"
 
 //该方法通常由ServerCommonLib内部调用，也可以自行调用
-void _NetLibPlus_UpdateServerInfo(int ServerID, const char* Ip, int Port, const char* ServerType);
+void _NetLibPlus_UpdateServerInfo(int ServerID, const char* Ip, int Port, int ServerType);
 
 class NetLibPlus_Client
 {
@@ -40,17 +40,20 @@ public:
 //返回值保证不是空shared_ptr。如果该ServerID对应的信息还没有获取到，那么发的包都会存在失败队列里；ServerID对应的信息改变了，用同一个Client也能照常发
 std::shared_ptr<NetLibPlus_Client> NetLibPlus_getClient(int ServerID);
 
+//这两个方法可能会用不上，或者挪到Gateway里去
+/*
 //返回值可能为空shared_ptr
 std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_first_Client(const char* ServerType);
 
 //返回值可能为空shared_ptr。本方法不受get_first_Client方法的影响。第一次调用get_next_Client会返回第一个Client，遍历完一遍又会从第一个开始
 std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_next_Client(const char* ServerType);
+*/
 
 typedef struct tagNetLibPlus_ServerInfo
 {
 	std::string IP;
 	int port;
-	std::string ServerType;
+	int ServerType;
 	int ServerID;	
 } NetLibPlus_ServerInfo;
 
@@ -62,18 +65,18 @@ public:
 	void SendCopyAsync(const char* data);
 };
 
-std::shared_ptr<NetLibPlus_Clients> NetLibPlus_getClients(const char* ServerType);
+std::shared_ptr<NetLibPlus_Clients> NetLibPlus_getClients(int ServerType);
 
 #include <map>
 
-std::map<int, NetLibPlus_ServerInfo> NetLibPlus_getClientsInfo(const char* ServerType);
+std::map<int, NetLibPlus_ServerInfo> NetLibPlus_getClientsInfo(int ServerType);
 
-void NetLibPlus_InitializeClients(const char* ServerType, std::shared_ptr<NetLibPlus_Client_Delegate> d, class ioservice_thread* ioservice_th = nullptr, uint64_t flags = 0); //设置某个类型服务器的Delegate
+void NetLibPlus_InitializeClients(int ServerType, std::shared_ptr<NetLibPlus_Client_Delegate> d, class ioservice_thread* ioservice_th = nullptr, uint64_t flags = 0); //设置某个类型服务器的Delegate
 
 void NetLibPlus_InitializeClients(std::shared_ptr<NetLibPlus_Client_Delegate> d, class ioservice_thread* ioservice_th = nullptr, uint64_t flags = 0); //设置全局的Delegate，不覆盖各类型的Delegate
 
 template <typename Delegate>
-void NetLibPlus_InitializeClients(const char* ServerType, class ioservice_thread* ioservice_th = nullptr, uint64_t flags = 0) //设置某个类型服务器的Delegate
+void NetLibPlus_InitializeClients(int ServerType, class ioservice_thread* ioservice_th = nullptr, uint64_t flags = 0) //设置某个类型服务器的Delegate
 {
 	NetLibPlus_InitializeClients(ServerType, std::make_shared<Delegate>(), ioservice_th, flags);
 }
@@ -84,7 +87,7 @@ void NetLibPlus_InitializeClients(class ioservice_thread* ioservice_th = nullptr
 	NetLibPlus_InitializeClients(std::make_shared<Delegate>(), ioservice_th, flags);
 }
 
-void NetLibPlus_UnInitializeClients(const char* ServerType); //将这一类的连接关闭。通常是一些一次性的连接，获取信息后就不再用了。但是如果这一类连接的某些连接的地址发生变更，则又会再次连上。
+void NetLibPlus_UnInitializeClients(int ServerType); //将这一类的连接关闭。通常是一些一次性的连接，获取信息后就不再用了。但是如果这一类连接的某些连接的地址发生变更，则又会再次连上。
 
 void NetLibPlus_UnInitializeClients();
 

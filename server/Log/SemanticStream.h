@@ -6,7 +6,6 @@
 #include <stdint.h>
 #include "LogValue.h"
 #include "LexicalEntry.h"
-#include "Log_Dll.h"
 
 class SemanticStream
 {

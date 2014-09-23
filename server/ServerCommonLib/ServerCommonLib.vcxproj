@@ -48,7 +48,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\LaluneCommon\3rdparty\protobuf\src;$(ProjectDir)..\NetLib;$(ProjectDir)..\;$(ProjectDir)..\..\3rdparty\boost;$(ProjectDir)..\protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\LaluneCommon\3rdparty\protobuf\src;$(ProjectDir)..\NetLib;$(ProjectDir)..\;$(ProjectDir)..\..\3rdparty\boost;$(ProjectDir)..\protobuf;$(ProjectDir)..\..\..\LaluneCommon\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -65,7 +65,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\LaluneCommon\3rdparty\protobuf\src;$(ProjectDir)..\NetLib;$(ProjectDir)..\;$(ProjectDir)..\..\3rdparty\boost;$(ProjectDir)..\protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\LaluneCommon\3rdparty\protobuf\src;$(ProjectDir)..\NetLib;$(ProjectDir)..\;$(ProjectDir)..\..\3rdparty\boost;$(ProjectDir)..\protobuf;$(ProjectDir)..\..\..\LaluneCommon\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -76,24 +76,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\SimpleIni.h" />
-    <ClInclude Include="..\protobuf\commonlib\HeaderEx.pb.h" />
+    <ClInclude Include="..\protobuf\commonlib\CommonLib.pb.h" />
     <ClInclude Include="NetLibPlus.h" />
     <ClInclude Include="NetLibPlusClient.h" />
     <ClInclude Include="ServerCommon.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\protobuf\commonlib\HeaderEx.pb.cc" />
+    <ClCompile Include="..\protobuf\commonlib\CommonLib.pb.cc" />
     <ClCompile Include="NetLibPlus.cpp" />
     <ClCompile Include="NetLibPlusClient.cpp" />
     <ClCompile Include="ServerCommon.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\protobuf\commonlib\HeaderEx.proto" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\NetLib\NetLib.vcxproj">
       <Project>{38aaa34f-5fc1-4d42-a385-1ef6b380a5b5}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\protobuf\commonlib\CommonLib.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

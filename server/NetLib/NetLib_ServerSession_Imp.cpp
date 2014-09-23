@@ -227,10 +227,10 @@ void NetLib_ServerSession_Imp::RecvFinishHandler(char* data) //ÕâÐ©·½·¨µÄÉÏ²ã¶¼±
 
 	if (*(uint32_t*)data == 4)
 	{
-		/*if (m_flags & NETLIB_SERVER_LISTEN_KEEP_ALIVE_EVENT)
+		if (server->m_flags & NETLIB_SERVER_LISTEN_KEEP_ALIVE_EVENT)
 		{
 			theDelegate->RecvKeepAliveHandler(shared_from_this());
-		}*/
+		}
 	}
 	else
 	{

@@ -15,10 +15,10 @@
 #define SERVER_MSG_HEADER_EX_LEN(d) (*(uint8_t*)((d) + 13))
 #define SERVER_MSG_RESERVED(d) (*(uint16_t*)((d) + 14))
 #define SERVER_MSG_HEADER_BASE_SIZE (16)
-#define SERVER_MSG_HEADER_EX(d) (*(uint16_t*)((d) + SERVER_MSG_HEADER_BASE_SIZE))
-#define SERVER_MSG_DATA(d) (*(uint16_t*)((d) + SERVER_MSG_HEADER_BASE_SIZE + MSG_HEADER_EX_LEN(d)))
+#define SERVER_MSG_AFTER_HEADER_BASE(d) ((d) + SERVER_MSG_HEADER_BASE_SIZE)
+#define SERVER_MSG_DATA(d) ((d) + SERVER_MSG_HEADER_BASE_SIZE + MSG_HEADER_EX_LEN(d))
 
-#include "commonlib/HeaderEx.pb.h"
+#include "commonlib/CommonLib.pb.h"
 
 class CommonLibDelegate
 {
@@ -30,12 +30,53 @@ public:
 	virtual void onServerAdded(int server_type, int server_id) {}
 };
 
-void InitializeCommonLib(class ioservice_thread& thread, CommonLibDelegate* d, int argc = 0, char* argv[] = nullptr);
+//服务端默认流程：先开监听端口并启动服务，然后告诉控制服务我的端口
+//网关服务对外的端口和对内的端口不是一个。对外的端口晚开一会儿
+void InitializeCommonLib(class ioservice_thread& thread, CommonLibDelegate* d, int my_listening_port, int my_server_type, int argc = 0, char* argv[] = nullptr);
 
 void ReportLoad(float load_factor);
 
-void UpdateCorrespondingServer(uint64_t user_id, const CorrespondingServer& header_ex);
+//TODO 该方法尚有待改进
+//void UpdateCorrespondingServer(uint64_t user_id, const common::CorrespondingServer& cs);
 
+#define CONTROL_SERVER_ID (0)
+#define CONTROL_SERVER_DEFAULT_PORT (5432)
+
+template<typename P>
+bool ParseMsg(char* data, P proto) //包头无UserID的版本
+{
+	return proto.ParseFromArray(SERVER_MSG_AFTER_HEADER_BASE(data), SERVER_MSG_LENGTH(data) - SERVER_MSG_HEADER_BASE_SIZE);
+}
+
+#include "NetLibPlus.h"
+
+template<typename P>
+bool SendMsg(uint32_t server_id, uint32_t msg_type, P proto)
+{
+	int proto_size = proto.ByteSize();
+
+	char* send_buf = new char[SERVER_MSG_HEADER_BASE_SIZE + proto_size];
+	SERVER_MSG_LENGTH(send_buf) = SERVER_MSG_HEADER_BASE_SIZE + proto_size;		// 数据包的字节数（含msghead）
+	SERVER_MSG_TYPE(send_buf) = msg_type;
+	SERVER_MSG_ERROR(send_buf) = 0;
+	SERVER_MSG_HEADER_EX_LEN(send_buf) = 0;
+	SERVER_MSG_RESERVED(send_buf) = 0;
+
+	proto.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)SERVER_MSG_AFTER_HEADER_BASE(send_buf));
+
+	auto client = NetLibPlus_getClient(server_id);
+	if (client)
+	{
+		client->SendAsync(send_buf);
+		return true;
+	}
+	else
+	{
+		delete[] send_buf;
+		return false;
+	}
+}
+/* TODO 尚未实现的SendMsg
 template<typename P>
 bool SendMsg(uint32_t server_id, uint32_t msg_type, uint64_t related_user_id, uint32_t op_id, const CorrespondingServer& cs, P proto)
 {
@@ -46,29 +87,30 @@ bool SendMsg(uint32_t server_id, uint32_t msg_type, uint64_t related_user_id, ui
 	int ex_size = header_ex.ByteSize();
 	int proto_size = proto.ByteSize();
 
-	char* send_buf = new char[SERVER_MSG_HEADER_BASE_SIZE + ex_size + proto_size];
-	SERVER_MSG_LENGTH(send_buf) = SERVER_MSG_HEADER_BASE_SIZE + ex_size + proto_size;		// 数据包的字节数（含msghead）
+	char* send_buf = new char[SERVER_MSG_HEADER_BASE_SIZE + proto_size];
+	SERVER_MSG_LENGTH(send_buf) = SERVER_MSG_HEADER_BASE_SIZE + proto_size;		// 数据包的字节数（含msghead）
 	SERVER_MSG_TYPE(send_buf) = msg_type;
-	SERVER_MSG_OPERATION_ID(send_buf) = op_id;
+	SERVER_MSG_ERROR(send_buf) = 0;
+	SERVER_MSG_HEADER_EX_LEN(send_buf) = 0;
+	SERVER_MSG_RESERVED(send_buf) = 0;
 
+	proto.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)SERVER_MSG_AFTER_HEADER_BASE(send_buf));
 
-	pb.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)CMDEX0_DATA(send_buf));
-
-	std::shared_ptr<NetLibPlus_Client> ls_client = NetLibPlus_get_first_Client(__LS_ServerTypeNameForQuery.c_str());
-
-	if (ls_client)
+	auto client = NetLibPlus_getClient(server_id);
+	if (client)
 	{
-		ls_client->SendAsync(send_buf);
+		client->SendAsync(send_buf);
+		return true;
 	}
 	else
 	{
 		delete[] send_buf;
+		return false;
 	}
-	return true;
 }
 
 template<typename P>
-bool SendMsg(uint32_t msg_type, uint64_t related_user_id, uint32_t op_id, P proto, bool require_corresponding_server)
+bool SendMsg(uint32_t msg_type, uint64_t related_user_id, uint32_t op_id, P proto, bool require_corresponding_server = false)
 {
 	
 
@@ -103,23 +145,40 @@ bool SendMsg(uint32_t msg_type, uint64_t related_user_id, uint32_t op_id, P prot
 }
 
 template<typename P>
-bool SendMsg(uint32_t msg_type, P proto)
+bool SendMsg(uint32_t msg_type, P proto) //包头无UserID的版本
 {
 
 	return true;
 }
 
-bool SendMsg(uint32_t msg_type, uint32_t op_id, uint8_t error_code)
+bool SendMsg(uint32_t msg_type, uint32_t op_id, uint8_t error_code) //包头无UserID的版本
 {
 
 	return true;
 }
 
 template<typename P>
-bool SendMsg(uint32_t msg_type, uint32_t op_id, uint8_t error_code, P proto)
+bool SendMsg(uint32_t msg_type, uint32_t op_id, uint8_t error_code, P proto) //包头无UserID的版本
 {
+
 	return true;
 }
+*/
+template<typename P>
+void ReplyMsg(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, P proto) //包头无UserID的版本
+{
+	int proto_size = proto.ByteSize();
 
+	char* send_buf = new char[SERVER_MSG_HEADER_BASE_SIZE + proto_size];
+	SERVER_MSG_LENGTH(send_buf) = SERVER_MSG_HEADER_BASE_SIZE + proto_size;		// 数据包的字节数（含msghead）
+	SERVER_MSG_TYPE(send_buf) = msg_type;
+	SERVER_MSG_ERROR(send_buf) = 0;
+	SERVER_MSG_HEADER_EX_LEN(send_buf) = 0;
+	SERVER_MSG_RESERVED(send_buf) = 0;
+
+	proto.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)SERVER_MSG_AFTER_HEADER_BASE(send_buf));
+
+	sessionptr->SendAsync(send_buf);
+}
 
 #endif

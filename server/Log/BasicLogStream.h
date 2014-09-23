@@ -2,7 +2,7 @@
 
 #include "SemanticStream.h"
 
-class LOG_API BasicLogStream : public SemanticStream //只有记录时间，并发到服务器的功能
+class BasicLogStream : public SemanticStream //只有记录时间，并发到服务器的功能
 {
 protected:
 	uint64_t t;

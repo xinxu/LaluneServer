@@ -1,9 +1,5 @@
 #pragma once
 
-#include "Log_Dll.h"
-
-#ifndef _LOG_DLL_
-
 #ifdef _DEBUG
 #define _LOG_LIBNAME_ "Logd"
 #else
@@ -12,7 +8,6 @@
 
 #pragma comment(lib, _LOG_LIBNAME_)  //this is not cross-platform. you should write Makefile on linux.
 
-#endif
 
 #include "LogStream.h"
 #include <sstream>
@@ -258,7 +253,7 @@
 #define LOGCMD_DISPLAY(CMDBUF) __LOGCMD(LOGBYTES_DISPLAY, CMDBUF)
 
 //logfilename_prefix别超过200字节，否则里面可能溢出
-LOG_API void LogInitializeLocalOptions(bool enable_to_console = false, bool enable_to_file = false, const char* logfilename_prefix = "", bool split_by_date = true, 
+void LogInitializeLocalOptions(bool enable_to_console = false, bool enable_to_file = false, const char* logfilename_prefix = "", bool split_by_date = true, 
 	int log_total_mega_bytes_limit_within_dir = 32 * 1024, int log_total_file_limit_within_dir = 200, const char* config_file_path = "logger.ini"); //如果配置文件中有值，则以配置文件中的值覆盖参数的值
 
 #ifndef _LOG_DLL_
@@ -280,9 +275,9 @@ LOG_API void SetLogServerAddress(const char* IP, int port);
 //本方法调用前(确切的说，是index1非空前)，所有通过LOGEVENT发往服务器的包都忽略，也不做统计，只是打屏幕。直到这两个参数确定。该方法可以被反复调用
 //且，如果filename_prefix为空，那么本方法调用前，Log也不会打到文件，因为不知道Log的目的地文件名
 
-LOG_API void LogSetIndex12(const char* index1, const char* index2); //index1 + index2别超过199字节，否则里面可能溢出
+void LogSetIndex12(const char* index1, const char* index2); //index1 + index2别超过199字节，否则里面可能溢出
 
 void LogSetIdentifier(const char* ServerType = "", int ServerID = -1);  //本方法本质上就是LogSetIndex12，把ServerType作为index1，把ServerID作为index2。ServerID为-1时index2为空字符串
 
 //理论上这个方法要考虑引用计数，在真正的最后一份引用被卸载的时候才执行。暂时没有管，第一次调用就真正执行了。
-LOG_API void LogUnInitialize();
+void LogUnInitialize();

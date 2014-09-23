@@ -135,6 +135,8 @@ void SendQuery(std::shared_ptr<ResultHandler> rh, uint16_t CmdID, const kit::log
 
 	pb.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)CMDEX0_DATA(send_buf));
 	
+	//TODO TOMODIFY
+	/*
 	std::shared_ptr<NetLibPlus_Client> ls_client = NetLibPlus_get_first_Client(__LS_ServerTypeNameForQuery.c_str());
 
 	if (ls_client)
@@ -144,16 +146,7 @@ void SendQuery(std::shared_ptr<ResultHandler> rh, uint16_t CmdID, const kit::log
 	else
 	{
 		delete[] send_buf;
-	}
-	//auto ls_clients = NetLibPlus_getClients("ls");
-	//auto lsa_clients = NetLibPlus_getClients("lsa");
-
-	//ls_clients->SendCopyAsync(send_buf);
-	//lsa_clients->SendCopyAsync(send_buf);
-
-	//TODO, wait and sort
-
-	//delete[] send_buf;
+	}*/
 }
 
 void Query123(std::shared_ptr<ResultHandler> rh, const std::string& index1, const std::string& index2, const std::string& index3, bool no_sort, uint64_t begin_time, uint64_t end_time)

@@ -3,21 +3,13 @@
 #include <boost/asio/placeholders.hpp>
 #include "ptime2.h"
 #include "../protobuf/log/log.pb.h"
-#ifndef _LOG_DLL_
 #include "NetLib/NetLib.h"
-#endif
 #include "internal.h"
 #include "BasicLogStream.h"
 #include "HeaderDefine.h"
 
 uint64_t __last_t = 0;
 boost::mutex __last_t_mutex;
-
-#ifdef _LOG_DLL_
-std::shared_ptr<boost::asio::ip::udp::socket> udpsocket_4log;
-boost::asio::ip::udp::endpoint udpendpoint_4log;
-boost::mutex _udpsocket_mutex;
-#endif
 
 void BasicLogStream::RecordTime()
 {	
@@ -81,7 +73,8 @@ void BasicLogStream::LogToNet(const std::string& index3, const std::string& inde
 	pb.set_time(t);
 	pb.set_data(detail_pb.SerializeAsString());
 
-#ifndef _LOG_DLL_
+	//TODO TOMODIFY
+	/*
 	int pb_size = pb.ByteSize();
 	char* send_buf = new char[CMDEX0_HEAD_SIZE + pb_size];
 	CMD_SIZE(send_buf)			= CMDEX0_HEAD_SIZE + pb_size;					// 数据包的字节数（含msghead）
@@ -101,26 +94,5 @@ void BasicLogStream::LogToNet(const std::string& index3, const std::string& inde
 	{
 		delete[] send_buf;
 	}
-#else
-	if (udpsocket_4log)
-	{
-		if (index1.empty()) //将global_index1, global_index2赋到proto里。当然，如果本条Log已经指定了index1,index2，那就用不到global_index1了
-		{
-			pb.set_index1(global_index1);
-			pb.set_index2(global_index2);
-		}
-		int pb_size = pb.ByteSize();
-		char* send_buf = new char[2 + pb_size];
-
-		*(uint16_t*)send_buf = ID_LOGSVR_LOG;
-
-		pb.SerializeWithCachedSizesToArray((google::protobuf::uint8*)(send_buf + 2));
-
-		boost::system::error_code error;
-		boost::lock_guard<boost::mutex> lock(_udpsocket_mutex);
-
-		udpsocket_4log->send_to(boost::asio::buffer(send_buf, 2 + pb_size), udpendpoint_4log, 0, error);  //这个0的具体意义不很明，反正如果不传的话默认他传的也是0
-		delete[] send_buf;
-	}
-#endif
+	*/
 }

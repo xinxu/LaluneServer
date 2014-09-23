@@ -8,9 +8,7 @@
 #include <sstream>
 #include <vector>
 #include <memory>
-#ifndef _LOG_DLL_
 #include "NetLib/NetLib.h"
-#endif
 #include "to_LS_ClientDelegate.h"
 #include "Counter.h"
 #include "ToAbsolutePath.h"
@@ -37,11 +35,7 @@ int LogTotalMegaBytesLimitWithinDir = 32 * 1024;
 int LogTotalFileLimitWithinDir = 200;
 
 unsigned global_LogLevel = LOGLV_INFO;
-#ifndef _LOG_DLL_
 unsigned global_CountInterval = 24 * 3600;
-#else
-unsigned global_CountInterval = 0;
-#endif
 
 unsigned global_EnableDetail = 1;
 std::string global_index1, global_index2; //index1Îª¿ÕÊ±£¬Ğ´ÍùÎÄ¼şºÍÍøÂçµÄLog»áÔİ´æ
@@ -49,8 +43,6 @@ std::string global_index1, global_index2; //index1Îª¿ÕÊ±£¬Ğ´ÍùÎÄ¼şºÍÍøÂçµÄLog»áÔ
 std::map<std::string, LogOption> options_map;
 
 LogFile file;
-
-#ifndef _LOG_DLL_
 
 void SetLSServerTypeNameForQuery(const char* LS_ServerTypeNameForQuery)
 {
@@ -65,81 +57,15 @@ void SetLSServerTypeName(const char* LS_ServerTypeName)
 
 void _InitializeLogNetDelegate() //TODO: ´øioservice_thread²ÎÊıµÄ·½·¨
 {
+	//TODO TOMODIFY
+	/*
 	NetLibPlus_InitializeClients<to_LS_ClientsDelegate>(__LS_ServerTypeName.c_str());
 	if (__LS_ServerTypeNameForQuery != __LS_ServerTypeName)
 	{
 		NetLibPlus_InitializeClients<to_LS_ClientsDelegate>(__LS_ServerTypeNameForQuery.c_str());
 	}
+	*/
 };
-
-#else
-
-#define RAW_UDP_MTU_ (1550)
-char receive_buffer[RAW_UDP_MTU_];
-boost::asio::ip::udp::endpoint udp_remote_endpoint_when_receive;
-
-bool udp_listenning = true;
-
-uint16_t udp_current_trans_id = 0;
-
-void raw_udp_async_receive();
-
-void raw_udp_receive_packet(const boost::system::error_code& error, std::size_t bytes_transferred)
-{	
-	if (udp_listenning) //Ö»ÔÚUnInitializeµÄÊ±ºòÖÃÎªfalse¡£Õâ¸ö±äÁ¿ÔİÊ±Ã»ÓĞÓÃËø±£»¤£¬Ó¦¸ÃÃ»ÊÂ¡£
-	{
-		if (!error) //ÓĞ´íºöÂÔ£¬ÒÀÈ»¼ÌĞøÊÕ
-		{
-			if (bytes_transferred >= 4) //°üÍ·4×Ö½Ú£¬Í·Á½×Ö½ÚÊÇÃüÁî£¬ºóÁ½×Ö½ÚÊÇtrans_id
-			{
-				//·µ»ØµÄ°üÔİÊ±Ö»¿ÉÄÜÊÇID_LOGSVR_LOGOPTIONS¡£±ğµÄ°üÒ²ÊÇÍêÈ«ÓĞ¿ÉÄÜµÄ£¬Ëµ²»¶¨±ğÈËÕıºÃÍ»È»·¢½øÀ´
-				if (*(uint16_t*)receive_buffer == ID_LOGSVR_LOGOPTIONS && *(uint16_t*)(receive_buffer + 2) == udp_current_trans_id) //µÃtrans_idÆ¥ÅäÁË²Å½ø£¬·ñÔò¿ÉÄÜÊÇÇ°Ò»´ÎSetIndex12·µ»ØµÄ½á¹û
-				{
-					if (ProcessLogOptions(receive_buffer + 4, bytes_transferred - 4))
-					{
-						//LOGEVENTL("Log_Debug", "Receive LogOptions");
-					}
-				}
-			}
-		}
-			
-		boost::lock_guard<boost::mutex> lock(_udpsocket_mutex);
-		raw_udp_async_receive();
-	}
-}
-
-void raw_udp_async_receive() //ÒªËøÄÚµ÷ÓÃ
-{
-	udpsocket_4log->async_receive_from(boost::asio::buffer(receive_buffer, RAW_UDP_MTU_), udp_remote_endpoint_when_receive,
-		boost::bind(&raw_udp_receive_packet, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
-}
-
-void SetLogServerAddress(const char* IP, int port)
-{	
-	boost::lock_guard<boost::mutex> lock(_udpsocket_mutex);
-	udpsocket_4log = std::make_shared<boost::asio::ip::udp::socket>(__log_ioservice_th.get_ioservice());
-	
-	boost::system::error_code error;
-	udpsocket_4log->open(boost::asio::ip::udp::v4(), error);
-	if (error)
-	{
-		LOGEVENTL("Log_Error", "raw udp open error: " << error.value());
-	}
-
-	boost::system::error_code error2;
-	udpsocket_4log->bind(boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0), error2);
-	if (error2)
-	{
-		LOGEVENTL("Log_Error", "udp bind error: " << error2.value());
-	}
-
-	udpendpoint_4log.address(boost::asio::ip::address::from_string(IP));
-	udpendpoint_4log.port(port);
-
-	raw_udp_async_receive();
-}
-
-#endif
 
 void SendLoginToLS() 
 {	
@@ -152,9 +78,7 @@ void SendLoginToLS()
 	_log_shared_mutex.unlock_shared();
 
 	int pb_size = pb.ByteSize();
-
-#ifndef _LOG_DLL_
-	
+		
 	char* send_buf = new char[CMDEX0_HEAD_SIZE + pb_size];
 	CMD_SIZE(send_buf)			= CMDEX0_HEAD_SIZE + pb_size;					// Êı¾İ°üµÄ×Ö½ÚÊı£¨º¬msghead£©
 	CMD_FLAG(send_buf)			= 0;							// ±êÖ¾Î»£¬±íÊ¾Êı¾İÊÇ·ñÑ¹Ëõ¡¢¼ÓÃÜµÈ
@@ -163,7 +87,10 @@ void SendLoginToLS()
 
 	pb.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)CMDEX0_DATA(send_buf));
 
+	//TODO TOMODIFY
+
 	//TODO: Ó¦¸Ã¸øËùÓĞls·¢
+	/*
 	std::shared_ptr<NetLibPlus_Client> client = NetLibPlus_get_first_Client(__LS_ServerTypeName.c_str()); //LogOptionsÖ»¶ÔĞ´LogÓĞĞ§£¬ËùÒÔ²»ÓÃ¶ÔServerTypeForQuery·¢
 	if (client) 
 	{
@@ -173,26 +100,7 @@ void SendLoginToLS()
 	{
 		delete[] send_buf;
 	}
-
-#else
-	
-	if (udp_listenning && udpsocket_4log) //»¹ÒªÅĞÒ»ÏÂudp_listenningÊÇÒòÎªÕë¶Ô¸ÕÒ»Æô¶¯¾ÍÍËµÄÇé¿ö£¬ÕâÊ±ºòudpsocket_4log»¹ÔÚ
-	{
-		char* send_buf = new char[4 + pb_size];
-		*(uint16_t*)send_buf = ID_LOGSVR_LOGIN;
-		*(uint16_t*)(send_buf + 2) = ++udp_current_trans_id; //Õâ¸ö±äÁ¿Ò²ÊÜioserviceµÄ±£»¤£¬¼¸¸ö·ÃÎÊÕß¶¼Ö»¿ÉÄÜÔÚioserviceÖĞÖ´ĞĞ
-
-		pb.SerializeWithCachedSizesToArray((google::protobuf::uint8*)(send_buf + 4));
-
-		boost::system::error_code error;
-		boost::lock_guard<boost::mutex> lock(_udpsocket_mutex);
-
-		udpsocket_4log->send_to(boost::asio::buffer(send_buf, 4 + pb_size), udpendpoint_4log, 0, error);
-
-		delete[] send_buf;
-	}
-	
-#endif
+	*/
 }
 
 void LogInitializeLocalOptions(bool enable_to_console, bool enable_to_file, const char* filename_prefix, bool split_by_date, int log_total_mega_bytes_limit_within_dir, int log_total_file_limit_within_dir, const char* config_file_path)
@@ -283,55 +191,17 @@ void LogUnInitialize()
 {
 	LogStopAllCounters();
 
-#ifndef _LOG_DLL_
+	//TODO TOMODIFY
+	/*
 	NetLibPlus_UnInitializeClients(__LS_ServerTypeName.c_str());
 	if (__LS_ServerTypeNameForQuery != __LS_ServerTypeName)
 	{
 		NetLibPlus_UnInitializeClients(__LS_ServerTypeNameForQuery.c_str());
 	}
-#else
-	
-	udp_listenning = false;
+	*/
 
-	boost::system::error_code ignored_error;
-	if (udpsocket_4log)
-	{
-		udpsocket_4log->shutdown(boost::asio::socket_base::shutdown_both, ignored_error);
-		udpsocket_4log->close(ignored_error);
-	}
-
-#endif
-	
 	__log_ioservice_th.stop_when_no_work(); //Õâ¾ä²»ÄÜÔÚLogStopAllCountersÖ®Ç°Ö´ĞĞ
 	__log_ioservice_th.wait_for_stop(); //ÏÂÁĞ¶«Î÷Ê¹ÓÃÁËioservice: counter's timer / udpsocket_4log(DLL°æ±¾) / udp_login_timer(DLL°æ±¾) / SendLoginToLS
 	
 	//µÈwait_for_stopÖ®ºóÔÙÊÍ·Å¸÷¶ÔÏó
-
-#ifdef _LOG_DLL_
-	udpsocket_4log.reset(); //ÕâÒ»ĞĞÈç¹û²»¼Ó£¬ÓÃÕâ¸ödllµÄexe¾Í»áÍË²»³ö
-	
-	google::protobuf::ShutdownProtobufLibrary();
-#endif
 }
-
-#ifdef _LOG_DLL_
-
-BOOL APIENTRY DllMain( HMODULE hModule,
-                       DWORD  ul_reason_for_call,
-                       LPVOID lpReserved
-					 )
-{
-	switch (ul_reason_for_call)
-	{
-	case DLL_PROCESS_ATTACH:
-		break;
-	case DLL_THREAD_ATTACH:
-	case DLL_THREAD_DETACH:
-		break;
-	case DLL_PROCESS_DETACH:
-		break;
-	}
-	return TRUE;
-}
-
-#endif

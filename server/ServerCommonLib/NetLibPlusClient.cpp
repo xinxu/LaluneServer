@@ -47,7 +47,7 @@ void NetLibPlus_Client_Imp::ResetClient(const char* ip, uint16_t tcp_port, ioser
 
 	m_client = NetLib_NewClient(shared_from_this(), ioservice_th);
 
-	m_client->ConnectAsyncTCP(ip, tcp_port, flags | NETLIB_CLIENT_ENABLE_RECONNECT_ON_FIRST_CONNECT | NETLIB_CLIENT_FLAG_KEEP_ALIVE);
+	m_client->ConnectAsync(ip, tcp_port, flags | NETLIB_CLIENT_ENABLE_RECONNECT_ON_FIRST_CONNECT | NETLIB_CLIENT_FLAG_KEEP_ALIVE);
 
 	m_RemoteServerIP = ip;
 	m_RemoteServerPort = tcp_port;

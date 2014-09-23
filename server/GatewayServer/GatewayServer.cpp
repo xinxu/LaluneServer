@@ -1,11 +1,12 @@
 #include <boost/asio.hpp>
-#include <boost/thread.hpp>
+#include "include/ioservice_thread.h"
 #include "Log/Log.h"
 #include "NetLib/NetLib.h"
 #include "memory.h"
 #include "string.h"
 #include <google/protobuf/stubs/common.h>
 #include "../../LaluneCommon/include/Header.h"
+#include "ServerCommonLib/ServerCommon.h"
 
 //实现一个SessionDelegate,至少要实现RecvFinishHandler
 class MySessionDelegate : public NetLib_ServerSession_Delegate
@@ -25,6 +26,17 @@ public:
 	}
 };
 
+class GatewayCommonLibDelegate : public CommonLibDelegate
+{
+public:
+	void onConfigRefresh(const std::string& content)
+	{
+
+	}
+};
+
+ioservice_thread thread;
+
 int main(int argc, char* argv[])
 {		
 	//Check Memory Leaks
@@ -39,18 +51,31 @@ int main(int argc, char* argv[])
 #endif
 
 	NETLIB_CHECK_VERSION;
-    LogInitializeLocalOptions(true, true, "user_server");
+    LogInitializeLocalOptions(true, true, "gateway");
 
-	NetLib_Server_ptr server = NetLib_NewServer<MySessionDelegate>();
+	thread.start();
 
+	NetLib_Server_ptr server = NetLib_NewServer<MySessionDelegate>(&thread);
+
+	//可以不指定端口 TODO (主要是内部端口)
+	//超时时间得可以中途重设 TODO
 	if (!server->StartTCP(4531, 1, 120)) //端口，线程数，超时时间
 	{
 		LOGEVENTL("Error", "Server Start Failed !");
+
+		NetLib_Servers_WaitForStop();
+
+		LogUnInitialize();
+
+		google_lalune::protobuf::ShutdownProtobufLibrary();
+
+		return 0;
 	}
-	else
-	{
-		LOGEVENTL("Info", "Server Start Success");
-	}
+	
+	LOGEVENTL("Info", "Server Start Success");
+
+	GatewayCommonLibDelegate* cl_delegate = new GatewayCommonLibDelegate();
+	InitializeCommonLib(thread, cl_delegate, 4531, SERVER_TYPE_GATEWAY_SERVER, argc, argv);
 	
 	for (;;)
 	{
@@ -69,32 +94,9 @@ int main(int argc, char* argv[])
 				server.reset();
 			}
 		}
-		else if (strcmp(tmp, "wait") == 0)
-		{
-			NetLib_Servers_WaitForStop();
-			LOGEVENTL("Info", "Wait OK.");
-		}
 		else if (strcmp(tmp, "exit") == 0)
 		{			
 			break;
-		}
-		else if (strcmp(tmp, "start") == 0)
-		{			
-			int tcp_port, work_thread, timeout_seconds;
-			scanf("%d%d%d", &tcp_port, &work_thread, &timeout_seconds);
-			if (server)
-			{
-				server->Stop();
-			}
-			server = NetLib_NewServer<MySessionDelegate>();
-			if (!server->Start(tcp_port, work_thread, timeout_seconds))
-			{
-				LOGEVENTL("Error", "Server Start Failed !");
-			}
-			else
-			{
-				LOGEVENTL("Info", "Server Start Success");
-			}
 		}
 	}
 

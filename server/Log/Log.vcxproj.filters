@@ -93,6 +93,9 @@
     <ClInclude Include="..\include\SimpleIni.h">
       <Filter>3rdparty</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Log.cpp">
@@ -127,5 +130,10 @@
     <None Include="..\protobuf\log\log.proto">
       <Filter>protobuf</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Log.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

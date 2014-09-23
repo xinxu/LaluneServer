@@ -17,11 +17,10 @@
 #endif
 #pragma comment(lib, _NETLIB_LIBNAME_)  //this is not cross-platform. you should write Makefile on linux.
 
+#endif
 
 #include <string>
 namespace boost { namespace asio { class io_service; } }
-
-#endif
 
 //for windows:   Need VS2010(or above)
 //for gnu linux: Need gcc4.6.3(or above)
@@ -36,7 +35,7 @@ namespace boost { namespace asio { class io_service; } }
 #define NETLIB_FLAG_TCP_NODELAY								(0x00000002)
 #define NETLIB_CLIENT_ENABLE_RECONNECT_ON_FIRST_CONNECT		(0x00000080)	//默认首次连接不自动重连。开了这个FLAG后首次连接也会自动重连
 #define NETLIB_SERVER_LISTEN_KEEP_ALIVE_EVENT				(0x00000100)	//收到size为4的包会触发ReceiveKeepAliveHandler。不开这个flag的话只是不触发Handler，但也有KeepAlive效果。
-        //这个flag尚未支持													//无论怎样size为4的包都不触发Server的ReceiveFinishHandler
+																			//无论怎样size为4的包都不触发Server的ReceiveFinishHandler
 //=====NetLib_Flags=====
 
 void NetLib_Set_MaxPacketSize(unsigned int MaxPacketSize); //default: 512 * 1024
@@ -167,6 +166,7 @@ public:
 	virtual void SendFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data, void* pHint = nullptr) { delete[] data; } //如果不是用new[]申请的内存，请重写此方法
 	virtual void SendCopyFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data, void* pHint = nullptr) {}
 
+	virtual void RecvKeepAliveHandler(NetLib_ServerSession_ptr sessionptr) {};
 	//'data' will be released just after RecvFinishHandler returns
 	virtual void RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data) = 0;
 

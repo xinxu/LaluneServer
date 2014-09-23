@@ -3,7 +3,7 @@
 #include "LogOption.h"
 #include "BasicLogStream.h"
 
-class LOG_API LogStream : public BasicLogStream //还有打到屏幕/打到文件/级别控制/统计 等功能
+class LogStream : public BasicLogStream //还有打到屏幕/打到文件/级别控制/统计 等功能
 {
 protected:
 	const std::string m_index3;

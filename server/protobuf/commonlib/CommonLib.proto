@@ -2,16 +2,10 @@ package common;
 
 //扩展头
 
-message CorrespondingServer
-{
-	required uint32 servertype	= 1;
-	required uint32 serverid	= 2;
-}
-
 message HeaderEx
 {
 	optional uint64 uid			= 1;
-	repeated CorrespondingServer servers	= 2;
+	repeated uint32 corresponding_servers	= 2;
 }
 
 //和控制服务器通信用的Protobuf
@@ -19,6 +13,8 @@ message HeaderEx
 message Hello
 {
 	required uint32 my_listening_port	= 1;
+	required uint32 server_type			= 2;
+	required uint32 is_server_start		= 3;
 }
 
 message ReportLoad
@@ -30,11 +26,16 @@ message AddressInfo
 {
 	required fixed32 ip	= 1;
 	required uint32 port	= 2;
-	required uint32 serverid	= 3;
-	required uint32 servertype	= 4;
+	required uint32 server_id	= 3;
+	required uint32 server_type	= 4;
 }
 
 message AddressList
 {
 	repeated AddressInfo addr	= 1;
+}
+
+message ServerId
+{
+	required uint32 server_id	= 1;
 }
