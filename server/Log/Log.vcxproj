@@ -38,7 +38,6 @@
     <ClInclude Include="LogQuery.h" />
     <ClInclude Include="LogStream.h" />
     <ClInclude Include="LogValue.h" />
-    <ClInclude Include="Log_Dll.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
     <ClInclude Include="SemanticStream.h" />

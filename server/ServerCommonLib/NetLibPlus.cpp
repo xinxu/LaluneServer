@@ -8,32 +8,34 @@
 #include <boost/thread/locks.hpp>
 #include "Log/Log.h"
 
+ioservice_thread* __thread;
+
+void _initialize_thread(class ioservice_thread* thread)
+{
+	__thread = thread;
+}
+
 typedef struct tag_delegate_and_flag
 {
 	std::shared_ptr<NetLibPlus_Client_Delegate> delegateptr;
-	ioservice_thread* ioservice_th;
 	uint64_t flags;
 	tag_delegate_and_flag()
 	{
 	}
-	tag_delegate_and_flag(std::shared_ptr<NetLibPlus_Client_Delegate>& d, ioservice_thread* it, uint64_t f) : delegateptr(d), ioservice_th(it), flags(f)
+	tag_delegate_and_flag(std::shared_ptr<NetLibPlus_Client_Delegate>& d, uint64_t f) : delegateptr(d), flags(f)
 	{
 	}
 } delegate_and_flag;
 
-boost::shared_mutex _NetLibPlus_mutex;
-
 bool NetLibPlus_Clients_Shutdown = false;
 delegate_and_flag global_delegate_info;
-std::map<std::string, delegate_and_flag> init_info;
+std::map<int, delegate_and_flag> init_info;
 std::map<int, std::shared_ptr<NetLibPlus_Client_Imp> > clients;
 std::map<int, NetLibPlus_ServerInfo > serverinfos;
-std::map<std::string, std::set<int> > serverid_groupby_type;
-std::map<std::string, int> serverid_iterator;
-boost::mutex _serverid_iterator_mutex;
+std::map<int, std::set<int> > serverid_groupby_type;
 int MyServerID = 0;
 
-delegate_and_flag select_delegate_and_flag(const std::string ServerType)
+delegate_and_flag select_delegate_and_flag(int ServerType)
 {
 	auto it = init_info.find(ServerType);
 	if (it != init_info.end())
@@ -59,7 +61,7 @@ void try_start_a_client(const NetLibPlus_ServerInfo& ServerInfo) //±ÿ–Î‘⁄À¯ƒ⁄µ˜”
 		}
 		
 		it->second->InitializeDelegate(delegate_to_use.delegateptr);
-		it->second->ResetClient(ServerInfo.IP.c_str(), ServerInfo.port, delegate_to_use.ioservice_th, delegate_to_use.flags);
+		it->second->ResetClient(ServerInfo.IP.c_str(), ServerInfo.port, __thread, delegate_to_use.flags);
 	}
 	else
 	{
@@ -67,11 +69,8 @@ void try_start_a_client(const NetLibPlus_ServerInfo& ServerInfo) //±ÿ–Î‘⁄À¯ƒ⁄µ˜”
 	}
 }
 
-//∏√∑Ω∑®”…ControlServerConnectorµ˜”√
-void _NetLibPlus_UpdateServerInfo(int ServerID, const char* Ip, int Port, const char* ServerType)
-{	
-	boost::lock_guard<boost::shared_mutex> lock(_NetLibPlus_mutex); 
-
+void _NetLibPlus_UpdateServerInfo(int ServerID, const char* Ip, int Port, int ServerType)
+{
 	if (NetLibPlus_Clients_Shutdown) return;
 
 	std::map<int, NetLibPlus_ServerInfo >::iterator it_info = serverinfos.find(ServerID);
@@ -99,21 +98,12 @@ void _NetLibPlus_UpdateServerInfo(int ServerID, const char* Ip, int Port, const 
 	}
 
 	serverid_groupby_type[ServerType].insert(ServerID);
-	{
-		boost::lock_guard<boost::mutex> lock_guard(_serverid_iterator_mutex);
-		if (serverid_iterator.count(ServerType) == 0)
-		{
-			serverid_iterator.insert(std::make_pair(ServerType, -1));
-		}
-	}
 
 	LOGEVENTL("NetLib_Info", log_::n("ServerInfoSize") << serverinfos.size() << log_::n("ServerID") << ServerID << log_::n("IP") << Ip << log_::n("Port") << Port);
 }
 
-void NetLibPlus_InitializeClients(std::shared_ptr<NetLibPlus_Client_Delegate> d, ioservice_thread* ioservice_th, uint64_t flags)
-{	
-	boost::lock_guard<boost::shared_mutex> lock(_NetLibPlus_mutex); 
-	
+void NetLibPlus_InitializeClients(std::shared_ptr<NetLibPlus_Client_Delegate> d, uint64_t flags)
+{		
 	if (NetLibPlus_Clients_Shutdown) 
 	{
 		LOGEVENTL("Error", "Do anything after NetLibPlus_UnInitializeClients is no use.");
@@ -127,14 +117,11 @@ void NetLibPlus_InitializeClients(std::shared_ptr<NetLibPlus_Client_Delegate> d,
 	}
 
 	global_delegate_info.delegateptr = d;
-	global_delegate_info.ioservice_th = ioservice_th;
 	global_delegate_info.flags = flags;
 }
 
-void NetLibPlus_InitializeClients(const char* ServerType, std::shared_ptr<NetLibPlus_Client_Delegate> d, ioservice_thread* ioservice_th, uint64_t flags)
+void NetLibPlus_InitializeClients(int ServerType, std::shared_ptr<NetLibPlus_Client_Delegate> d, uint64_t flags)
 {
-	boost::lock_guard<boost::shared_mutex> lock(_NetLibPlus_mutex); 
-
 	if (NetLibPlus_Clients_Shutdown) 
 	{
 		LOGEVENTL("Error", "Do anything after NetLibPlus_UnInitializeClients is no use.");
@@ -147,13 +134,11 @@ void NetLibPlus_InitializeClients(const char* ServerType, std::shared_ptr<NetLib
 		return;
 	}
 
-	init_info[ServerType] = delegate_and_flag(d, ioservice_th, flags);
+	init_info[ServerType] = delegate_and_flag(d, flags);
 }
 
 std::shared_ptr<NetLibPlus_Client> NetLibPlus_getClient(int ServerID) //”…”⁄ «shared_ptr£¨À˘“‘÷ª“™get≥ˆ¿¥æÕ“ª∂®”––ß°£÷ª «ø…ƒ‹”√◊≈“ª∞Î¡¨Ω”∂œ¡À£¨’‚Œﬁ∑®±‹√‚°£
 {	
-	boost::shared_lock<boost::shared_mutex> lock(_NetLibPlus_mutex); 
-
 	if (NetLibPlus_Clients_Shutdown) 
 	{
 		LOGEVENTL("Error", "NetLibPlus_getClient: Do anything after NetLibPlus_UnInitializeClients is no use.");
@@ -179,48 +164,7 @@ std::shared_ptr<NetLibPlus_Client> NetLibPlus_getClient(int ServerID) //”…”⁄ «sh
 	return clients[ServerID];
 }
 
-std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_first_Client(const char* ServerType)
-{
-	boost::shared_lock<boost::shared_mutex> lock(_NetLibPlus_mutex); 
-
-	std::shared_ptr<NetLibPlus_Client> ret;
-
-	if (NetLibPlus_Clients_Shutdown)
-	{
-		LOGEVENTL("Error", "NetLibPlus_get_first_Client: Do anything after NetLibPlus_UnInitializeClients is no use.");
-	}
-	else
-	{
-		auto it_group = serverid_groupby_type.find(ServerType);
-		if (it_group == serverid_groupby_type.end())
-		{
-			LOGEVENTL("Warn", "NetLibPlus_get_first_Client: Type " << ServerType << " has no servers ");
-		}
-		else
-		{
-			auto it_id = it_group->second.begin();
-			if (it_id != it_group->second.end())
-			{
-				auto it_client = clients.find(*it_id);
-				if (it_client == clients.end())
-				{
-					LOGEVENTL("Fatal", "UNEXPECTED. ServerID " << *it_id << " exist in serverid_groupby_type, but not exist in clients");
-				}
-				else
-				{
-					ret = it_client->second;
-				}
-			}
-			else
-			{
-				LOGEVENTL("Fatal", "UNEXPECTED. serverid_groupby_type(" << ServerType << ") is an empty set.");
-			}
-		}
-	}
-
-	return ret;
-}
-
+/* ∑Ω∑®∏–æı «”√≤ª…œ¡À£¨ªÚ’ﬂ≈≤µΩGateway»•
 std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_next_Client(const char* ServerType)
 {
 	boost::shared_lock<boost::shared_mutex> lock(_NetLibPlus_mutex); 
@@ -275,13 +219,12 @@ std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_next_Client(const char* Server
 
 	return ret;
 }
+*/
 
-std::shared_ptr<NetLibPlus_Clients> NetLibPlus_getClients(const char* ServerType)
+std::shared_ptr<NetLibPlus_Clients> NetLibPlus_getClients(int ServerType)
 {
 	std::shared_ptr<NetLibPlus_Clients> ret = std::make_shared<NetLibPlus_Clients> ();
-
-	boost::shared_lock<boost::shared_mutex> lock(_NetLibPlus_mutex); 
-
+	
 	if (NetLibPlus_Clients_Shutdown)
 	{
 		LOGEVENTL("Error", "NetLibPlus_getClients: Do anything after NetLibPlus_UnInitializeClients is no use.");
@@ -313,12 +256,10 @@ std::shared_ptr<NetLibPlus_Clients> NetLibPlus_getClients(const char* ServerType
 	return ret;
 }
 
-std::map<int, NetLibPlus_ServerInfo> NetLibPlus_getClientsInfo(const char* ServerType)
+std::map<int, NetLibPlus_ServerInfo> NetLibPlus_getClientsInfo(int ServerType)
 {
 	std::map<int, NetLibPlus_ServerInfo> ret;
-
-	boost::shared_lock<boost::shared_mutex> lock(_NetLibPlus_mutex); 
-
+	
 	if (NetLibPlus_Clients_Shutdown)
 	{
 		LOGEVENTL("Error", "NetLibPlus_getClientsInfo: Do anything after NetLibPlus_UnInitializeClients is no use.");
@@ -358,10 +299,8 @@ void NetLibPlus_Clients::SendCopyAsync(const char* data)
 	}
 }
 
-void NetLibPlus_UnInitializeClients(const char* ServerType)
+void NetLibPlus_UnInitializeClients(int ServerType)
 {	
-	boost::lock_guard<boost::shared_mutex> lock(_NetLibPlus_mutex); 
-
 	if (NetLibPlus_Clients_Shutdown) return; //‘ –ÌNetLibPlus_UnInitializeClientsµ˜”√∂‡¥Œ£¨µ´÷ª”–µ⁄“ª¥Œ µº ”––ß
 
 	auto it_idgroup = serverid_groupby_type.find(ServerType);
@@ -384,8 +323,6 @@ void NetLibPlus_UnInitializeClients(const char* ServerType)
 
 void NetLibPlus_UnInitializeClients()
 {	
-	boost::lock_guard<boost::shared_mutex> lock(_NetLibPlus_mutex); 
-
 	if (NetLibPlus_Clients_Shutdown) return; //‘ –ÌNetLibPlus_UnInitializeClientsµ˜”√∂‡¥Œ£¨µ´÷ª”–µ⁄“ª¥Œ µº ”––ß
 
 	NetLibPlus_Clients_Shutdown = true; //NetLibPlus_Clients_Shutdown…Ë÷√Œ™true∫Û£¨æÕ“‚Œ∂◊≈clients÷–µƒ ˝æ›≤ª‘ –Ì‘Ÿ±ª∑√Œ 

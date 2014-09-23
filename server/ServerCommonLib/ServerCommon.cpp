@@ -35,7 +35,15 @@ public:
 		{
 			switch (SERVER_MSG_TYPE(data))
 			{
+			case MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REFRESH:
+				break;
 			case MSG_TYPE_CONTROL_SERVER_ADDR_INFO_ADD:
+				break;
+			case MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REMOVE:
+				break;
+			case MSG_TYPE_CONTROL_SERVER_ADDR_INFO_RESTART:
+				//RESTART先啥也不干
+				break;
 			default:
 				break;
 			}
@@ -49,6 +57,8 @@ public:
 
 void InitializeCommonLib(ioservice_thread& thread, CommonLibDelegate* d, int my_listening_port, int my_server_type, int argc, char* argv[])
 {
+	_initialize_thread(&thread);
+
 	__commonlib_delegate = d;
 
 	__my_listening_port = my_listening_port;

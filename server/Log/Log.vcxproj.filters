@@ -69,9 +69,6 @@
     <ClInclude Include="LogDataReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Log_Dll.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="LogQuery.h">
       <Filter>Query</Filter>
     </ClInclude>

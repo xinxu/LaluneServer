@@ -3,6 +3,14 @@
 
 //ÎÞËø°æ
 
+#ifdef _DEBUG
+#define _SERVER_COMMON_LIBNAME_ "ServerCommond"
+#else
+#define _SERVER_COMMON_LIBNAME_ "ServerCommon"
+#endif
+
+#pragma comment(lib, _SERVER_COMMON_LIBNAME_)  //this is not cross-platform. you should write Makefile on linux.
+
 #include <cstdint>
 #include <map>
 
@@ -51,7 +59,7 @@ bool ParseMsg(char* data, P proto) //°üÍ·ÎÞUserIDµÄ°æ±¾
 #include "NetLibPlus.h"
 
 template<typename P>
-bool SendMsg(uint32_t server_id, uint32_t msg_type, P proto)
+bool SendMsg(uint32_t server_id, uint32_t msg_type, P& proto)
 {
 	int proto_size = proto.ByteSize();
 
@@ -165,7 +173,7 @@ bool SendMsg(uint32_t msg_type, uint32_t op_id, uint8_t error_code, P proto) //°
 }
 */
 template<typename P>
-void ReplyMsg(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, P proto) //°üÍ·ÎÞUserIDµÄ°æ±¾
+void ReplyMsg(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, P& proto) //°üÍ·ÎÞUserIDµÄ°æ±¾
 {
 	int proto_size = proto.ByteSize();
 
