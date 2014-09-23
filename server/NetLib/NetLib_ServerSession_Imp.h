@@ -52,6 +52,8 @@ public:
 
 	bool GetRemoteAddress(char* ip, uint16_t& port);
 	bool GetRemoteAddress(std::string& ip, uint16_t& port);
+	std::string GetRemoteIP();
+	uint32_t GetRemoteIPu();
 
 	std::string GetLocalAddress();
 

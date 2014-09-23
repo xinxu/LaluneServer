@@ -1,5 +1,7 @@
 #pragma once
 
+//这是老的消息定义，待修改
+
 #define CMD_HEAD_SIZE (12)
 #define CMDEX0_HEAD_SIZE (24)
 #define CMDEX_HEAD_SIZE (32)

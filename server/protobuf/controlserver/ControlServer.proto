@@ -1,0 +1,12 @@
+package control_server;
+
+message Command
+{
+	required string command_name	= 1;
+	repeated string args			= 2;
+}
+
+message CommandResult
+{
+	required string result	= 1;
+}

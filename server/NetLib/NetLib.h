@@ -52,8 +52,8 @@ public:
 	virtual bool IsConnected() = 0; //不建议编写逻辑时过于依赖该方法的返回值，因为判断前后连接状态可能发生改变。
 
 	//only ip is supported, domain or hostname is not supported. Resolver not implemented
-	//已过时。udp_port现在已经无效了。等价于直接调用ConnectAsyncTCP
-	virtual void ConnectAsync(const char* ip, uint16_t tcp_port, uint16_t udp_port, uint64_t flags = 0) = 0;
+	virtual void ConnectAsync(const char* ip, uint16_t port, uint64_t flags = 0) = 0;
+	virtual void ConnectAsync(uint32_t ip, uint16_t port, uint64_t flags = 0) = 0;
 
 	//'data' must be retained until SendFinishHandler has been called
 	//data的前4个字节是长度
@@ -68,10 +68,6 @@ public:
 	//reconnect_interval_ms表示每次重连失败后等待多少毫秒后再次尝试重连。第一次断线时会立即重连。
 	//max_continuous_retries表示重连失败多少次后不再重连
 	//只有连着的连接断线了才会重连，没连上的连接不会反复尝试连
-
-	virtual void ConnectAsyncTCP(const char* ip, uint16_t tcp_port, uint64_t flags = 0) = 0;
-	//已过时，执行则什么也不发生
-	virtual void ConnectAsyncUDP(const char* ip, uint16_t udp_port, uint64_t flags = 0) = 0;
 
 	virtual void ResetFailedData() = 0;	
 	
@@ -156,6 +152,8 @@ public:
 	virtual void Disconnect() = 0;
 
 	virtual bool GetRemoteAddress(std::string& ip, uint16_t& port) = 0;
+	virtual uint32_t GetRemoteIPu() = 0;
+	virtual std::string GetRemoteIP() = 0;
 	virtual std::string GetLocalAddress() = 0;
 };
 

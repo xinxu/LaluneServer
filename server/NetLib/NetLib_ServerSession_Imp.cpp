@@ -118,6 +118,33 @@ bool NetLib_ServerSession_Imp::GetRemoteAddress(std::string& ip, uint16_t& port)
 	}
 }
 
+std::string NetLib_ServerSession_Imp::GetRemoteIP()
+{
+	boost::lock_guard<boost::recursive_mutex> lock(session_mutex);
+
+	if (session_detail)
+	{
+		std::string ip;
+		uint16_t port;
+		if (session_detail->get_remote_address(ip, port))
+		{
+			return ip;
+		}
+	}
+	return "";
+}
+
+uint32_t NetLib_ServerSession_Imp::GetRemoteIPu()
+{
+	boost::lock_guard<boost::recursive_mutex> lock(session_mutex);
+
+	if (session_detail)
+	{
+		return session_detail->get_remote_ip();
+	}
+	return 0;
+}
+
 std::string NetLib_ServerSession_Imp::GetLocalAddress()
 {
 	boost::lock_guard<boost::recursive_mutex> lock(session_mutex);

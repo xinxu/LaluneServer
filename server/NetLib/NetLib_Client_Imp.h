@@ -18,6 +18,7 @@ protected:
 	boost::asio::io_service & boostioservice;
 	tcp::socket tcpsocket;
 	std::string m_dest_ip;
+	uint32_t m_dest_ip_u;
 	uint16_t m_tcp_port;
 	uint64_t m_flags;
 	bool m_in_disconnect_process;
@@ -47,6 +48,8 @@ protected:
 
 	void tcp_connect_async();
 	void tcp_connected_handler(std::shared_ptr<NetLib_Client_Imp> keep_alive, const boost::system::error_code& error); //async handlers need to keep this() alive
+
+	void _connect_async(const char* ip_s, uint32_t ip_u, uint16_t port, uint64_t flags = 0);
 	
 public:
 	void SendFinishHandler(char* data, void* pHint) //as long as connected_sessions is connected, the session_container is kept alive
@@ -83,17 +86,15 @@ public:
 
 	void Disconnect();
 	bool IsConnected();
-	void ConnectAsync(const char* ip, uint16_t tcp_port, uint16_t udp_port, uint64_t _flags);
+	void ConnectAsync(const char* ip, uint16_t tcp_port, uint64_t _flags);
+	void ConnectAsync(uint32_t ip, uint16_t tcp_port, uint64_t _flags);
 
 	void SendAsync(const char* data, void* pHint = nullptr);
 	void SendCopyAsync(const char* data, void* pHint = nullptr);
 
 	void DisableReconnect();
 	void EnableReconnect(int reconnect_interval_ms = 3000, int max_continuous_retries = -1); 
-
-	void ConnectAsyncTCP(const char* ip, uint16_t tcp_port, uint64_t flags = 0);
-	void ConnectAsyncUDP(const char* ip, uint16_t tcp_port, uint64_t flags = 0) {}
-	
+		
 	boost::asio::io_service* GetWorkIoService();
 
 	void SetKeepAliveIntervalSeconds(int keepalive_interval_seconds = 240);

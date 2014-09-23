@@ -296,6 +296,18 @@ bool NetLib_Connected_TcpSession::get_remote_address(std::string& ip, uint16_t& 
 	return true;
 }
 
+uint32_t NetLib_Connected_TcpSession::get_remote_ip()
+{
+	boost::lock_guard<boost::recursive_mutex> lock(owner->get_mutex());
+	boost::system::error_code error;
+	const tcp::endpoint& ep = tcpsocket->remote_endpoint(error);
+	if (error)
+	{
+		return 0;
+	}
+	return ep.address().to_v4().to_ulong();
+}
+
 std::string NetLib_Connected_TcpSession::get_local_address()
 {
 	boost::system::error_code error;

@@ -1,5 +1,7 @@
 #pragma once
 
+//这是老的消息定义，待修改
+
 #define CAT_LOGSVR	0x4150 //"Log服务器相关消息"
 
 #define ID_LOGSVR_LOGIN 0x01 //"登陆Log服务器，目前主要是提交index1和index2的信息，并假设之后的Log都使用相同的index1和index2，避免以后每次都发"

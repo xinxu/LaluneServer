@@ -51,6 +51,7 @@ public:
 		owner = _owner;
 	}
 
+	uint32_t get_remote_ip();
 	bool get_remote_address(char* ip, uint16_t& port);
 	bool get_remote_address(std::string& ip, uint16_t& port);
 	std::string get_local_address();

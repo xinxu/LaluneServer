@@ -291,7 +291,15 @@ void NetLib_Client_Imp::tcp_connect_async()
 	boost::lock_guard<boost::recursive_mutex> lock(client_mutex);
 	try
 	{
-		boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(m_dest_ip), m_tcp_port);
+		boost::asio::ip::tcp::endpoint endpoint;
+		if (m_dest_ip_u == 0)
+		{
+			endpoint = boost::asio::ip::tcp::endpoint(boost::asio::ip::address::from_string(m_dest_ip), m_tcp_port);
+		}
+		else
+		{
+			endpoint = boost::asio::ip::tcp::endpoint(boost::asio::ip::address_v4(m_dest_ip_u), m_tcp_port);
+		}
 
 		increase_pending_ops_count();
 
@@ -378,8 +386,8 @@ void NetLib_Client_Imp::connect_async()
 	}
 }
 
-void NetLib_Client_Imp::ConnectAsync(const char* ip, uint16_t tcp_port, uint16_t udp_port, uint64_t _flags)
-{	
+void NetLib_Client_Imp::_connect_async(const char* ip_s, uint32_t ip_u, uint16_t port, uint64_t flags)
+{
 	std::shared_ptr<NetLib_Client_Imp> keep_alive = shared_from_this(); //避免在锁外的时候this还健在，等能进锁了this已经释放了。
 	boost::lock_guard<boost::recursive_mutex> lock(client_mutex);
 	if (m_pending_ops_count != 0 || m_in_disconnect_process)
@@ -388,12 +396,25 @@ void NetLib_Client_Imp::ConnectAsync(const char* ip, uint16_t tcp_port, uint16_t
 	}
 	else
 	{
-		LOGEVENTL("NetLib_Info", "(" << log_::h((std::size_t)this) << ") ConnectAsync: ip("  //直接打指针gcc会自己带0x，就不统一了，于是转了再打
-				<< ip << "), tcp(" << tcp_port << "), udp(" << udp_port << "), flags(" << log_::h(_flags) << ")");
+		if (ip_s)
+		{
+			LOGEVENTL("NetLib_Info", log_::n("ptr") << log_::h((std::size_t)this) << ", ConnectAsync: "  //直接打指针gcc会自己带0x，就不统一了，于是转了再打
+				<< log_::n("ip") << ip_s << log_::n("port") << port << log_::n("flags") << log_::h(flags));
+
+			m_dest_ip = ip_s;
+			m_dest_ip_u = 0;
+		}
+		else
+		{
+			LOGEVENTL("NetLib_Info", log_::n("ptr") << log_::h((std::size_t)this) << ", ConnectAsync: "  //直接打指针gcc会自己带0x，就不统一了，于是转了再打
+				<< log_::n("ip") << ip_u << log_::n("port") << port << log_::n("flags") << log_::h(flags));
+
+			m_dest_ip_u = ip_u;
+		}
 		m_manually_disconnect = false;
-		m_dest_ip = ip;
-		m_tcp_port = tcp_port;
-		m_flags = _flags;
+
+		m_tcp_port = port;
+		m_flags = flags;
 		if (m_flags & NETLIB_CLIENT_ENABLE_RECONNECT_ON_FIRST_CONNECT)
 		{
 			m_will_reconnect_if_disconnected = true; //首次连接也允许重连
@@ -407,9 +428,14 @@ void NetLib_Client_Imp::ConnectAsync(const char* ip, uint16_t tcp_port, uint16_t
 	}
 }
 
-void NetLib_Client_Imp::ConnectAsyncTCP(const char* ip, uint16_t tcp_port, uint64_t flags)
+void NetLib_Client_Imp::ConnectAsync(const char* ip, uint16_t port, uint64_t _flags)
+{	
+	_connect_async(ip, 0, port, _flags);
+}
+
+void NetLib_Client_Imp::ConnectAsync(uint32_t ip, uint16_t port, uint64_t _flags)
 {
-	ConnectAsync(ip, tcp_port, 0, flags);
+	_connect_async(nullptr, ip, port, _flags);
 }
 
 void NetLib_Client_Imp::SendAsyncFailed(std::shared_ptr<NetLib_Client_Imp> keep_alive, const char* data, void* pHint)
