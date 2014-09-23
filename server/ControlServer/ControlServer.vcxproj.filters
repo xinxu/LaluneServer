@@ -27,6 +27,9 @@
     <ClCompile Include="..\protobuf\commonlib\CommonLib.pb.cc">
       <Filter>protobuf</Filter>
     </ClCompile>
+    <ClCompile Include="..\protobuf\controlserver\ControlServer.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ControlServerSessionDelegate.h">
@@ -43,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="ControlServer.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\protobuf\controlserver\ControlServer.pb.h">
+      <Filter>protobuf</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

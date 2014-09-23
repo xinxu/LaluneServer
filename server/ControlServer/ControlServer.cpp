@@ -49,8 +49,29 @@ void releaseId(uint32_t _id)
 }
 
 std::map<NetLib_ServerSession_ptr, std::pair<int, int>> session2server;
-std::map<std::pair<int, int>, std::pair<common::AddressInfo, boost::asio::deadline_timer>> servers_info;
+std::map<std::pair<int, int>, ServerInfo*> servers_info;
 std::set<NetLib_ServerSession_ptr> gateways;
+
+//这个的timeout只会因为timer而触发。如果不是的话，还得keep_alive一份timer
+void ServerTimeout(std::pair<int, int> ip_port, const boost::system::error_code& error)
+{
+	if (error)
+	{
+		//有服务超时了，得把他从数据结构里移除，并告知他人
+		auto info_it = servers_info.find(ip_port);
+		if (info_it != servers_info.end())
+		{
+			informAddressInfo(info_it->second->addr, MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REMOVE);
+
+			delete info_it->second;
+			servers_info.erase(info_it);
+		}
+		else
+		{
+			LOGEVENTL("ERROR", "When a server timeout, can't find it in servers_info. " << log_::n("ip") << ip_port.first << log_::n("port") << ip_port.second);
+		}
+	}
+}
 
 //反正是在同一个线程里的，就直接改config的值了
 void LoadConfig()
@@ -74,7 +95,7 @@ void StartupTimer(const boost::system::error_code& error)
 		common::AddressList addr_list;
 		for (auto it = servers_info.begin(); it != servers_info.end(); ++it)
 		{
-			*addr_list.add_addr() = it->second.first;
+			*addr_list.add_addr() = it->second->addr;
 		}
 		informAddressInfo(addr_list, MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REFRESH);
 	}
