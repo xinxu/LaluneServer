@@ -1,5 +1,6 @@
 #include "NetLibPlusClient.h"
 #include "../include/ioservice_thread.h"
+#include "../include/utility2.h"
 #include "Log/Log.h"
 
 //暂不开启，否则打Log的时候太烦了
@@ -287,6 +288,6 @@ int NetLibPlus_Client_Imp::GetRemoteServerID() const
 
 void NetLibPlus_Client_Imp::GetRemoteServerAddress(std::string& IP, int& port)
 {	
-	IP = m_RemoteServerIP;
+	IP = utility2::toIPs(m_RemoteServerIP);
 	port = m_RemoteServerPort;
 }

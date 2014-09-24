@@ -4,6 +4,7 @@
 #include <boost/thread/locks.hpp>
 #include <boost/array.hpp>
 #include "NetLib_Params.h"
+#include "../include/utility2.h"
 #include "Log/Log.h"
 
 NetLib_Client_Imp::NetLib_Client_Imp(std::shared_ptr<NetLib_Client_Delegate> d, boost::asio::io_service & ioservice) : theDelegate(d), boostioservice(ioservice), tcpsocket(ioservice), 
@@ -407,7 +408,7 @@ void NetLib_Client_Imp::_connect_async(const char* ip_s, uint32_t ip_u, uint16_t
 		else
 		{
 			LOGEVENTL("NetLib_Info", log_::n("ptr") << log_::h((std::size_t)this) << ", ConnectAsync: "  //直接打指针gcc会自己带0x，就不统一了，于是转了再打
-				<< log_::n("ip") << ip_u << log_::n("port") << port << log_::n("flags") << log_::h(flags));
+				<< log_::n("ip") << utility2::toIPs(ip_u) << log_::n("port") << port << log_::n("flags") << log_::h(flags));
 
 			m_dest_ip_u = ip_u;
 		}

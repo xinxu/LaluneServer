@@ -1,6 +1,7 @@
 #include "NetLibPlus.h"
 #include "NetLibPlusClient.h"
 #include "../include/ioservice_thread.h"
+#include "include/utility2.h"
 #include <map>
 #include <set>
 #include <boost/thread/mutex.hpp>
@@ -99,7 +100,7 @@ void _NetLibPlus_UpdateServerInfo(int ServerID, int Ip, int Port, int ServerType
 
 	serverid_groupby_type[ServerType].insert(ServerID);
 
-	LOGEVENTL("NetLib_Info", log_::n("ServerInfoSize") << serverinfos.size() << log_::n("ServerID") << ServerID << log_::n("IP") << Ip << log_::n("Port") << Port);
+	LOGEVENTL("NetLib_Info", log_::n("ServerInfoSize") << serverinfos.size() << log_::n("ServerID") << ServerID << log_::n("IP") << utility2::toIPs(Ip) << log_::n("Port") << Port);
 }
 
 void _NetLibPlus_RemoveServerInfo(int ServerID, int Ip, int Port, int ServerType)
@@ -113,7 +114,7 @@ void _NetLibPlus_RemoveServerInfo(int ServerID, int Ip, int Port, int ServerType
 		if (it_info->second.IP != Ip || it_info->second.port != Port || it_info->second.ServerType != ServerType)
 		{
 			LOGEVENTL("ERROR", "UNEXPECTED. Remove a server but detail info not match. " << _ln("server_id") << ServerID 
-				<< _ln("expected_ip") << it_info->second.IP << _ln("ip") << Ip 
+				<< _ln("expected_ip") << it_info->second.IP << _ln("ip") << utility2::toIPs(Ip)
 				<< _ln("expected_port") << it_info->second.port << _ln("port") << Port 
 				<< _ln("expected_server_type") << it_info->second.ServerType << _ln("server_type") << ServerType);
 		}
@@ -136,7 +137,7 @@ void _NetLibPlus_RemoveServerInfo(int ServerID, int Ip, int Port, int ServerType
 	}
 	else
 	{
-		LOGEVENTL("ERROR", "UNEXPECTED. Remove a server but not found in serverinfos. " << _ln("server_id") << ServerID << _ln("ip") << Ip << _ln("port") << Port);
+		LOGEVENTL("ERROR", "UNEXPECTED. Remove a server but not found in serverinfos. " << _ln("server_id") << ServerID << _ln("ip") << utility2::toIPs(Ip) << _ln("port") << Port);
 	}
 }
 

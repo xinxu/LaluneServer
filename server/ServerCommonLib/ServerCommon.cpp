@@ -27,12 +27,12 @@ bool is_initialized = false;
 class Conn2ControlServerDelegate : public NetLibPlus_Client_Delegate
 {
 public:
-	void ReconnectedHandler(NetLib_Client_ptr clientptr)
+	void ReconnectedHandler(std::shared_ptr<NetLibPlus_Client> clientptr)
 	{
 		SayHello2ControlServer(0);
 	}
 
-	void RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
+	void RecvFinishHandler(std::shared_ptr<NetLibPlus_Client> clientptr, char* data)
 	{
 		if (SERVER_MSG_LENGTH(data) >= SERVER_MSG_HEADER_BASE_SIZE)
 		{
@@ -43,6 +43,7 @@ public:
 					common::AddressList list;
 					if (ParseMsg(data, list))
 					{
+						LOGEVENTL("DEBUG", "MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REFRESH");
 						for (int i = 0; i < list.addr_size(); ++i)
 						{
 							const common::AddressInfo& addr = list.addr(i);
@@ -62,6 +63,7 @@ public:
 					common::AddressInfo addr;
 					if (ParseMsg(data, addr))
 					{
+						LOGEVENTL("DEBUG", "MSG_TYPE_CONTROL_SERVER_ADDR_INFO_ADD");
 						_NetLibPlus_UpdateServerInfo(addr.server_id(), addr.ip(), addr.port(), addr.server_type()); 
 						__commonlib_delegate->onServerAdded(addr.server_type(), addr.server_id());
 					}
@@ -72,12 +74,14 @@ public:
 					common::AddressInfo addr;
 					if (ParseMsg(data, addr))
 					{
+						LOGEVENTL("DEBUG", "MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REMOVE");
 						_NetLibPlus_RemoveServerInfo(addr.server_id(), addr.ip(), addr.port(), addr.server_type());
 						__commonlib_delegate->onServerRemoved(addr.server_type(), addr.server_id());
 					}
 				}
 				break;
 			case MSG_TYPE_CONTROL_SERVER_ADDR_INFO_RESTART:
+				LOGEVENTL("DEBUG", "MSG_TYPE_CONTROL_SERVER_ADDR_INFO_RESTART");
 				//RESTART先啥也不干
 				break;
 			default:
@@ -134,7 +138,6 @@ void ReportLoad(float load_factor)
 	SendMsg(CONTROL_SERVER_ID, MSG_TYPE_CONTROL_SERVER_REPORT_LOAD, load);
 }
 
-//需要测试或了解：把protobuf直接当struct用对性能有无损失，损失多大
 //TODO
 //std::map<int, common::CorrespondingServer> corresponding_server_map;
 

@@ -55,7 +55,7 @@ std::set<NetLib_ServerSession_ptr> gateways;
 //这个的timeout只会因为timer而触发。如果不是的话，还得keep_alive一份timer
 void ServerTimeout(std::pair<int, int> ip_port, const boost::system::error_code& error)
 {
-	if (error)
+	if (!error)
 	{
 		//有服务超时了，得把他从数据结构里移除，并告知他人
 		auto info_it = servers_info.find(ip_port);
@@ -70,6 +70,14 @@ void ServerTimeout(std::pair<int, int> ip_port, const boost::system::error_code&
 		{
 			LOGEVENTL("ERROR", "When a server timeout, can't find it in servers_info. " << log_::n("ip") << ip_port.first << log_::n("port") << ip_port.second);
 		}
+	}
+}
+
+void UnInitliazeServerInfos()
+{
+	for (auto it = servers_info.begin(); it != servers_info.end(); ++it)
+	{
+		delete it->second;
 	}
 }
 
@@ -94,8 +102,9 @@ void GenerateAddressList(common::AddressList& list)
 
 void StartupTimer(const boost::system::error_code& error)
 {
-	if (error)
+	if (!error)
 	{
+		LOGEVENTL("INFO", "Server startup timer triggered.");
 		during_startup = false;
 
 		//告知各服务完整地址信息
@@ -144,6 +153,9 @@ int main(int argc, char* argv[])
 
 		LogUnInitialize();
 
+		thread.stop_when_no_work();
+		thread.wait_for_stop();
+
 		google_lalune::protobuf::ShutdownProtobufLibrary();
 
 		return 0;
@@ -177,9 +189,14 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	UnInitliazeServerInfos();
+
 	NetLib_Servers_WaitForStop();
 
 	LogUnInitialize();
+
+	thread.stop_when_no_work();
+	thread.wait_for_stop();
 
 	google_lalune::protobuf::ShutdownProtobufLibrary();
 
