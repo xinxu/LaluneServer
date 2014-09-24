@@ -102,7 +102,7 @@ class HeaderEx : public ::google_lalune::protobuf::Message {
   inline ::google_lalune::protobuf::uint64 uid() const;
   inline void set_uid(::google_lalune::protobuf::uint64 value);
 
-  // repeated uint32 corresponding_servers = 2;
+  // repeated uint32 corresponding_servers = 2 [packed = true];
   inline int corresponding_servers_size() const;
   inline void clear_corresponding_servers();
   static const int kCorrespondingServersFieldNumber = 2;
@@ -125,6 +125,7 @@ class HeaderEx : public ::google_lalune::protobuf::Message {
   mutable int _cached_size_;
   ::google_lalune::protobuf::uint64 uid_;
   ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 > corresponding_servers_;
+  mutable int _corresponding_servers_cached_byte_size_;
   friend void  protobuf_AddDesc_commonlib_2fCommonLib_2eproto();
   friend void protobuf_AssignDesc_commonlib_2fCommonLib_2eproto();
   friend void protobuf_ShutdownFile_commonlib_2fCommonLib_2eproto();
@@ -611,7 +612,7 @@ inline void HeaderEx::set_uid(::google_lalune::protobuf::uint64 value) {
   // @@protoc_insertion_point(field_set:common.HeaderEx.uid)
 }
 
-// repeated uint32 corresponding_servers = 2;
+// repeated uint32 corresponding_servers = 2 [packed = true];
 inline int HeaderEx::corresponding_servers_size() const {
   return corresponding_servers_.size();
 }

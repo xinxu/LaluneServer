@@ -79,8 +79,16 @@ void LoadConfig()
 	CSimpleIni ini;
 	if (ini.LoadFile(utility3::ToAbsolutePath(config_file_path).c_str()) == SI_OK)
 	{
-		config.startup_ms = ini.GetLongValue("ControlServer", "StartupMS", 8000); //这个参数目前只在启动的时候有效，Reload了也不管用
-		config.timeout_sec = ini.GetLongValue("ControlServer", "TimeoutSec", 7); //这个参数目前只在启动的时候有效，Reload了也不管用
+		config.startup_ms = ini.GetLongValue("ControlServer", "StartupMS", _CONFIG_DEFAULT_STARTUP_MS); //这个参数目前只在启动的时候有效，Reload了也不管用
+		config.timeout_sec = ini.GetLongValue("ControlServer", "TimeoutSec", _CONFIG_DEFAULT_TIMEOUT_SEC); //这个参数目前只在启动的时候有效，Reload了也不管用
+	}
+}
+
+void GenerateAddressList(common::AddressList& list)
+{
+	for (auto it = servers_info.begin(); it != servers_info.end(); ++it)
+	{
+		*list.add_addr() = it->second->addr;
 	}
 }
 
@@ -91,12 +99,8 @@ void StartupTimer(const boost::system::error_code& error)
 		during_startup = false;
 
 		//告知各服务完整地址信息
-
 		common::AddressList addr_list;
-		for (auto it = servers_info.begin(); it != servers_info.end(); ++it)
-		{
-			*addr_list.add_addr() = it->second->addr;
-		}
+		GenerateAddressList(addr_list);
 		informAddressInfo(addr_list, MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REFRESH);
 	}
 }
@@ -128,7 +132,7 @@ int main(int argc, char* argv[])
 
 	thread.start();
 
-	thread.get_ioservice().post(boost::bind(&LoadConfig));
+	LoadConfig();
 
 	NetLib_Server_ptr server = NetLib_NewServer<ControlServerSessionDelegate>(&thread);
 

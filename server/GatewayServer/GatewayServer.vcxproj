@@ -89,6 +89,8 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\LaluneCommon\include\Header.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
+    <ClInclude Include="GatewaySessionDelegate.h" />
+    <ClInclude Include="GatewayUserSessionDelegate.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Log\Log.vcxproj">
@@ -103,6 +105,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GatewayServer.cpp" />
+    <ClCompile Include="GatewaySessionDelegate.cpp" />
+    <ClCompile Include="GatewayUserSessionDelegate.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

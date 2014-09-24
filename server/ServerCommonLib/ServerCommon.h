@@ -31,6 +31,8 @@
 class CommonLibDelegate
 {
 public:
+	virtual void onInitialized() {}
+
 	virtual void onConfigRefresh(const std::string& content) = 0;
 	virtual void onGlobalConfigRefresh(const std::string& content) {}
 

@@ -5,6 +5,8 @@
 //暂不开启，否则打Log的时候太烦了
 //#define NLP_LOGDETAIL
 
+#define KEEP_ALIVE_SEC (3)
+
 NetLibPlus_Client_Imp::NetLibPlus_Client_Imp(int ServerID) : m_ServerID(ServerID), m_RemoteServerPort(0)
 	//之所以在构造函数时要传入delegate，是因为FailedDataReleaseHandler可能会被调用，即使这个连接从来都没有被调用过ResetClient
 {
@@ -46,6 +48,8 @@ void NetLibPlus_Client_Imp::ResetClient(uint32_t ip, uint16_t tcp_port, ioservic
 	}
 
 	m_client = NetLib_NewClient(shared_from_this(), ioservice_th);
+
+	m_client->SetKeepAliveIntervalSeconds(KEEP_ALIVE_SEC);
 
 	m_client->ConnectAsync(ip, tcp_port, flags | NETLIB_CLIENT_ENABLE_RECONNECT_ON_FIRST_CONNECT | NETLIB_CLIENT_FLAG_KEEP_ALIVE);
 

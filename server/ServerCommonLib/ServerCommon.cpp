@@ -22,7 +22,9 @@ void SayHello2ControlServer(int is_server_start = 1)
 	SendMsg(CONTROL_SERVER_ID, MSG_TYPE_CONTROL_SERVER_SAY_HELLO, hello);
 }
 
-class Conn2ControlServerDelegate : public NetLib_Client_Delegate
+bool is_initialized = false;
+
+class Conn2ControlServerDelegate : public NetLibPlus_Client_Delegate
 {
 public:
 	void ReconnectedHandler(NetLib_Client_ptr clientptr)
@@ -46,6 +48,11 @@ public:
 							const common::AddressInfo& addr = list.addr(i);
 							_NetLibPlus_UpdateServerInfo(addr.server_id(), addr.ip(), addr.port(), addr.server_type());
 							__commonlib_delegate->onServerAdded(addr.server_type(), addr.server_id());
+						}
+						if (!is_initialized)
+						{
+							is_initialized = true;
+							__commonlib_delegate->onInitialized();
 						}
 					}
 				}
@@ -114,6 +121,7 @@ void InitializeCommonLib(ioservice_thread& thread, CommonLibDelegate* d, int my_
 		}
 	}
 
+	NetLibPlus_InitializeClients<Conn2ControlServerDelegate>(SERVER_TYPE_CONTROL_SERVER);
 	_NetLibPlus_UpdateServerInfo(CONTROL_SERVER_ID,	boost::asio::ip::address_v4::from_string(control_server_ip).to_ulong(), control_server_port, SERVER_TYPE_CONTROL_SERVER);
 
 	SayHello2ControlServer();

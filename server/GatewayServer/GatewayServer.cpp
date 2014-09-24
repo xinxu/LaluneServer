@@ -7,35 +7,39 @@
 #include <google/protobuf/stubs/common.h>
 #include "../../LaluneCommon/include/Header.h"
 #include "ServerCommonLib/ServerCommon.h"
+#include "GatewaySessionDelegate.h"
+#include "GatewayUserSessionDelegate.h"
 
-//实现一个SessionDelegate,至少要实现RecvFinishHandler
-class MySessionDelegate : public NetLib_ServerSession_Delegate
-{	
-public:	
-	void ConnectedHandler(NetLib_ServerSession_ptr sessionptr)
-	{
+#define GATEWAY_OUTER_PORT (6677) //服务于用户的
+#define GATEWAY_INNER_PORT (9432) //内部通信用的
 
-	}
+ioservice_thread thread;
 
-	//RecvFinishHandler一旦返回，data的内容就会被释放
-	void RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data)
-	{
-		uint32_t len = MSG_LENGTH(data);
-
-		//switch (
-	}
-};
+NetLib_Server_ptr server4user;
 
 class GatewayCommonLibDelegate : public CommonLibDelegate
 {
 public:
+	void onInitialized()
+	{
+		server4user	= NetLib_NewServer<GatewayUserSessionDelegate>(&thread);
+
+		//超时时间得可以中途重设 TODO
+		if (!server4user->StartTCP(GATEWAY_OUTER_PORT, 1, 120)) //端口，线程数，超时时间
+		{
+			LOGEVENTL("Error", "Server4User Start Failed !");
+
+			//TODO 发出警报，或者退出程序
+		}
+
+		LOGEVENTL("Info", "Server4User Start Success");
+	}
+
 	void onConfigRefresh(const std::string& content)
 	{
 
 	}
 };
-
-ioservice_thread thread;
 
 int main(int argc, char* argv[])
 {		
@@ -55,11 +59,10 @@ int main(int argc, char* argv[])
 
 	thread.start();
 
-	NetLib_Server_ptr server = NetLib_NewServer<MySessionDelegate>(&thread);
+	NetLib_Server_ptr server = NetLib_NewServer<GatewaySessionDelegate>(&thread);
 
 	//可以不指定端口 TODO (主要是内部端口)
-	//超时时间得可以中途重设 TODO
-	if (!server->StartTCP(4531, 1, 120)) //端口，线程数，超时时间
+	if (!server->StartTCP(GATEWAY_INNER_PORT, 1, 120)) //端口，线程数，超时时间
 	{
 		LOGEVENTL("Error", "Server Start Failed !");
 
@@ -75,7 +78,7 @@ int main(int argc, char* argv[])
 	LOGEVENTL("Info", "Server Start Success");
 
 	GatewayCommonLibDelegate* cl_delegate = new GatewayCommonLibDelegate();
-	InitializeCommonLib(thread, cl_delegate, 4531, SERVER_TYPE_GATEWAY_SERVER, argc, argv);
+	InitializeCommonLib(thread, cl_delegate, GATEWAY_INNER_PORT, SERVER_TYPE_GATEWAY_SERVER, argc, argv);
 	
 	for (;;)
 	{

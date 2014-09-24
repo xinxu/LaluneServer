@@ -194,16 +194,16 @@ void protobuf_AddDesc_commonlib_2fCommonLib_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google_lalune::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\031commonlib/CommonLib.proto\022\006common\"6\n\010H"
-    "eaderEx\022\013\n\003uid\030\001 \001(\004\022\035\n\025corresponding_se"
-    "rvers\030\002 \003(\r\"P\n\005Hello\022\031\n\021my_listening_por"
-    "t\030\001 \002(\r\022\023\n\013server_type\030\002 \002(\r\022\027\n\017is_serve"
-    "r_start\030\003 \002(\r\"\032\n\nReportLoad\022\014\n\004load\030\001 \002("
-    "\002\"O\n\013AddressInfo\022\n\n\002ip\030\001 \002(\007\022\014\n\004port\030\002 \002"
-    "(\r\022\021\n\tserver_id\030\003 \002(\r\022\023\n\013server_type\030\004 \002"
-    "(\r\"0\n\013AddressList\022!\n\004addr\030\001 \003(\0132\023.common"
-    ".AddressInfo\"\035\n\010ServerId\022\021\n\tserver_id\030\001 "
-    "\002(\r", 363);
+    "\n\031commonlib/CommonLib.proto\022\006common\":\n\010H"
+    "eaderEx\022\013\n\003uid\030\001 \001(\004\022!\n\025corresponding_se"
+    "rvers\030\002 \003(\rB\002\020\001\"P\n\005Hello\022\031\n\021my_listening"
+    "_port\030\001 \002(\r\022\023\n\013server_type\030\002 \002(\r\022\027\n\017is_s"
+    "erver_start\030\003 \002(\r\"\032\n\nReportLoad\022\014\n\004load\030"
+    "\001 \002(\002\"O\n\013AddressInfo\022\n\n\002ip\030\001 \002(\007\022\014\n\004port"
+    "\030\002 \002(\r\022\021\n\tserver_id\030\003 \002(\r\022\023\n\013server_type"
+    "\030\004 \002(\r\"0\n\013AddressList\022!\n\004addr\030\001 \003(\0132\023.co"
+    "mmon.AddressInfo\"\035\n\010ServerId\022\021\n\tserver_i"
+    "d\030\001 \002(\r", 367);
   ::google_lalune::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "commonlib/CommonLib.proto", &protobuf_RegisterTypes);
   HeaderEx::default_instance_ = new HeaderEx();
@@ -315,25 +315,24 @@ bool HeaderEx::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_corresponding_servers;
+        if (input->ExpectTag(18)) goto parse_corresponding_servers;
         break;
       }
 
-      // repeated uint32 corresponding_servers = 2;
+      // repeated uint32 corresponding_servers = 2 [packed = true];
       case 2: {
-        if (tag == 16) {
+        if (tag == 18) {
          parse_corresponding_servers:
-          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
-                   ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 1, 16, input, this->mutable_corresponding_servers())));
-        } else if (tag == 18) {
-          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
                    ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, this->mutable_corresponding_servers())));
+        } else if (tag == 16) {
+          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 18, input, this->mutable_corresponding_servers())));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_corresponding_servers;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -368,10 +367,14 @@ void HeaderEx::SerializeWithCachedSizes(
     ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt64(1, this->uid(), output);
   }
 
-  // repeated uint32 corresponding_servers = 2;
+  // repeated uint32 corresponding_servers = 2 [packed = true];
+  if (this->corresponding_servers_size() > 0) {
+    ::google_lalune::protobuf::internal::WireFormatLite::WriteTag(2, ::google_lalune::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(_corresponding_servers_cached_byte_size_);
+  }
   for (int i = 0; i < this->corresponding_servers_size(); i++) {
-    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(
-      2, this->corresponding_servers(i), output);
+    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32NoTag(
+      this->corresponding_servers(i), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -389,10 +392,18 @@ void HeaderEx::SerializeWithCachedSizes(
     target = ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt64ToArray(1, this->uid(), target);
   }
 
-  // repeated uint32 corresponding_servers = 2;
+  // repeated uint32 corresponding_servers = 2 [packed = true];
+  if (this->corresponding_servers_size() > 0) {
+    target = ::google_lalune::protobuf::internal::WireFormatLite::WriteTagToArray(
+      2,
+      ::google_lalune::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google_lalune::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+      _corresponding_servers_cached_byte_size_, target);
+  }
   for (int i = 0; i < this->corresponding_servers_size(); i++) {
     target = ::google_lalune::protobuf::internal::WireFormatLite::
-      WriteUInt32ToArray(2, this->corresponding_servers(i), target);
+      WriteUInt32NoTagToArray(this->corresponding_servers(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -415,14 +426,21 @@ int HeaderEx::ByteSize() const {
     }
 
   }
-  // repeated uint32 corresponding_servers = 2;
+  // repeated uint32 corresponding_servers = 2 [packed = true];
   {
     int data_size = 0;
     for (int i = 0; i < this->corresponding_servers_size(); i++) {
       data_size += ::google_lalune::protobuf::internal::WireFormatLite::
         UInt32Size(this->corresponding_servers(i));
     }
-    total_size += 1 * this->corresponding_servers_size() + data_size;
+    if (data_size > 0) {
+      total_size += 1 +
+        ::google_lalune::protobuf::internal::WireFormatLite::Int32Size(data_size);
+    }
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _corresponding_servers_cached_byte_size_ = data_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
   }
 
   if (!unknown_fields().empty()) {
