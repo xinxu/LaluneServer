@@ -90,7 +90,6 @@
     <ClCompile Include="ControlServerSessionDelegate.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\LaluneCommon\include\Header.h" />
     <ClInclude Include="..\include\utility2.h" />
     <ClInclude Include="..\protobuf\commonlib\CommonLib.pb.h" />
     <ClInclude Include="..\protobuf\controlserver\ControlServer.pb.h" />

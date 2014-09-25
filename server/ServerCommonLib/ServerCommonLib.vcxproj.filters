@@ -36,7 +36,7 @@
     <ClInclude Include="..\protobuf\commonlib\CommonLib.pb.h">
       <Filter>protobuf</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\LaluneCommon\include\Header.h">
+    <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

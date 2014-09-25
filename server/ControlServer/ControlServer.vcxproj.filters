@@ -38,9 +38,6 @@
     <ClInclude Include="ControlServerConfig.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\LaluneCommon\include\Header.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\protobuf\commonlib\CommonLib.pb.h">
       <Filter>protobuf</Filter>
     </ClInclude>

@@ -87,7 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\LaluneCommon\include\Header.h" />
+    <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
     <ClInclude Include="NoticeServerSessionDelegate.h" />
   </ItemGroup>
