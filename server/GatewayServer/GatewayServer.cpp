@@ -5,7 +5,7 @@
 #include "memory.h"
 #include "string.h"
 #include <google/protobuf/stubs/common.h>
-#include "../../LaluneCommon/include/Header.h"
+#include "MessageTypeDef.h"
 #include "ServerCommonLib/ServerCommon.h"
 #include "GatewaySessionDelegate.h"
 #include "GatewayUserSessionDelegate.h"
