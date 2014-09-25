@@ -62,6 +62,7 @@ void ServerTimeout(std::pair<int, int> ip_port, const boost::system::error_code&
 		if (info_it != servers_info.end())
 		{
 			informAddressInfo(info_it->second->addr, MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REMOVE);
+			LOGEVENTL("INFO", "Send remove to all. " << _ln("server_id") << info_it->second->addr.server_id());
 
 			delete info_it->second;
 			servers_info.erase(info_it);

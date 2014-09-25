@@ -10,8 +10,10 @@
 #include <boost/asio.hpp>
 
 CommonLibDelegate* __commonlib_delegate;
-int __my_listening_port, __my_server_type;
+int __my_listening_port, __my_server_type, __my_server_id = -1;
 NetLib_Client_ptr __conn2controlserver;
+
+bool is_initialized = false;
 
 void SayHello2ControlServer(int is_server_start = 1)
 {
@@ -21,8 +23,6 @@ void SayHello2ControlServer(int is_server_start = 1)
 	hello.set_is_server_start(1);
 	SendMsg(CONTROL_SERVER_ID, MSG_TYPE_CONTROL_SERVER_SAY_HELLO, hello);
 }
-
-bool is_initialized = false;
 
 class Conn2ControlServerDelegate : public NetLibPlus_Client_Delegate
 {
@@ -38,6 +38,15 @@ public:
 		{
 			switch (SERVER_MSG_TYPE(data))
 			{
+			case MSG_TYPE_CONTROL_SERVER_SAY_HELLO_RESULT:
+				{
+					common::HelloResult result;
+					if (ParseMsg(data, result))
+					{
+						__my_server_id = result.server_id();
+					}
+				}
+				break;
 			case MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REFRESH:
 				{
 					common::AddressList list;
@@ -47,8 +56,11 @@ public:
 						for (int i = 0; i < list.addr_size(); ++i)
 						{
 							const common::AddressInfo& addr = list.addr(i);
-							_NetLibPlus_UpdateServerInfo(addr.server_id(), addr.ip(), addr.port(), addr.server_type());
-							__commonlib_delegate->onServerAdded(addr.server_type(), addr.server_id());
+							if (addr.server_id() != __my_server_id)
+							{
+								_NetLibPlus_UpdateServerInfo(addr.server_id(), addr.ip(), addr.port(), addr.server_type());
+								__commonlib_delegate->onServerAdded(addr.server_type(), addr.server_id());
+							}
 						}
 						if (!is_initialized)
 						{
@@ -63,9 +75,13 @@ public:
 					common::AddressInfo addr;
 					if (ParseMsg(data, addr))
 					{
-						LOGEVENTL("DEBUG", "MSG_TYPE_CONTROL_SERVER_ADDR_INFO_ADD");
-						_NetLibPlus_UpdateServerInfo(addr.server_id(), addr.ip(), addr.port(), addr.server_type()); 
-						__commonlib_delegate->onServerAdded(addr.server_type(), addr.server_id());
+						if (addr.server_id() != __my_server_id)
+						{
+							LOGEVENTL("DEBUG", "MSG_TYPE_CONTROL_SERVER_ADDR_INFO_ADD");
+
+							_NetLibPlus_UpdateServerInfo(addr.server_id(), addr.ip(), addr.port(), addr.server_type());
+							__commonlib_delegate->onServerAdded(addr.server_type(), addr.server_id());
+						}
 					}
 				}
 				break;

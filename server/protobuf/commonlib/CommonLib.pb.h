@@ -35,6 +35,7 @@ void protobuf_ShutdownFile_commonlib_2fCommonLib_2eproto();
 
 class HeaderEx;
 class Hello;
+class HelloResult;
 class ReportLoad;
 class AddressInfo;
 class AddressList;
@@ -231,6 +232,85 @@ class Hello : public ::google_lalune::protobuf::Message {
 
   void InitAsDefaultInstance();
   static Hello* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class HelloResult : public ::google_lalune::protobuf::Message {
+ public:
+  HelloResult();
+  virtual ~HelloResult();
+
+  HelloResult(const HelloResult& from);
+
+  inline HelloResult& operator=(const HelloResult& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google_lalune::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google_lalune::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google_lalune::protobuf::Descriptor* descriptor();
+  static const HelloResult& default_instance();
+
+  void Swap(HelloResult* other);
+
+  // implements Message ----------------------------------------------
+
+  HelloResult* New() const;
+  void CopyFrom(const ::google_lalune::protobuf::Message& from);
+  void MergeFrom(const ::google_lalune::protobuf::Message& from);
+  void CopyFrom(const HelloResult& from);
+  void MergeFrom(const HelloResult& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google_lalune::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google_lalune::protobuf::io::CodedOutputStream* output) const;
+  ::google_lalune::protobuf::uint8* SerializeWithCachedSizesToArray(::google_lalune::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google_lalune::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 server_id = 1;
+  inline bool has_server_id() const;
+  inline void clear_server_id();
+  static const int kServerIdFieldNumber = 1;
+  inline ::google_lalune::protobuf::uint32 server_id() const;
+  inline void set_server_id(::google_lalune::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:common.HelloResult)
+ private:
+  inline void set_has_server_id();
+  inline void clear_has_server_id();
+
+  ::google_lalune::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google_lalune::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google_lalune::protobuf::uint32 server_id_;
+  friend void  protobuf_AddDesc_commonlib_2fCommonLib_2eproto();
+  friend void protobuf_AssignDesc_commonlib_2fCommonLib_2eproto();
+  friend void protobuf_ShutdownFile_commonlib_2fCommonLib_2eproto();
+
+  void InitAsDefaultInstance();
+  static HelloResult* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -716,6 +796,34 @@ inline void Hello::set_is_server_start(::google_lalune::protobuf::uint32 value) 
   set_has_is_server_start();
   is_server_start_ = value;
   // @@protoc_insertion_point(field_set:common.Hello.is_server_start)
+}
+
+// -------------------------------------------------------------------
+
+// HelloResult
+
+// required uint32 server_id = 1;
+inline bool HelloResult::has_server_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void HelloResult::set_has_server_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void HelloResult::clear_has_server_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void HelloResult::clear_server_id() {
+  server_id_ = 0u;
+  clear_has_server_id();
+}
+inline ::google_lalune::protobuf::uint32 HelloResult::server_id() const {
+  // @@protoc_insertion_point(field_get:common.HelloResult.server_id)
+  return server_id_;
+}
+inline void HelloResult::set_server_id(::google_lalune::protobuf::uint32 value) {
+  set_has_server_id();
+  server_id_ = value;
+  // @@protoc_insertion_point(field_set:common.HelloResult.server_id)
 }
 
 // -------------------------------------------------------------------
