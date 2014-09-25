@@ -4,7 +4,7 @@
 #include "include/SimpleIni.h"
 #include "include/utility1.h"
 #include "include/ioservice_thread.h"
-#include "Header.h"
+#include "MessageTypeDef.h"
 #include "Log/Log.h"
 #include <map>
 #include <boost/asio.hpp>

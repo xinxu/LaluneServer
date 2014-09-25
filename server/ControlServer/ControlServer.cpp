@@ -10,7 +10,7 @@
 #include "ControlServerConfig.h"
 #include <boost/asio.hpp>
 #include "ControlServer.h"
-#include "Header.h"
+#include "MessageTypeDef.h"
 
 ioservice_thread thread;
 

@@ -5,36 +5,17 @@
 #include "memory.h"
 #include "string.h"
 #include <google/protobuf/stubs/common.h>
-#include "../../LaluneCommon/include/Header.h"
+#include "../../LaluneCommon/include/MessageTypeDef.h"
 #include "ServerCommonLib/ServerCommon.h"
-#include "GatewaySessionDelegate.h"
-#include "GatewayUserSessionDelegate.h"
+#include "LoginServerSessionDelegate.h"
 
-#define GATEWAY_OUTER_PORT (6677) //服务于用户的
-#define GATEWAY_INNER_PORT (9432) //内部通信用的
+#define LOGIN_SERVER_PORT (6834)
 
 ioservice_thread thread;
 
-NetLib_Server_ptr server4user;
-
-class GatewayCommonLibDelegate : public CommonLibDelegate
+class LoginServerCommonLibDelegate : public CommonLibDelegate
 {
 public:
-	void onInitialized()
-	{
-		server4user	= NetLib_NewServer<GatewayUserSessionDelegate>(&thread);
-
-		//超时时间得可以中途重设 TODO
-		if (!server4user->StartTCP(GATEWAY_OUTER_PORT, 1, 120)) //端口，线程数，超时时间
-		{
-			LOGEVENTL("Error", "Server4User Start Failed !");
-
-			//TODO 发出警报，或者退出程序
-		}
-
-		LOGEVENTL("Info", "Server4User Start Success");
-	}
-
 	void onConfigRefresh(const std::string& content)
 	{
 
@@ -59,10 +40,10 @@ int main(int argc, char* argv[])
 
 	thread.start();
 
-	NetLib_Server_ptr server = NetLib_NewServer<GatewaySessionDelegate>(&thread);
+	NetLib_Server_ptr server = NetLib_NewServer<LoginServerSessionDelegate>(&thread);
 
 	//可以不指定端口 TODO (主要是内部端口)
-	if (!server->StartTCP(GATEWAY_INNER_PORT, 1, 120)) //端口，线程数，超时时间
+	if (!server->StartTCP(LOGIN_SERVER_PORT, 1, 120)) //端口，线程数，超时时间
 	{
 		LOGEVENTL("Error", "Server Start Failed !");
 
@@ -77,8 +58,8 @@ int main(int argc, char* argv[])
 	
 	LOGEVENTL("Info", "Server Start Success");
 
-	GatewayCommonLibDelegate* cl_delegate = new GatewayCommonLibDelegate();
-	InitializeCommonLib(thread, cl_delegate, GATEWAY_INNER_PORT, SERVER_TYPE_GATEWAY_SERVER, argc, argv);
+	LoginServerCommonLibDelegate* cl_delegate = new LoginServerCommonLibDelegate();
+	InitializeCommonLib(thread, cl_delegate, LOGIN_SERVER_PORT, SERVER_TYPE_LOGIN_SERVER, argc, argv);
 	
 	for (;;)
 	{
