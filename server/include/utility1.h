@@ -36,4 +36,26 @@ public:
 			out.push_back(in_str.substr(word_begin, in_str.size() - word_begin));
 		}
 	}
+
+	static std::string generateRandomString(int len = 8)
+	{
+		std::string ret(len, ' ');
+		for (int i = 0; i < len; ++i)
+		{
+			int r = rand() % 62;
+			if (r < 10)
+			{
+				ret[i] = '0' + r;
+			}
+			else if (r < 36)
+			{
+				ret[i] = 'a' + r - 10;
+			}
+			else
+			{
+				ret[i] = 'A' + r - 36;
+			}
+		}
+		return ret;
+	}
 };

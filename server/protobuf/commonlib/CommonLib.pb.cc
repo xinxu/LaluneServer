@@ -54,7 +54,7 @@ void protobuf_AssignDesc_commonlib_2fCommonLib_2eproto() {
   HeaderEx_descriptor_ = file->message_type(0);
   static const int HeaderEx_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeaderEx, uid_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeaderEx, corresponding_servers_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeaderEx, operation_id_),
   };
   HeaderEx_reflection_ =
     new ::google_lalune::protobuf::internal::GeneratedMessageReflection(
@@ -216,17 +216,16 @@ void protobuf_AddDesc_commonlib_2fCommonLib_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google_lalune::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\031commonlib/CommonLib.proto\022\006common\":\n\010H"
-    "eaderEx\022\013\n\003uid\030\001 \001(\004\022!\n\025corresponding_se"
-    "rvers\030\002 \003(\rB\002\020\001\"P\n\005Hello\022\031\n\021my_listening"
-    "_port\030\001 \002(\r\022\023\n\013server_type\030\002 \002(\r\022\027\n\017is_s"
-    "erver_start\030\003 \002(\r\" \n\013HelloResult\022\021\n\tserv"
-    "er_id\030\001 \002(\r\"\032\n\nReportLoad\022\014\n\004load\030\001 \002(\002\""
-    "O\n\013AddressInfo\022\n\n\002ip\030\001 \002(\007\022\014\n\004port\030\002 \002(\r"
-    "\022\021\n\tserver_id\030\003 \002(\r\022\023\n\013server_type\030\004 \002(\r"
-    "\"0\n\013AddressList\022!\n\004addr\030\001 \003(\0132\023.common.A"
-    "ddressInfo\"\035\n\010ServerId\022\021\n\tserver_id\030\001 \002("
-    "\r", 401);
+    "\n\031commonlib/CommonLib.proto\022\006common\"-\n\010H"
+    "eaderEx\022\013\n\003uid\030\001 \001(\r\022\024\n\014operation_id\030\002 \003"
+    "(\r\"P\n\005Hello\022\031\n\021my_listening_port\030\001 \002(\r\022\023"
+    "\n\013server_type\030\002 \002(\r\022\027\n\017is_server_start\030\003"
+    " \002(\r\" \n\013HelloResult\022\021\n\tserver_id\030\001 \002(\r\"\032"
+    "\n\nReportLoad\022\014\n\004load\030\001 \002(\002\"O\n\013AddressInf"
+    "o\022\n\n\002ip\030\001 \002(\007\022\014\n\004port\030\002 \002(\r\022\021\n\tserver_id"
+    "\030\003 \002(\r\022\023\n\013server_type\030\004 \002(\r\"0\n\013AddressLi"
+    "st\022!\n\004addr\030\001 \003(\0132\023.common.AddressInfo\"\035\n"
+    "\010ServerId\022\021\n\tserver_id\030\001 \002(\r", 388);
   ::google_lalune::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "commonlib/CommonLib.proto", &protobuf_RegisterTypes);
   HeaderEx::default_instance_ = new HeaderEx();
@@ -257,7 +256,7 @@ struct StaticDescriptorInitializer_commonlib_2fCommonLib_2eproto {
 
 #ifndef _MSC_VER
 const int HeaderEx::kUidFieldNumber;
-const int HeaderEx::kCorrespondingServersFieldNumber;
+const int HeaderEx::kOperationIdFieldNumber;
 #endif  // !_MSC_VER
 
 HeaderEx::HeaderEx()
@@ -278,7 +277,7 @@ HeaderEx::HeaderEx(const HeaderEx& from)
 
 void HeaderEx::SharedCtor() {
   _cached_size_ = 0;
-  uid_ = GOOGLE_ULONGLONG(0);
+  uid_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -314,8 +313,8 @@ HeaderEx* HeaderEx::New() const {
 }
 
 void HeaderEx::Clear() {
-  uid_ = GOOGLE_ULONGLONG(0);
-  corresponding_servers_.Clear();
+  uid_ = 0u;
+  operation_id_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -330,34 +329,35 @@ bool HeaderEx::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google_lalune::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional uint64 uid = 1;
+      // optional uint32 uid = 1;
       case 1: {
         if (tag == 8) {
           DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google_lalune::protobuf::uint64, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                   ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &uid_)));
           set_has_uid();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(18)) goto parse_corresponding_servers;
+        if (input->ExpectTag(16)) goto parse_operation_id;
         break;
       }
 
-      // repeated uint32 corresponding_servers = 2 [packed = true];
+      // repeated uint32 operation_id = 2;
       case 2: {
-        if (tag == 18) {
-         parse_corresponding_servers:
-          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+        if (tag == 16) {
+         parse_operation_id:
+          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
                    ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, this->mutable_corresponding_servers())));
-        } else if (tag == 16) {
-          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                 1, 16, input, this->mutable_operation_id())));
+        } else if (tag == 18) {
+          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
                    ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 1, 18, input, this->mutable_corresponding_servers())));
+                 input, this->mutable_operation_id())));
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(16)) goto parse_operation_id;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -387,19 +387,15 @@ failure:
 void HeaderEx::SerializeWithCachedSizes(
     ::google_lalune::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:common.HeaderEx)
-  // optional uint64 uid = 1;
+  // optional uint32 uid = 1;
   if (has_uid()) {
-    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt64(1, this->uid(), output);
+    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(1, this->uid(), output);
   }
 
-  // repeated uint32 corresponding_servers = 2 [packed = true];
-  if (this->corresponding_servers_size() > 0) {
-    ::google_lalune::protobuf::internal::WireFormatLite::WriteTag(2, ::google_lalune::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
-    output->WriteVarint32(_corresponding_servers_cached_byte_size_);
-  }
-  for (int i = 0; i < this->corresponding_servers_size(); i++) {
-    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32NoTag(
-      this->corresponding_servers(i), output);
+  // repeated uint32 operation_id = 2;
+  for (int i = 0; i < this->operation_id_size(); i++) {
+    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(
+      2, this->operation_id(i), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -412,23 +408,15 @@ void HeaderEx::SerializeWithCachedSizes(
 ::google_lalune::protobuf::uint8* HeaderEx::SerializeWithCachedSizesToArray(
     ::google_lalune::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:common.HeaderEx)
-  // optional uint64 uid = 1;
+  // optional uint32 uid = 1;
   if (has_uid()) {
-    target = ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt64ToArray(1, this->uid(), target);
+    target = ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->uid(), target);
   }
 
-  // repeated uint32 corresponding_servers = 2 [packed = true];
-  if (this->corresponding_servers_size() > 0) {
-    target = ::google_lalune::protobuf::internal::WireFormatLite::WriteTagToArray(
-      2,
-      ::google_lalune::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
-      target);
-    target = ::google_lalune::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
-      _corresponding_servers_cached_byte_size_, target);
-  }
-  for (int i = 0; i < this->corresponding_servers_size(); i++) {
+  // repeated uint32 operation_id = 2;
+  for (int i = 0; i < this->operation_id_size(); i++) {
     target = ::google_lalune::protobuf::internal::WireFormatLite::
-      WriteUInt32NoTagToArray(this->corresponding_servers(i), target);
+      WriteUInt32ToArray(2, this->operation_id(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -443,29 +431,22 @@ int HeaderEx::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // optional uint64 uid = 1;
+    // optional uint32 uid = 1;
     if (has_uid()) {
       total_size += 1 +
-        ::google_lalune::protobuf::internal::WireFormatLite::UInt64Size(
+        ::google_lalune::protobuf::internal::WireFormatLite::UInt32Size(
           this->uid());
     }
 
   }
-  // repeated uint32 corresponding_servers = 2 [packed = true];
+  // repeated uint32 operation_id = 2;
   {
     int data_size = 0;
-    for (int i = 0; i < this->corresponding_servers_size(); i++) {
+    for (int i = 0; i < this->operation_id_size(); i++) {
       data_size += ::google_lalune::protobuf::internal::WireFormatLite::
-        UInt32Size(this->corresponding_servers(i));
+        UInt32Size(this->operation_id(i));
     }
-    if (data_size > 0) {
-      total_size += 1 +
-        ::google_lalune::protobuf::internal::WireFormatLite::Int32Size(data_size);
-    }
-    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-    _corresponding_servers_cached_byte_size_ = data_size;
-    GOOGLE_SAFE_CONCURRENT_WRITES_END();
-    total_size += data_size;
+    total_size += 1 * this->operation_id_size() + data_size;
   }
 
   if (!unknown_fields().empty()) {
@@ -493,7 +474,7 @@ void HeaderEx::MergeFrom(const ::google_lalune::protobuf::Message& from) {
 
 void HeaderEx::MergeFrom(const HeaderEx& from) {
   GOOGLE_CHECK_NE(&from, this);
-  corresponding_servers_.MergeFrom(from.corresponding_servers_);
+  operation_id_.MergeFrom(from.operation_id_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_uid()) {
       set_uid(from.uid());
@@ -522,7 +503,7 @@ bool HeaderEx::IsInitialized() const {
 void HeaderEx::Swap(HeaderEx* other) {
   if (other != this) {
     std::swap(uid_, other->uid_);
-    corresponding_servers_.Swap(&other->corresponding_servers_);
+    operation_id_.Swap(&other->operation_id_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

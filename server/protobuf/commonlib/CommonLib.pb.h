@@ -96,24 +96,24 @@ class HeaderEx : public ::google_lalune::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // optional uint64 uid = 1;
+  // optional uint32 uid = 1;
   inline bool has_uid() const;
   inline void clear_uid();
   static const int kUidFieldNumber = 1;
-  inline ::google_lalune::protobuf::uint64 uid() const;
-  inline void set_uid(::google_lalune::protobuf::uint64 value);
+  inline ::google_lalune::protobuf::uint32 uid() const;
+  inline void set_uid(::google_lalune::protobuf::uint32 value);
 
-  // repeated uint32 corresponding_servers = 2 [packed = true];
-  inline int corresponding_servers_size() const;
-  inline void clear_corresponding_servers();
-  static const int kCorrespondingServersFieldNumber = 2;
-  inline ::google_lalune::protobuf::uint32 corresponding_servers(int index) const;
-  inline void set_corresponding_servers(int index, ::google_lalune::protobuf::uint32 value);
-  inline void add_corresponding_servers(::google_lalune::protobuf::uint32 value);
+  // repeated uint32 operation_id = 2;
+  inline int operation_id_size() const;
+  inline void clear_operation_id();
+  static const int kOperationIdFieldNumber = 2;
+  inline ::google_lalune::protobuf::uint32 operation_id(int index) const;
+  inline void set_operation_id(int index, ::google_lalune::protobuf::uint32 value);
+  inline void add_operation_id(::google_lalune::protobuf::uint32 value);
   inline const ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 >&
-      corresponding_servers() const;
+      operation_id() const;
   inline ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 >*
-      mutable_corresponding_servers();
+      mutable_operation_id();
 
   // @@protoc_insertion_point(class_scope:common.HeaderEx)
  private:
@@ -124,9 +124,8 @@ class HeaderEx : public ::google_lalune::protobuf::Message {
 
   ::google_lalune::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google_lalune::protobuf::uint64 uid_;
-  ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 > corresponding_servers_;
-  mutable int _corresponding_servers_cached_byte_size_;
+  ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 > operation_id_;
+  ::google_lalune::protobuf::uint32 uid_;
   friend void  protobuf_AddDesc_commonlib_2fCommonLib_2eproto();
   friend void protobuf_AssignDesc_commonlib_2fCommonLib_2eproto();
   friend void protobuf_ShutdownFile_commonlib_2fCommonLib_2eproto();
@@ -668,7 +667,7 @@ class ServerId : public ::google_lalune::protobuf::Message {
 
 // HeaderEx
 
-// optional uint64 uid = 1;
+// optional uint32 uid = 1;
 inline bool HeaderEx::has_uid() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -679,47 +678,47 @@ inline void HeaderEx::clear_has_uid() {
   _has_bits_[0] &= ~0x00000001u;
 }
 inline void HeaderEx::clear_uid() {
-  uid_ = GOOGLE_ULONGLONG(0);
+  uid_ = 0u;
   clear_has_uid();
 }
-inline ::google_lalune::protobuf::uint64 HeaderEx::uid() const {
+inline ::google_lalune::protobuf::uint32 HeaderEx::uid() const {
   // @@protoc_insertion_point(field_get:common.HeaderEx.uid)
   return uid_;
 }
-inline void HeaderEx::set_uid(::google_lalune::protobuf::uint64 value) {
+inline void HeaderEx::set_uid(::google_lalune::protobuf::uint32 value) {
   set_has_uid();
   uid_ = value;
   // @@protoc_insertion_point(field_set:common.HeaderEx.uid)
 }
 
-// repeated uint32 corresponding_servers = 2 [packed = true];
-inline int HeaderEx::corresponding_servers_size() const {
-  return corresponding_servers_.size();
+// repeated uint32 operation_id = 2;
+inline int HeaderEx::operation_id_size() const {
+  return operation_id_.size();
 }
-inline void HeaderEx::clear_corresponding_servers() {
-  corresponding_servers_.Clear();
+inline void HeaderEx::clear_operation_id() {
+  operation_id_.Clear();
 }
-inline ::google_lalune::protobuf::uint32 HeaderEx::corresponding_servers(int index) const {
-  // @@protoc_insertion_point(field_get:common.HeaderEx.corresponding_servers)
-  return corresponding_servers_.Get(index);
+inline ::google_lalune::protobuf::uint32 HeaderEx::operation_id(int index) const {
+  // @@protoc_insertion_point(field_get:common.HeaderEx.operation_id)
+  return operation_id_.Get(index);
 }
-inline void HeaderEx::set_corresponding_servers(int index, ::google_lalune::protobuf::uint32 value) {
-  corresponding_servers_.Set(index, value);
-  // @@protoc_insertion_point(field_set:common.HeaderEx.corresponding_servers)
+inline void HeaderEx::set_operation_id(int index, ::google_lalune::protobuf::uint32 value) {
+  operation_id_.Set(index, value);
+  // @@protoc_insertion_point(field_set:common.HeaderEx.operation_id)
 }
-inline void HeaderEx::add_corresponding_servers(::google_lalune::protobuf::uint32 value) {
-  corresponding_servers_.Add(value);
-  // @@protoc_insertion_point(field_add:common.HeaderEx.corresponding_servers)
+inline void HeaderEx::add_operation_id(::google_lalune::protobuf::uint32 value) {
+  operation_id_.Add(value);
+  // @@protoc_insertion_point(field_add:common.HeaderEx.operation_id)
 }
 inline const ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 >&
-HeaderEx::corresponding_servers() const {
-  // @@protoc_insertion_point(field_list:common.HeaderEx.corresponding_servers)
-  return corresponding_servers_;
+HeaderEx::operation_id() const {
+  // @@protoc_insertion_point(field_list:common.HeaderEx.operation_id)
+  return operation_id_;
 }
 inline ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 >*
-HeaderEx::mutable_corresponding_servers() {
-  // @@protoc_insertion_point(field_mutable_list:common.HeaderEx.corresponding_servers)
-  return &corresponding_servers_;
+HeaderEx::mutable_operation_id() {
+  // @@protoc_insertion_point(field_mutable_list:common.HeaderEx.operation_id)
+  return &operation_id_;
 }
 
 // -------------------------------------------------------------------

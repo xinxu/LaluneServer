@@ -18,11 +18,11 @@
 
 #define SERVER_MSG_LENGTH(d) (*(uint32_t*)(d))
 #define SERVER_MSG_TYPE(d) (*(uint32_t*)((d) + 4))
-#define SERVER_MSG_OPERATION_ID(d) (*(uint32_t*))((d) + 8)
-#define SERVER_MSG_ERROR(d) (*(uint8_t*)((d) + 12)) //后端服务给前端服务返回的错误。如果有错误，那么默认后面的Protobuf就没有了，除非另有约定
-#define SERVER_MSG_HEADER_EX_LEN(d) (*(uint8_t*)((d) + 13))
-#define SERVER_MSG_RESERVED(d) (*(uint16_t*)((d) + 14))
-#define SERVER_MSG_HEADER_BASE_SIZE (16)
+#define SERVER_MSG_AFTER_TYPE_POS (8)
+#define SERVER_MSG_ERROR(d) (*(uint8_t*)((d) + SERVER_MSG_AFTER_TYPE_POS)) //后端服务给前端服务返回的错误。如果有错误，那么默认后面的Protobuf就没有了，除非另有约定
+#define SERVER_MSG_HEADER_EX_LEN(d) (*(uint8_t*)((d) + SERVER_MSG_AFTER_TYPE_POS + 1))
+#define SERVER_MSG_RESERVED(d) (*(uint16_t*)((d) + SERVER_MSG_AFTER_TYPE_POS + 2))
+#define SERVER_MSG_HEADER_BASE_SIZE (SERVER_MSG_AFTER_TYPE_POS + 4)
 #define SERVER_MSG_AFTER_HEADER_BASE(d) ((d) + SERVER_MSG_HEADER_BASE_SIZE)
 #define SERVER_MSG_DATA(d) ((d) + SERVER_MSG_HEADER_BASE_SIZE + MSG_HEADER_EX_LEN(d))
 
@@ -68,9 +68,7 @@ bool SendMsg(uint32_t server_id, uint32_t msg_type, P& proto)
 	char* send_buf = new char[SERVER_MSG_HEADER_BASE_SIZE + proto_size];
 	SERVER_MSG_LENGTH(send_buf) = SERVER_MSG_HEADER_BASE_SIZE + proto_size;		// 数据包的字节数（含msghead）
 	SERVER_MSG_TYPE(send_buf) = msg_type;
-	SERVER_MSG_ERROR(send_buf) = 0;
-	SERVER_MSG_HEADER_EX_LEN(send_buf) = 0;
-	SERVER_MSG_RESERVED(send_buf) = 0;
+	memset(send_buf + SERVER_MSG_AFTER_TYPE_POS, 0, SERVER_MSG_HEADER_BASE_SIZE - SERVER_MSG_AFTER_TYPE_POS);
 
 	proto.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)SERVER_MSG_AFTER_HEADER_BASE(send_buf));
 
@@ -182,6 +180,7 @@ void ReplyMsg(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, P& proto) 
 	char* send_buf = new char[SERVER_MSG_HEADER_BASE_SIZE + proto_size];
 	SERVER_MSG_LENGTH(send_buf) = SERVER_MSG_HEADER_BASE_SIZE + proto_size;		// 数据包的字节数（含msghead）
 	SERVER_MSG_TYPE(send_buf) = msg_type;
+	SERVER_MSG_OPERATION_ID(send_buf) = 0;
 	SERVER_MSG_ERROR(send_buf) = 0;
 	SERVER_MSG_HEADER_EX_LEN(send_buf) = 0;
 	SERVER_MSG_RESERVED(send_buf) = 0;

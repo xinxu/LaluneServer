@@ -52,7 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_STATIC_NETLIB_;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;../;../include/;..\..\3rdparty\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;../;../include/;..\..\3rdparty\boost\;$(ProjectDir)..\..\..\LaluneCommon\protobuf\protos\out;$(ProjectDir)..\..\..\LaluneCommon\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -70,7 +70,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_STATIC_NETLIB_;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;../;../include/;..\..\3rdparty\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;../;../include/;..\..\3rdparty\boost\;$(ProjectDir)..\..\..\LaluneCommon\protobuf\protos\out;$(ProjectDir)..\..\..\LaluneCommon\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -82,10 +82,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
+    <ClInclude Include="UserSimulator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.cc" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="UserSimulator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\Account.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

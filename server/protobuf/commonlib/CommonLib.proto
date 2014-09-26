@@ -4,8 +4,8 @@ package common;
 
 message HeaderEx
 {
-	optional uint64 uid			= 1;
-	repeated uint32 corresponding_servers	= 2 [packed=true];
+	optional uint32 uid			= 1;
+	repeated uint32 operation_id	= 2;
 }
 
 //和控制服务器通信用的Protobuf
