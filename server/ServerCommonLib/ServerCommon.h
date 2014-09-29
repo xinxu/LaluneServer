@@ -61,6 +61,40 @@ bool ParseMsg(char* data, P& proto) //°üÍ·ÎÞHeaderExµÄ°æ±¾
 
 bool ParseHeaderEx(char* data, common::HeaderEx& proto);
 
+template<typename P>
+bool ParseMsgEx(char* data, common::HeaderEx& ex, P& proto)
+{
+	if (ex.ParseFromArray(SERVER_MSG_AFTER_HEADER_BASE(data), SERVER_MSG_HEADER_EX_LEN(data)))
+	{
+		return proto.ParseFromArray(SERVER_MSG_DATA(data), SERVER_MSG_DATA_LEN(data));
+	}
+	return false;
+}
+
+template<typename P>
+bool ParseMsgOpId(char* data, uint32_t& operation_id, P& proto)
+{
+	common::HeaderEx ex;
+	if (ex.ParseFromArray(SERVER_MSG_AFTER_HEADER_BASE(data), SERVER_MSG_HEADER_EX_LEN(data)))
+	{
+		operation_id = ex.operation_id();
+		return proto.ParseFromArray(SERVER_MSG_DATA(data), SERVER_MSG_DATA_LEN(data));
+	}
+	return false;
+}
+
+template<typename P>
+bool ParseMsgUid(char* data, uint32_t& uid, P& proto)
+{
+	common::HeaderEx ex;
+	if (ex.ParseFromArray(SERVER_MSG_AFTER_HEADER_BASE(data), SERVER_MSG_HEADER_EX_LEN(data)))
+	{
+		uid = ex.uid();
+		return proto.ParseFromArray(SERVER_MSG_DATA(data), SERVER_MSG_DATA_LEN(data));
+	}
+	return false;
+}
+
 #include "NetLibPlus.h"
 
 template<typename P>
@@ -175,6 +209,7 @@ bool SendMsg(uint32_t msg_type, uint32_t op_id, uint8_t error_code, P proto) //°
 	return true;
 }
 */
+
 template<typename P>
 void ReplyMsg(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, P& proto) //°üÍ·ÎÞUserIDµÄ°æ±¾
 {
@@ -190,6 +225,41 @@ void ReplyMsg(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, P& proto) 
 	proto.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)SERVER_MSG_AFTER_HEADER_BASE(send_buf));
 
 	sessionptr->SendAsync(send_buf);
+}
+
+template<typename P>
+void ReplyMsgEx(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, common::HeaderEx& ex, P& proto)
+{
+	int ex_len = ex.ByteSize();
+	int proto_size = proto.ByteSize();
+	int len = SERVER_MSG_HEADER_BASE_SIZE + ex_len + proto_size;
+	char* send_buf = new char[len];
+	SERVER_MSG_LENGTH(send_buf) = len;
+	SERVER_MSG_TYPE(send_buf) = msg_type;
+	SERVER_MSG_ERROR(send_buf) = 0;
+	SERVER_MSG_HEADER_EX_LEN(send_buf) = ex_len;
+	SERVER_MSG_RESERVED(send_buf) = 0;
+
+	ex.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)SERVER_MSG_AFTER_HEADER_BASE(send_buf));
+	proto.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)SERVER_MSG_DATA(send_buf));
+
+	sessionptr->SendAsync(send_buf);
+}
+
+template<typename P>
+void ReplyMsgOpId(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, uint32_t operation_id, P& proto)
+{
+	common::HeaderEx ex;
+	ex.set_operation_id(operation_id);
+	ReplyMsgEx(sessionptr, msg_type, ex, proto);
+}
+
+template<typename P>
+void ReplyMsgUid(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, uint32_t uid, P& proto)
+{
+	common::HeaderEx ex;
+	ex.set_uid(uid);
+	ReplyMsgEx(sessionptr, msg_type, ex, proto);
 }
 
 #endif

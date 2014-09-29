@@ -15,13 +15,14 @@ void LoginServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr sess
 		{
 		case MSG_TYPE_AUTOREGISTER_REQUEST:
 		{
+			uint32_t op_id = 0;
 			lalune::AutoRegisterRequest auto_register;
-			if (ParseMsg(data, auto_register))
+			if (ParseMsgOpId(data, op_id, auto_register))
 			{
 				lalune::AutoRegisterResponce response;
 				response.set_uid(debug_user_id_4_register++);
 				response.set_pwd(utility1::generateRandomString());
-				ReplyMsg(sessionptr, MSG_TYPE_AUTOREGISTER_RESPONSE, response);
+				ReplyMsgOpId(sessionptr, MSG_TYPE_AUTOREGISTER_RESPONSE, op_id, response);
 			}
 			break;
 		}
