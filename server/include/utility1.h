@@ -59,3 +59,38 @@ public:
 		return ret;
 	}
 };
+
+template<typename T>
+class AvailableIDs
+{
+protected:
+	T _next_id = 1;
+	std::vector<T> _available_ids;
+
+public:
+	T getId()
+	{
+		if (_available_ids.size())
+		{
+			int _id = _available_ids.back();
+			_available_ids.pop_back();
+			return _id;
+		}
+		else
+		{
+			return _next_id++;
+		}
+	}
+
+	void releaseId(T _id)
+	{
+		if (_id + 1 == _next_id)
+		{
+			_next_id--;
+		}
+		else
+		{
+			_available_ids.push_back(_id);
+		}
+	}
+};

@@ -103,29 +103,36 @@ class HeaderEx : public ::google_lalune::protobuf::Message {
   inline ::google_lalune::protobuf::uint32 uid() const;
   inline void set_uid(::google_lalune::protobuf::uint32 value);
 
-  // repeated uint32 operation_id = 2;
-  inline int operation_id_size() const;
+  // optional uint32 gateway_id = 2;
+  inline bool has_gateway_id() const;
+  inline void clear_gateway_id();
+  static const int kGatewayIdFieldNumber = 2;
+  inline ::google_lalune::protobuf::uint32 gateway_id() const;
+  inline void set_gateway_id(::google_lalune::protobuf::uint32 value);
+
+  // optional uint32 operation_id = 3;
+  inline bool has_operation_id() const;
   inline void clear_operation_id();
-  static const int kOperationIdFieldNumber = 2;
-  inline ::google_lalune::protobuf::uint32 operation_id(int index) const;
-  inline void set_operation_id(int index, ::google_lalune::protobuf::uint32 value);
-  inline void add_operation_id(::google_lalune::protobuf::uint32 value);
-  inline const ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 >&
-      operation_id() const;
-  inline ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 >*
-      mutable_operation_id();
+  static const int kOperationIdFieldNumber = 3;
+  inline ::google_lalune::protobuf::uint32 operation_id() const;
+  inline void set_operation_id(::google_lalune::protobuf::uint32 value);
 
   // @@protoc_insertion_point(class_scope:common.HeaderEx)
  private:
   inline void set_has_uid();
   inline void clear_has_uid();
+  inline void set_has_gateway_id();
+  inline void clear_has_gateway_id();
+  inline void set_has_operation_id();
+  inline void clear_has_operation_id();
 
   ::google_lalune::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google_lalune::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 > operation_id_;
   ::google_lalune::protobuf::uint32 uid_;
+  ::google_lalune::protobuf::uint32 gateway_id_;
+  ::google_lalune::protobuf::uint32 operation_id_;
   friend void  protobuf_AddDesc_commonlib_2fCommonLib_2eproto();
   friend void protobuf_AssignDesc_commonlib_2fCommonLib_2eproto();
   friend void protobuf_ShutdownFile_commonlib_2fCommonLib_2eproto();
@@ -691,34 +698,52 @@ inline void HeaderEx::set_uid(::google_lalune::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:common.HeaderEx.uid)
 }
 
-// repeated uint32 operation_id = 2;
-inline int HeaderEx::operation_id_size() const {
-  return operation_id_.size();
+// optional uint32 gateway_id = 2;
+inline bool HeaderEx::has_gateway_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void HeaderEx::set_has_gateway_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void HeaderEx::clear_has_gateway_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void HeaderEx::clear_gateway_id() {
+  gateway_id_ = 0u;
+  clear_has_gateway_id();
+}
+inline ::google_lalune::protobuf::uint32 HeaderEx::gateway_id() const {
+  // @@protoc_insertion_point(field_get:common.HeaderEx.gateway_id)
+  return gateway_id_;
+}
+inline void HeaderEx::set_gateway_id(::google_lalune::protobuf::uint32 value) {
+  set_has_gateway_id();
+  gateway_id_ = value;
+  // @@protoc_insertion_point(field_set:common.HeaderEx.gateway_id)
+}
+
+// optional uint32 operation_id = 3;
+inline bool HeaderEx::has_operation_id() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void HeaderEx::set_has_operation_id() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void HeaderEx::clear_has_operation_id() {
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void HeaderEx::clear_operation_id() {
-  operation_id_.Clear();
+  operation_id_ = 0u;
+  clear_has_operation_id();
 }
-inline ::google_lalune::protobuf::uint32 HeaderEx::operation_id(int index) const {
+inline ::google_lalune::protobuf::uint32 HeaderEx::operation_id() const {
   // @@protoc_insertion_point(field_get:common.HeaderEx.operation_id)
-  return operation_id_.Get(index);
-}
-inline void HeaderEx::set_operation_id(int index, ::google_lalune::protobuf::uint32 value) {
-  operation_id_.Set(index, value);
-  // @@protoc_insertion_point(field_set:common.HeaderEx.operation_id)
-}
-inline void HeaderEx::add_operation_id(::google_lalune::protobuf::uint32 value) {
-  operation_id_.Add(value);
-  // @@protoc_insertion_point(field_add:common.HeaderEx.operation_id)
-}
-inline const ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 >&
-HeaderEx::operation_id() const {
-  // @@protoc_insertion_point(field_list:common.HeaderEx.operation_id)
   return operation_id_;
 }
-inline ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 >*
-HeaderEx::mutable_operation_id() {
-  // @@protoc_insertion_point(field_mutable_list:common.HeaderEx.operation_id)
-  return &operation_id_;
+inline void HeaderEx::set_operation_id(::google_lalune::protobuf::uint32 value) {
+  set_has_operation_id();
+  operation_id_ = value;
+  // @@protoc_insertion_point(field_set:common.HeaderEx.operation_id)
 }
 
 // -------------------------------------------------------------------

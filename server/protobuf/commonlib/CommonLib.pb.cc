@@ -52,8 +52,9 @@ void protobuf_AssignDesc_commonlib_2fCommonLib_2eproto() {
       "commonlib/CommonLib.proto");
   GOOGLE_CHECK(file != NULL);
   HeaderEx_descriptor_ = file->message_type(0);
-  static const int HeaderEx_offsets_[2] = {
+  static const int HeaderEx_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeaderEx, uid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeaderEx, gateway_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeaderEx, operation_id_),
   };
   HeaderEx_reflection_ =
@@ -216,16 +217,17 @@ void protobuf_AddDesc_commonlib_2fCommonLib_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google_lalune::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\031commonlib/CommonLib.proto\022\006common\"-\n\010H"
-    "eaderEx\022\013\n\003uid\030\001 \001(\r\022\024\n\014operation_id\030\002 \003"
-    "(\r\"P\n\005Hello\022\031\n\021my_listening_port\030\001 \002(\r\022\023"
-    "\n\013server_type\030\002 \002(\r\022\027\n\017is_server_start\030\003"
-    " \002(\r\" \n\013HelloResult\022\021\n\tserver_id\030\001 \002(\r\"\032"
-    "\n\nReportLoad\022\014\n\004load\030\001 \002(\002\"O\n\013AddressInf"
-    "o\022\n\n\002ip\030\001 \002(\007\022\014\n\004port\030\002 \002(\r\022\021\n\tserver_id"
-    "\030\003 \002(\r\022\023\n\013server_type\030\004 \002(\r\"0\n\013AddressLi"
-    "st\022!\n\004addr\030\001 \003(\0132\023.common.AddressInfo\"\035\n"
-    "\010ServerId\022\021\n\tserver_id\030\001 \002(\r", 388);
+    "\n\031commonlib/CommonLib.proto\022\006common\"A\n\010H"
+    "eaderEx\022\013\n\003uid\030\001 \001(\r\022\022\n\ngateway_id\030\002 \001(\r"
+    "\022\024\n\014operation_id\030\003 \001(\r\"P\n\005Hello\022\031\n\021my_li"
+    "stening_port\030\001 \002(\r\022\023\n\013server_type\030\002 \002(\r\022"
+    "\027\n\017is_server_start\030\003 \002(\r\" \n\013HelloResult\022"
+    "\021\n\tserver_id\030\001 \002(\r\"\032\n\nReportLoad\022\014\n\004load"
+    "\030\001 \002(\002\"O\n\013AddressInfo\022\n\n\002ip\030\001 \002(\007\022\014\n\004por"
+    "t\030\002 \002(\r\022\021\n\tserver_id\030\003 \002(\r\022\023\n\013server_typ"
+    "e\030\004 \002(\r\"0\n\013AddressList\022!\n\004addr\030\001 \003(\0132\023.c"
+    "ommon.AddressInfo\"\035\n\010ServerId\022\021\n\tserver_"
+    "id\030\001 \002(\r", 408);
   ::google_lalune::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "commonlib/CommonLib.proto", &protobuf_RegisterTypes);
   HeaderEx::default_instance_ = new HeaderEx();
@@ -256,6 +258,7 @@ struct StaticDescriptorInitializer_commonlib_2fCommonLib_2eproto {
 
 #ifndef _MSC_VER
 const int HeaderEx::kUidFieldNumber;
+const int HeaderEx::kGatewayIdFieldNumber;
 const int HeaderEx::kOperationIdFieldNumber;
 #endif  // !_MSC_VER
 
@@ -278,6 +281,8 @@ HeaderEx::HeaderEx(const HeaderEx& from)
 void HeaderEx::SharedCtor() {
   _cached_size_ = 0;
   uid_ = 0u;
+  gateway_id_ = 0u;
+  operation_id_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -313,8 +318,21 @@ HeaderEx* HeaderEx::New() const {
 }
 
 void HeaderEx::Clear() {
-  uid_ = 0u;
-  operation_id_.Clear();
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<HeaderEx*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(uid_, operation_id_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -339,25 +357,36 @@ bool HeaderEx::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_operation_id;
+        if (input->ExpectTag(16)) goto parse_gateway_id;
         break;
       }
 
-      // repeated uint32 operation_id = 2;
+      // optional uint32 gateway_id = 2;
       case 2: {
         if (tag == 16) {
-         parse_operation_id:
-          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+         parse_gateway_id:
+          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 1, 16, input, this->mutable_operation_id())));
-        } else if (tag == 18) {
-          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
-                   ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, this->mutable_operation_id())));
+                 input, &gateway_id_)));
+          set_has_gateway_id();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_operation_id;
+        if (input->ExpectTag(24)) goto parse_operation_id;
+        break;
+      }
+
+      // optional uint32 operation_id = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_operation_id:
+          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &operation_id_)));
+          set_has_operation_id();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -392,10 +421,14 @@ void HeaderEx::SerializeWithCachedSizes(
     ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(1, this->uid(), output);
   }
 
-  // repeated uint32 operation_id = 2;
-  for (int i = 0; i < this->operation_id_size(); i++) {
-    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(
-      2, this->operation_id(i), output);
+  // optional uint32 gateway_id = 2;
+  if (has_gateway_id()) {
+    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(2, this->gateway_id(), output);
+  }
+
+  // optional uint32 operation_id = 3;
+  if (has_operation_id()) {
+    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(3, this->operation_id(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -413,10 +446,14 @@ void HeaderEx::SerializeWithCachedSizes(
     target = ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->uid(), target);
   }
 
-  // repeated uint32 operation_id = 2;
-  for (int i = 0; i < this->operation_id_size(); i++) {
-    target = ::google_lalune::protobuf::internal::WireFormatLite::
-      WriteUInt32ToArray(2, this->operation_id(i), target);
+  // optional uint32 gateway_id = 2;
+  if (has_gateway_id()) {
+    target = ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->gateway_id(), target);
+  }
+
+  // optional uint32 operation_id = 3;
+  if (has_operation_id()) {
+    target = ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->operation_id(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -438,17 +475,21 @@ int HeaderEx::ByteSize() const {
           this->uid());
     }
 
-  }
-  // repeated uint32 operation_id = 2;
-  {
-    int data_size = 0;
-    for (int i = 0; i < this->operation_id_size(); i++) {
-      data_size += ::google_lalune::protobuf::internal::WireFormatLite::
-        UInt32Size(this->operation_id(i));
+    // optional uint32 gateway_id = 2;
+    if (has_gateway_id()) {
+      total_size += 1 +
+        ::google_lalune::protobuf::internal::WireFormatLite::UInt32Size(
+          this->gateway_id());
     }
-    total_size += 1 * this->operation_id_size() + data_size;
-  }
 
+    // optional uint32 operation_id = 3;
+    if (has_operation_id()) {
+      total_size += 1 +
+        ::google_lalune::protobuf::internal::WireFormatLite::UInt32Size(
+          this->operation_id());
+    }
+
+  }
   if (!unknown_fields().empty()) {
     total_size +=
       ::google_lalune::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -474,10 +515,15 @@ void HeaderEx::MergeFrom(const ::google_lalune::protobuf::Message& from) {
 
 void HeaderEx::MergeFrom(const HeaderEx& from) {
   GOOGLE_CHECK_NE(&from, this);
-  operation_id_.MergeFrom(from.operation_id_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_uid()) {
       set_uid(from.uid());
+    }
+    if (from.has_gateway_id()) {
+      set_gateway_id(from.gateway_id());
+    }
+    if (from.has_operation_id()) {
+      set_operation_id(from.operation_id());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -503,7 +549,8 @@ bool HeaderEx::IsInitialized() const {
 void HeaderEx::Swap(HeaderEx* other) {
   if (other != this) {
     std::swap(uid_, other->uid_);
-    operation_id_.Swap(&other->operation_id_);
+    std::swap(gateway_id_, other->gateway_id_);
+    std::swap(operation_id_, other->operation_id_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

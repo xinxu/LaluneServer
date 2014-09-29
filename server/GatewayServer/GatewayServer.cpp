@@ -9,6 +9,8 @@
 #include "ServerCommonLib/ServerCommon.h"
 #include "GatewaySessionDelegate.h"
 #include "GatewayUserSessionDelegate.h"
+#include <vector>
+#include "include/utility1.h"
 
 #define GATEWAY_OUTER_PORT (6677) //服务于用户的
 #define GATEWAY_INNER_PORT (9432) //内部通信用的
@@ -16,6 +18,42 @@
 ioservice_thread thread;
 
 NetLib_Server_ptr server4user;
+
+std::map<int, NetLib_ServerSession_ptr> user2session;
+AvailableIDs<int> available_tmp_ids; //其实不一定需要搞这么一套available_id，直接让operation_id加到从0开始也可以。但id小一点好像能省一点流量。。
+
+int GetTmpUserId()
+{
+	return available_tmp_ids.getId();
+}
+
+void ReleaseTmpUserId(int _id)
+{
+	available_tmp_ids.releaseId(_id);
+}
+
+void UpdateUserSession(int uid, NetLib_ServerSession_ptr session)
+{
+	user2session[uid] = session;
+}
+
+void UserSessionLeft(int uid)
+{
+	user2session.erase(uid);
+}
+
+NetLib_ServerSession_ptr GetSessionById(int uid)
+{
+	auto it = user2session.find(uid);
+	if (it == user2session.end())
+	{
+		return nullptr;
+	}
+	else
+	{
+		return it->second;
+	}
+}
 
 class GatewayCommonLibDelegate : public CommonLibDelegate
 {

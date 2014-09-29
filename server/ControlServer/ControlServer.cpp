@@ -19,34 +19,7 @@ ControlServerConfig config;
 
 bool during_startup = true;
 
-uint32_t next_server_id = 1;
-std::vector<uint32_t> available_ids;
-
-uint32_t getNextId()
-{
-	if (available_ids.size())
-	{
-		int _id = available_ids.back();
-		available_ids.pop_back();
-		return _id;
-	}
-	else
-	{
-		return next_server_id++;
-	}
-}
-
-void releaseId(uint32_t _id)
-{
-	if (_id + 1 == next_server_id)
-	{
-		next_server_id--;
-	}
-	else
-	{
-		available_ids.push_back(_id);
-	}
-}
+AvailableIDs<uint32_t> available_ids;
 
 std::map<NetLib_ServerSession_ptr, std::pair<int, int>> session2server;
 std::map<std::pair<int, int>, ServerInfo*> servers_info;
@@ -64,6 +37,7 @@ void ServerTimeout(std::pair<int, int> ip_port, const boost::system::error_code&
 			informAddressInfo(info_it->second->addr, MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REMOVE);
 			LOGEVENTL("INFO", "Send remove to all. " << _ln("server_id") << info_it->second->addr.server_id());
 
+			available_ids.releaseId(info_it->second->addr.server_id());
 			delete info_it->second;
 			servers_info.erase(info_it);
 		}

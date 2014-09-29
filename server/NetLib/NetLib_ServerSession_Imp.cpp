@@ -4,7 +4,7 @@
 #include <boost/bind.hpp>
 
 NetLib_ServerSession_Imp::NetLib_ServerSession_Imp(NetLib_ServerSession_Delegate* d, std::shared_ptr<NetLib_Server_Delegate> sd, boost::asio::io_service& ioservice, int timeout_seconds): 
-	theDelegate(d), serverDelegate(sd), boostioservice(ioservice), m_keep_alive_timer(boostioservice), m_timeout_seconds(timeout_seconds)
+theDelegate(d), serverDelegate(sd), boostioservice(ioservice), m_keep_alive_timer(boostioservice), m_timeout_seconds(timeout_seconds), m_attached_data(0)
 {
 }
 
@@ -247,4 +247,14 @@ bool NetLib_ServerSession_Imp::SendCopyFailedHandler(const char* data_copy, void
 {
 	theDelegate->SendCopyFailedHandler(shared_from_this(), data_copy, pHint);
 	return false;
+}
+
+int NetLib_ServerSession_Imp::GetAttachedData()
+{
+	return m_attached_data;
+}
+
+void NetLib_ServerSession_Imp::SetAttachedData(int d)
+{
+	m_attached_data = d;
 }

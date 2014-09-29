@@ -154,6 +154,11 @@ void ReportLoad(float load_factor)
 	SendMsg(CONTROL_SERVER_ID, MSG_TYPE_CONTROL_SERVER_REPORT_LOAD, load);
 }
 
+bool ParseHeaderEx(char* data, common::HeaderEx& proto)
+{
+	return proto.ParseFromArray(SERVER_MSG_AFTER_HEADER_BASE(data), SERVER_MSG_HEADER_EX_LEN(data));
+}
+
 //TODO
 //std::map<int, common::CorrespondingServer> corresponding_server_map;
 

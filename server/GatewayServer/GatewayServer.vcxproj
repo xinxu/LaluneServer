@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
+    <ClInclude Include="GatewayServer.h" />
     <ClInclude Include="GatewaySessionDelegate.h" />
     <ClInclude Include="GatewayUserSessionDelegate.h" />
   </ItemGroup>

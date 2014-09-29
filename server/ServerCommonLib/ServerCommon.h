@@ -24,7 +24,8 @@
 #define SERVER_MSG_RESERVED(d) (*(uint16_t*)((d) + SERVER_MSG_AFTER_TYPE_POS + 2))
 #define SERVER_MSG_HEADER_BASE_SIZE (SERVER_MSG_AFTER_TYPE_POS + 4)
 #define SERVER_MSG_AFTER_HEADER_BASE(d) ((d) + SERVER_MSG_HEADER_BASE_SIZE)
-#define SERVER_MSG_DATA(d) ((d) + SERVER_MSG_HEADER_BASE_SIZE + MSG_HEADER_EX_LEN(d))
+#define SERVER_MSG_DATA(d) ((d) + SERVER_MSG_HEADER_BASE_SIZE + SERVER_MSG_HEADER_EX_LEN(d))
+#define SERVER_MSG_DATA_LEN(d) (SERVER_MSG_LENGTH(d) - SERVER_MSG_HEADER_BASE_SIZE - SERVER_MSG_HEADER_EX_LEN(d))
 
 #include "commonlib/CommonLib.pb.h"
 
@@ -53,10 +54,12 @@ void ReportLoad(float load_factor);
 #define CONTROL_SERVER_DEFAULT_PORT (5432)
 
 template<typename P>
-bool ParseMsg(char* data, P& proto) //包头无UserID的版本
+bool ParseMsg(char* data, P& proto) //包头无HeaderEx的版本
 {
 	return proto.ParseFromArray(SERVER_MSG_AFTER_HEADER_BASE(data), SERVER_MSG_LENGTH(data) - SERVER_MSG_HEADER_BASE_SIZE);
 }
+
+bool ParseHeaderEx(char* data, common::HeaderEx& proto);
 
 #include "NetLibPlus.h"
 
@@ -180,7 +183,6 @@ void ReplyMsg(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, P& proto) 
 	char* send_buf = new char[SERVER_MSG_HEADER_BASE_SIZE + proto_size];
 	SERVER_MSG_LENGTH(send_buf) = SERVER_MSG_HEADER_BASE_SIZE + proto_size;		// 数据包的字节数（含msghead）
 	SERVER_MSG_TYPE(send_buf) = msg_type;
-	SERVER_MSG_OPERATION_ID(send_buf) = 0;
 	SERVER_MSG_ERROR(send_buf) = 0;
 	SERVER_MSG_HEADER_EX_LEN(send_buf) = 0;
 	SERVER_MSG_RESERVED(send_buf) = 0;
