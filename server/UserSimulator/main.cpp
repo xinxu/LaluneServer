@@ -22,12 +22,14 @@ int main(int argc, char* argv[])
 	NETLIB_CHECK_VERSION;
 
 	LogInitializeLocalOptions(true, true, "user_simulator");
+	
+	auto us = std::make_shared<UserSimulator>();
+	us->Connect("192.168.1.16", 6677);
+	us->Register(); //TODO 这个也要改，到时候都得在thread里面跑
 
 	thread.start();
 
-	auto us = std::make_shared<UserSimulator>();
-	us->Connect("192.168.1.16", 6677);
-	us->Register();
+	//TODO： 要支持跑简易脚本
 
 	for (;;)
 	{
@@ -39,7 +41,7 @@ int main(int argc, char* argv[])
 		}
 		else if (tmp == "register")
 		{
-			us->Register();
+			us->Register(); //TODO 这个也要改，到时候都得在thread里面跑
 		}
 		else
 		{

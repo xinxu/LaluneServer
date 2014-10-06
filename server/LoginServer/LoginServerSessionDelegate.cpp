@@ -22,6 +22,7 @@ void LoginServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr sess
 				lalune::AutoRegisterResponce response;
 				response.set_uid(debug_user_id_4_register++);
 				response.set_pwd(utility1::generateRandomString());
+				response.set_code(0);
 				ReplyMsgOpId(sessionptr, MSG_TYPE_AUTOREGISTER_RESPONSE, op_id, response);
 			}
 			break;

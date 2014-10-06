@@ -2,6 +2,7 @@
 #include "ServerCommon.h"
 #include "Log/Log.h"
 #include "GatewayServer.h"
+#include "MessageTypeDef.h"
 
 void toBackEndDelegate::RecvFinishHandler(std::shared_ptr<NetLibPlus_Client> clientptr, char* data)
 {
@@ -30,11 +31,13 @@ void toBackEndDelegate::RecvFinishHandler(std::shared_ptr<NetLibPlus_Client> cli
 			{
 				int len = SERVER_MSG_HEADER_BASE_SIZE + SERVER_MSG_DATA_LEN(data);
 				char* send_buf = new char[len];
-				SERVER_MSG_LENGTH(send_buf) = len;		// 数据包的字节数（含msghead）
-				SERVER_MSG_TYPE(send_buf) = SERVER_MSG_TYPE(data);
-				SERVER_MSG_ERROR(send_buf) = 0;
-				SERVER_MSG_HEADER_EX_LEN(send_buf) = 0;
-				SERVER_MSG_RESERVED(send_buf) = 0;
+				MSG_LENGTH(send_buf) = len;		// 数据包的字节数（含msghead）
+				MSG_TYPE(send_buf) = SERVER_MSG_TYPE(data);
+				MSG_ERROR(send_buf) = 0;
+				MSG_ENCRYPTION_TYPE(send_buf) = 0;
+				MSG_RESERVED(send_buf) = 0;
+
+				memcpy(MSG_DATA(send_buf), SERVER_MSG_DATA(data), SERVER_MSG_DATA_LEN(data));
 
 				user_session->SendAsync(send_buf);
 			}

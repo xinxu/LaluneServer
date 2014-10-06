@@ -121,11 +121,7 @@ void _NetLibPlus_RemoveServerInfo(int ServerID, int Ip, int Port, int ServerType
 		else
 		{
 			auto it_client = clients.find(ServerID);
-			if (it_client == clients.end())
-			{
-				LOGEVENTL("Fatal", "When _NetLibPlus_RemoveServerInfo, client to " << ServerID << " exist in serverinfos, but not exist in map clients");
-			}
-			else
+			if (it_client != clients.end()) //== end()的情况是当时就没有产生client，因为没有delegate
 			{
 				it_client->second->ReleaseClient();
 				clients.erase(it_client);
