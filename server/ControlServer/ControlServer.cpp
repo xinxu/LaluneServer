@@ -30,6 +30,8 @@ void ServerTimeout(std::pair<int, int> ip_port, const boost::system::error_code&
 {
 	if (!error)
 	{
+		LOGEVENTL("Debug", "Server timeout");
+
 		//有服务超时了，得把他从数据结构里移除，并告知他人
 		auto info_it = servers_info.find(ip_port);
 		if (info_it != servers_info.end())
@@ -45,6 +47,10 @@ void ServerTimeout(std::pair<int, int> ip_port, const boost::system::error_code&
 		{
 			LOGEVENTL("ERROR", "When a server timeout, can't find it in servers_info. " << log_::n("ip") << ip_port.first << log_::n("port") << ip_port.second);
 		}
+	}
+	else
+	{
+		LOGEVENTL("Debug", "Server timeout timer canceled. " << error.value());
 	}
 }
 
@@ -161,7 +167,7 @@ int main(int argc, char* argv[])
 		else if (strcmp(tmp, "exit") == 0)
 		{
 			break;
-		}
+		} 
 	}
 
 	UnInitliazeServerInfos();
@@ -178,3 +184,11 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+//待增加测试：
+/*
+
+关一个服务器，是否能如期触发超时（查ControlServer的数据结构）  FAIL
+
+...
+
+*/

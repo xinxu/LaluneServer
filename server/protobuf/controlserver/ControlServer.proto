@@ -9,4 +9,5 @@ message Command
 message CommandResult
 {
 	required string result	= 1;
+	repeated uint32 params	= 2;
 }

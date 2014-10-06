@@ -30,14 +30,17 @@ void GatewayUserSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr sess
 		switch (server_type)
 		{
 		case SERVER_TYPE_GATEWAY_SERVER:
+			//需要自己处理的
 			LOGEVENTL("Warn", "ServerType=GatewayServer haven't implemented");
 			break;
 		case SERVER_TYPE_BASIC_INFO_SERVER:
 		case SERVER_TYPE_LEAGUE_SERVER:
 		case SERVER_TYPE_ASYNC_BATTLE_SERVER:
+			//需要哈希的
 			LOGEVENTL("Warn", "ServerType haven't implemented");
 			break;
 		default:
+			//转发的
 			{
 				//这里还有待优化。不用返回个map出来，在里面就选好就行了。就是可能会有个几乎是Gateway专用的方法实现在ServerCommon里
 				std::map<int, NetLibPlus_ServerInfo> info = NetLibPlus_getClientsInfo(server_type);
@@ -45,7 +48,7 @@ void GatewayUserSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr sess
 				{
 					common::HeaderEx ex;
 					char* send_buf;
-					if (server_type == SERVER_TYPE_VERSION_SERVER || server_type == SERVER_TYPE_LOGIN_SERVER) //这两个服务是在登陆以前，于是要加上operation_id。否则的话是加user_id
+					if (server_type == SERVER_TYPE_VERSION_SERVER || server_type == SERVER_TYPE_LOGIN_SERVER) //这两个服务是在登陆以前，于是要加上operation_id（否则不知道回给哪个用户）。否则的话是加user_id
 					{
 						int tmp_id = sessionptr->GetAttachedData();
 						if (tmp_id == 0)
