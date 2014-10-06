@@ -494,13 +494,13 @@ void NetLib_Client_Imp::SendFailedHandler(const char* data, void* pHint)
 {
 	if (theDelegate->SendFailedHandler(shared_from_this(), data, pHint))
 	{	
-		//LOGEVENTL("NetLib_Trace", "SendFailed and Push into failed_data_queue. data: 0x" << std::hex << (std::size_t)data);
+		//LOGEVENTL("NetLib_Trace", "SendFailed and Push into failed_data_queue. data: 0x" << log_::h((std::size_t)data));
 
 		boost::lock_guard<boost::recursive_mutex> lock(client_mutex);		
 
 		failed_data_queue.push( netlib_packet(data, false, pHint));
 
-		//LOGEVENTL("NetLib_Trace", "failed_data_queue.back().data: 0x" << std::hex << (std::size_t)failed_data_queue.back().data);
+		//LOGEVENTL("NetLib_Trace", "failed_data_queue.back().data: 0x" << log_::h((std::size_t)failed_data_queue.back().data));
 	}
 }
 

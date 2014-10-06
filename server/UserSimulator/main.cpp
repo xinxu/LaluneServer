@@ -6,6 +6,19 @@
 
 extern ioservice_thread thread;
 
+std::shared_ptr<UserSimulator> us;
+
+void initialize()
+{
+	us = std::make_shared<UserSimulator>();
+	us->Connect("192.168.1.16", 6677);
+}
+
+void _register()
+{
+	us->Register();
+}
+
 int main(int argc, char* argv[])
 {
 	//Check Memory Leaks
@@ -22,13 +35,13 @@ int main(int argc, char* argv[])
 	NETLIB_CHECK_VERSION;
 
 	LogInitializeLocalOptions(true, true, "user_simulator");
-	
-	auto us = std::make_shared<UserSimulator>();
-	us->Connect("192.168.1.16", 6677);
-	us->Register(); //TODO 这个也要改，到时候都得在thread里面跑
 
 	thread.start();
 
+	auto us = std::make_shared<UserSimulator>();
+	thread.get_ioservice().post(boost::bind(&initialize));
+	thread.get_ioservice().post(boost::bind(&_register));
+	
 	//TODO： 要支持跑简易脚本
 
 	for (;;)
@@ -41,7 +54,7 @@ int main(int argc, char* argv[])
 		}
 		else if (tmp == "register")
 		{
-			us->Register(); //TODO 这个也要改，到时候都得在thread里面跑
+			thread.get_ioservice().post(boost::bind(&_register));
 		}
 		else
 		{
