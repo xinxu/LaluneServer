@@ -9,7 +9,7 @@
 
 NetLib_Client_Imp::NetLib_Client_Imp(std::shared_ptr<NetLib_Client_Delegate> d, boost::asio::io_service & ioservice) : theDelegate(d), boostioservice(ioservice), tcpsocket(ioservice), 
 	m_last_error(no_error), m_last_internal_error(0), 
-	m_enable_reconnect(true), m_manually_disconnect(false), m_will_reconnect_if_disconnected(false), m_in_disconnect_process(false),
+	m_enable_reconnect(true), m_manually_disconnect(false), m_will_reconnect_if_disconnected(false), m_in_disconnect_process(false), m_first_connect(true),
 	m_reconnect_interval_ms(5000), m_max_continuous_retries(-1), m_currently_retries(0), reconnect_retry_timer(ioservice), keep_alive_timer(ioservice), m_keepalive_interval_seconds(240)
 {
 }
@@ -155,10 +155,10 @@ void NetLib_Client_Imp::disconnected(std::shared_ptr<NetLib_Client_Imp> keep_ali
 	//m_will_reconnect_if_disconnected是强条件，即使will_continue_reconnect被改了，如果m_will_reconnect_if_disconnected是false那也没有用
 	if (m_will_reconnect_if_disconnected && will_continue_reconnect)
 	{
-		if (m_currently_retries || (m_currently_retries == 0 && (m_flags & NETLIB_CLIENT_ENABLE_RECONNECT_ON_FIRST_CONNECT)))
+		if (m_currently_retries || m_first_connect)
 		{
 			//LOGEVENTL("Info", "will reconnect later");
-			//非首次断线，或者第一次连就失败然后需要重连(开了相关选项)，需要延时一段时间再重连
+			//非首次尝试重连(即刚重失败过)，或者第一次连就失败然后需要重连：需要延时一段时间再重连
 			reconnect_retry_timer.expires_from_now(boost::posix_time::milliseconds(m_reconnect_interval_ms));
 			reconnect_retry_timer.async_wait(boost::bind(&NetLib_Client_Imp::reconnect_timer_pulse, this, shared_from_this(), boost::asio::placeholders::error));
 		}
@@ -248,6 +248,7 @@ void NetLib_Client_Imp::connected_handler() //该方法只能在锁内调用
 
 	if (m_currently_retries == 0) //表示是外部调用ConnectAsync的连接成功
 	{		
+		m_first_connect = false;
 		boostioservice.post(boost::bind(&NetLib_Client_Delegate::ConnectedHandler, theDelegate.get(), shared_from_this())); //外面还有锁，所以只能通过post来出锁了
 	}
 	else //表示自动重连成功
