@@ -9,6 +9,7 @@
 #include "ServerCommonLib/ServerCommon.h"
 #include "GatewaySessionDelegate.h"
 #include "GatewayUserSessionDelegate.h"
+#include "toBackEndDelegate.h"
 #include <vector>
 #include "include/utility1.h"
 
@@ -117,6 +118,8 @@ int main(int argc, char* argv[])
 
 	GatewayCommonLibDelegate* cl_delegate = new GatewayCommonLibDelegate();
 	InitializeCommonLib(thread, cl_delegate, GATEWAY_INNER_PORT, SERVER_TYPE_GATEWAY_SERVER, argc, argv);
+
+	NetLibPlus_InitializeClients<toBackEndDelegate>();
 	
 	for (;;)
 	{

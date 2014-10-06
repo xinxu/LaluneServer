@@ -66,7 +66,7 @@ void try_start_a_client(const NetLibPlus_ServerInfo& ServerInfo) //±ØĞëÔÚËøÄÚµ÷Ó
 	}
 	else
 	{
-		LOGEVENTL("Fatal", "try_start_a_client: NetLibPlus_InitializeClients havn't been called yet!! Type: " << ServerInfo.ServerType << ", ServerID: " << ServerInfo.ServerID);
+		LOGEVENTL("NetLibPlus_Warn", "try_start_a_client, but corresponding NetLibPlus_InitializeClients havn't been called yet. Type: " << ServerInfo.ServerType << ", ServerID: " << ServerInfo.ServerID);
 	}
 }
 
