@@ -550,3 +550,16 @@ void NetLib_Client_Imp::SetKeepAliveIntervalSeconds(int keepalive_interval_secon
 {
 	m_keepalive_interval_seconds = keepalive_interval_seconds;
 }
+
+/*
+
+待改进项：
+主动调用者和Client不在一个线程的情况。先连再发，有可能会发生这种情况：
+发送失败->连接成功，检查失败包没有->插入失败队列
+就会导致看起来包少了。。。直到下次重连成功
+主要原因是SendAsync里触发FailedHandler用了post，当有多线程时就可能导致在连接成功之后才插入队列
+主动调用者和Client同线程就没事。否则这里要改，索性别对外抛FailedHandler了。
+
+测试：
+
+*/
