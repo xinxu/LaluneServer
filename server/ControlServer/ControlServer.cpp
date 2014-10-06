@@ -48,10 +48,6 @@ void ServerTimeout(std::pair<int, int> ip_port, const boost::system::error_code&
 			LOGEVENTL("ERROR", "When a server timeout, can't find it in servers_info. " << log_::n("ip") << ip_port.first << log_::n("port") << ip_port.second);
 		}
 	}
-	else
-	{
-		LOGEVENTL("Debug", "Server timeout timer canceled. " << error.value());
-	}
 }
 
 void UnInitliazeServerInfos()
@@ -187,7 +183,7 @@ int main(int argc, char* argv[])
 //待增加测试：
 /*
 
-关一个服务器，是否能如期触发超时（查ControlServer的数据结构）  FAIL
+关一个服务器，是否能如期触发超时（查ControlServer的数据结构）  PASS
 
 ...
 

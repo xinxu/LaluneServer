@@ -35,7 +35,7 @@ void ControlServerSessionDelegate::RecvKeepAliveHandler(NetLib_ServerSession_ptr
 		}
 		else
 		{
-			//info_it->second->refresh();
+			info_it->second->refresh();
 		}
 	}
 }
