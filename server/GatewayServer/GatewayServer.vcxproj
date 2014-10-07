@@ -92,6 +92,7 @@
     <ClInclude Include="GatewayServer.h" />
     <ClInclude Include="GatewaySessionDelegate.h" />
     <ClInclude Include="GatewayUserSessionDelegate.h" />
+    <ClInclude Include="toBackEndDelegate.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Log\Log.vcxproj">
@@ -108,6 +109,7 @@
     <ClCompile Include="GatewayServer.cpp" />
     <ClCompile Include="GatewaySessionDelegate.cpp" />
     <ClCompile Include="GatewayUserSessionDelegate.cpp" />
+    <ClCompile Include="toBackEndDelegate.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

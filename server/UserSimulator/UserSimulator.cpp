@@ -18,6 +18,7 @@ void UserSimulator::Connect(const std::string& ip, int port)
 {
 	_client = NetLib_NewClient(shared_from_this(), &thread);
 	_client->ConnectAsync(ip.c_str(), port, NETLIB_CLIENT_ENABLE_RECONNECT_ON_FIRST_CONNECT | NETLIB_CLIENT_FLAG_KEEP_ALIVE);
+	_client->SetKeepAliveIntervalSeconds(30);
 }
 
 void UserSimulator::Register()

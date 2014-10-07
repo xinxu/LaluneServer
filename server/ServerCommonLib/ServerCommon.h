@@ -32,7 +32,7 @@
 class CommonLibDelegate
 {
 public:
-	virtual void onInitialized() {}
+	virtual void onInitialized() {} //收到过第一次refresh
 
 	virtual void onConfigRefresh(const std::string& content) = 0;
 	virtual void onGlobalConfigRefresh(const std::string& content) {}

@@ -66,7 +66,7 @@ void try_start_a_client(const NetLibPlus_ServerInfo& ServerInfo) //±ØĞëÔÚËøÄÚµ÷Ó
 	}
 	else
 	{
-		LOGEVENTL("Fatal", "try_start_a_client: NetLibPlus_InitializeClients havn't been called yet!! Type: " << ServerInfo.ServerType << ", ServerID: " << ServerInfo.ServerID);
+		LOGEVENTL("NetLibPlus_Warn", "try_start_a_client, but corresponding NetLibPlus_InitializeClients havn't been called yet. Type: " << ServerInfo.ServerType << ", ServerID: " << ServerInfo.ServerID);
 	}
 }
 
@@ -121,11 +121,7 @@ void _NetLibPlus_RemoveServerInfo(int ServerID, int Ip, int Port, int ServerType
 		else
 		{
 			auto it_client = clients.find(ServerID);
-			if (it_client == clients.end())
-			{
-				LOGEVENTL("Fatal", "When _NetLibPlus_RemoveServerInfo, client to " << ServerID << " exist in serverinfos, but not exist in map clients");
-			}
-			else
+			if (it_client != clients.end()) //== end()µÄÇé¿öÊÇµ±Ê±¾ÍÃ»ÓĞ²úÉúclient£¬ÒòÎªÃ»ÓĞdelegate
 			{
 				it_client->second->ReleaseClient();
 				clients.erase(it_client);

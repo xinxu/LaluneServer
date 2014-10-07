@@ -40,8 +40,8 @@ public:
 
 	void refresh()
 	{
-		_timer.async_wait(boost::bind(&ServerTimeout, std::make_pair(addr.ip(), addr.port()), boost::asio::placeholders::error));
 		_timer.expires_from_now(boost::posix_time::seconds(config.timeout_sec));
+		_timer.async_wait(boost::bind(&ServerTimeout, std::make_pair(addr.ip(), addr.port()), boost::asio::placeholders::error));
 	}
 
 	virtual ~ServerInfo()

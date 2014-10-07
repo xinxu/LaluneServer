@@ -26,6 +26,7 @@ protected:
 	int m_last_internal_error;
 	bool m_manually_disconnect;
 	bool m_enable_reconnect, m_will_reconnect_if_disconnected;
+	bool m_first_connect; //第一次连。主要是避免第一次连没连上就立即重连
 	int m_reconnect_interval_ms, m_max_continuous_retries, m_currently_retries;
 	boost::asio::deadline_timer reconnect_retry_timer;
 	boost::asio::deadline_timer keep_alive_timer;
