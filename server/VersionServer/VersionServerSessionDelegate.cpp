@@ -2,6 +2,7 @@
 #include "ServerCommon.h"
 #include "MessageTypeDef.h"
 #include "Log/Log.h"
+#include "Version.pb.h"
 
 void VersionServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data)
 {
@@ -11,6 +12,11 @@ void VersionServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 		{
 		case MSG_CHECK_VERSION:
 		{
+								  lalune::CheckVersionResult result;
+
+								  lalune::VersionFile* file = result.add_file();
+								 
+								  
 								  //TODO
 											  /*uint32_t op_id = 0;
 											  lalune::AutoRegisterRequest auto_register;

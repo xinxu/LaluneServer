@@ -11,10 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{A7EE1AAB-59F6-4302-80A3-1A3CDC7D8F12}</ProjectGuid>
+    <ProjectGuid>{FEEF88E8-0BE0-45FC-9D13-D8BE9650B835}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>tNetLib2</RootNamespace>
-    <ProjectName>VersionServer</ProjectName>
+    <RootNamespace>tNetLib</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -52,15 +51,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_STATIC_NETLIB_;_WIN32_WINNT=0x0501;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;$(ProjectDir)..\;..\..\3rdparty\boost\;$(ProjectDir)..\..\..\LaluneCommon\include;$(ProjectDir)..\..\..\LaluneCommon\protobuf;$(ProjectDir)..\ServerCommonLib;$(ProjectDir)..\protobuf;$(ProjectDir)..\..\..\LaluneCommon\protobuf\protos\out;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;_STATIC_NETLIB_;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;../;../include/;..\..\3rdparty\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)../lib/;$(ProjectDir)../../3rdparty/boost/stage/lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>..\..\..\LaluneCommon\3rdparty\protobuf\vsprojects\Debug\libprotobuf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir);..\lib\;..\..\3rdparty\boost\stage\lib\;$(ProjectDir)../../server/lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -71,26 +69,25 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_STATIC_NETLIB_;_WIN32_WINNT=0x0501;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;$(ProjectDir)..\;..\..\3rdparty\boost\;$(ProjectDir)..\..\..\LaluneCommon\include;$(ProjectDir)..\..\..\LaluneCommon\protobuf;$(ProjectDir)..\ServerCommonLib;$(ProjectDir)..\protobuf;$(ProjectDir)..\..\..\LaluneCommon\protobuf\protos\out;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;_STATIC_NETLIB_;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;../;../include/;..\..\3rdparty\boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)../lib/;$(ProjectDir)../../3rdparty/boost/stage/lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>..\..\..\LaluneCommon\3rdparty\protobuf\vsprojects\Release\libprotobuf.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\lib\;..\..\3rdparty\boost\stage\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
-    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
-    <ClInclude Include="VersionServerSessionDelegate.h" />
+    <ClInclude Include="UpdateVersion.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="background.cpp" />
+    <ClCompile Include="UpdateVersion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Log\Log.vcxproj">
@@ -99,17 +96,6 @@
     <ProjectReference Include="..\NetLib\NetLib.vcxproj">
       <Project>{38aaa34f-5fc1-4d42-a385-1ef6b380a5b5}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\ServerCommonLib\ServerCommonLib.vcxproj">
-      <Project>{9f15547d-8152-4790-8519-8f12725cacf3}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.cc" />
-    <ClCompile Include="VersionServer.cpp" />
-    <ClCompile Include="VersionServerSessionDelegate.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\LaluneCommon\protobuf\protos\Version.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
