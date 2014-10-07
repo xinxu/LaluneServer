@@ -248,6 +248,8 @@ void NetLib_Client_Imp::connected_handler() //该方法只能在锁内调用
 
 	if (m_currently_retries == 0) //表示是外部调用ConnectAsync的连接成功
 	{		
+		LOGEVENTL("NetLib_Info", "(" << hex((std::size_t)this) << ") NetLib_Client connected.");
+
 		m_first_connect = false;
 		boostioservice.post(boost::bind(&NetLib_Client_Delegate::ConnectedHandler, theDelegate.get(), shared_from_this())); //外面还有锁，所以只能通过post来出锁了
 	}
@@ -465,6 +467,7 @@ void NetLib_Client_Imp::SendAsync(const char* data, void* pHint)
 	else
 	{
 		client_mutex.unlock();
+		LOGEVENTL("Debug", "SendAsyncFailed");
 		boostioservice.post(boost::bind(&NetLib_Client_Imp::SendAsyncFailed, this, shared_from_this(), data, pHint)); //Handler必须直接或间接的经过post才能调用，否则有可能导致死锁
 	}
 }
@@ -486,6 +489,7 @@ void NetLib_Client_Imp::SendCopyAsync(const char* data, void* pHint)
 	else
 	{
 		client_mutex.unlock();
+		LOGEVENTL("Debug", "SendCopyAsyncFailed");
 		boostioservice.post(boost::bind(&NetLib_Client_Imp::SendCopyAsyncFailed, this, shared_from_this(), data_copy, pHint)); //Handler必须直接或间接的经过post才能调用，否则有可能导致死锁
 	}
 }
@@ -494,13 +498,13 @@ void NetLib_Client_Imp::SendFailedHandler(const char* data, void* pHint)
 {
 	if (theDelegate->SendFailedHandler(shared_from_this(), data, pHint))
 	{	
-		//LOGEVENTL("NetLib_Trace", "SendFailed and Push into failed_data_queue. data: 0x" << log_::h((std::size_t)data));
+		LOGEVENTL("NetLib_Trace", "SendFailed and Push into failed_data_queue. data: 0x" << log_::h((std::size_t)data));
 
 		boost::lock_guard<boost::recursive_mutex> lock(client_mutex);		
 
 		failed_data_queue.push( netlib_packet(data, false, pHint));
 
-		//LOGEVENTL("NetLib_Trace", "failed_data_queue.back().data: 0x" << log_::h((std::size_t)failed_data_queue.back().data));
+		LOGEVENTL("NetLib_Trace", "failed_data_queue.back().data: 0x" << log_::h((std::size_t)failed_data_queue.back().data));
 	}
 }
 
