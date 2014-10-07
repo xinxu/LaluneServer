@@ -88,6 +88,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
     <ClInclude Include="VersionServerSessionDelegate.h" />
   </ItemGroup>
@@ -103,8 +104,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.cc" />
     <ClCompile Include="VersionServer.cpp" />
     <ClCompile Include="VersionServerSessionDelegate.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\Version.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

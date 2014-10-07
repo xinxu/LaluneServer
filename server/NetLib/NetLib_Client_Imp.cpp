@@ -558,7 +558,8 @@ void NetLib_Client_Imp::SetKeepAliveIntervalSeconds(int keepalive_interval_secon
 发送失败->连接成功，检查失败包没有->插入失败队列
 就会导致看起来包少了。。。直到下次重连成功
 主要原因是SendAsync里触发FailedHandler用了post，当有多线程时就可能导致在连接成功之后才插入队列
-主动调用者和Client同线程就没事。否则这里要改，索性别对外抛FailedHandler了。
+主动调用者和Client同线程就没事。没问题的前提是boost不会在我的函数执行了一半的时候往ioservice里插事件。到底会不会呢？要测试下。。
+否则这里要改，索性别对外抛FailedHandler了。
 
 测试：
 
