@@ -41,6 +41,9 @@ const ::google_lalune::protobuf::internal::GeneratedMessageReflection*
 const ::google_lalune::protobuf::Descriptor* ServerId_descriptor_ = NULL;
 const ::google_lalune::protobuf::internal::GeneratedMessageReflection*
   ServerId_reflection_ = NULL;
+const ::google_lalune::protobuf::Descriptor* Cmd2Server_descriptor_ = NULL;
+const ::google_lalune::protobuf::internal::GeneratedMessageReflection*
+  Cmd2Server_reflection_ = NULL;
 
 }  // namespace
 
@@ -52,10 +55,11 @@ void protobuf_AssignDesc_commonlib_2fCommonLib_2eproto() {
       "commonlib/CommonLib.proto");
   GOOGLE_CHECK(file != NULL);
   HeaderEx_descriptor_ = file->message_type(0);
-  static const int HeaderEx_offsets_[3] = {
+  static const int HeaderEx_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeaderEx, uid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeaderEx, gateway_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeaderEx, operation_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeaderEx, flag_),
   };
   HeaderEx_reflection_ =
     new ::google_lalune::protobuf::internal::GeneratedMessageReflection(
@@ -163,6 +167,23 @@ void protobuf_AssignDesc_commonlib_2fCommonLib_2eproto() {
       ::google_lalune::protobuf::DescriptorPool::generated_pool(),
       ::google_lalune::protobuf::MessageFactory::generated_factory(),
       sizeof(ServerId));
+  Cmd2Server_descriptor_ = file->message_type(7);
+  static const int Cmd2Server_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Cmd2Server, to_server_type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Cmd2Server, cmd_type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Cmd2Server, data_),
+  };
+  Cmd2Server_reflection_ =
+    new ::google_lalune::protobuf::internal::GeneratedMessageReflection(
+      Cmd2Server_descriptor_,
+      Cmd2Server::default_instance_,
+      Cmd2Server_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Cmd2Server, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Cmd2Server, _unknown_fields_),
+      -1,
+      ::google_lalune::protobuf::DescriptorPool::generated_pool(),
+      ::google_lalune::protobuf::MessageFactory::generated_factory(),
+      sizeof(Cmd2Server));
 }
 
 namespace {
@@ -189,6 +210,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
     AddressList_descriptor_, &AddressList::default_instance());
   ::google_lalune::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     ServerId_descriptor_, &ServerId::default_instance());
+  ::google_lalune::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    Cmd2Server_descriptor_, &Cmd2Server::default_instance());
 }
 
 }  // namespace
@@ -208,6 +231,8 @@ void protobuf_ShutdownFile_commonlib_2fCommonLib_2eproto() {
   delete AddressList_reflection_;
   delete ServerId::default_instance_;
   delete ServerId_reflection_;
+  delete Cmd2Server::default_instance_;
+  delete Cmd2Server_reflection_;
 }
 
 void protobuf_AddDesc_commonlib_2fCommonLib_2eproto() {
@@ -217,17 +242,19 @@ void protobuf_AddDesc_commonlib_2fCommonLib_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google_lalune::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\031commonlib/CommonLib.proto\022\006common\"A\n\010H"
+    "\n\031commonlib/CommonLib.proto\022\006common\"O\n\010H"
     "eaderEx\022\013\n\003uid\030\001 \001(\r\022\022\n\ngateway_id\030\002 \001(\r"
-    "\022\024\n\014operation_id\030\003 \001(\r\"P\n\005Hello\022\031\n\021my_li"
-    "stening_port\030\001 \002(\r\022\023\n\013server_type\030\002 \002(\r\022"
-    "\027\n\017is_server_start\030\003 \002(\r\" \n\013HelloResult\022"
-    "\021\n\tserver_id\030\001 \002(\r\"\032\n\nReportLoad\022\014\n\004load"
-    "\030\001 \002(\002\"O\n\013AddressInfo\022\n\n\002ip\030\001 \002(\007\022\014\n\004por"
-    "t\030\002 \002(\r\022\021\n\tserver_id\030\003 \002(\r\022\023\n\013server_typ"
-    "e\030\004 \002(\r\"0\n\013AddressList\022!\n\004addr\030\001 \003(\0132\023.c"
-    "ommon.AddressInfo\"\035\n\010ServerId\022\021\n\tserver_"
-    "id\030\001 \002(\r", 408);
+    "\022\024\n\014operation_id\030\003 \001(\r\022\014\n\004flag\030\004 \001(\r\"P\n\005"
+    "Hello\022\031\n\021my_listening_port\030\001 \002(\r\022\023\n\013serv"
+    "er_type\030\002 \002(\r\022\027\n\017is_server_start\030\003 \002(\r\" "
+    "\n\013HelloResult\022\021\n\tserver_id\030\001 \002(\r\"\032\n\nRepo"
+    "rtLoad\022\014\n\004load\030\001 \002(\002\"O\n\013AddressInfo\022\n\n\002i"
+    "p\030\001 \002(\007\022\014\n\004port\030\002 \002(\r\022\021\n\tserver_id\030\003 \002(\r"
+    "\022\023\n\013server_type\030\004 \002(\r\"0\n\013AddressList\022!\n\004"
+    "addr\030\001 \003(\0132\023.common.AddressInfo\"\035\n\010Serve"
+    "rId\022\021\n\tserver_id\030\001 \002(\r\"D\n\nCmd2Server\022\026\n\016"
+    "to_server_type\030\001 \002(\r\022\020\n\010cmd_type\030\002 \002(\r\022\014"
+    "\n\004data\030\003 \002(\014", 492);
   ::google_lalune::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "commonlib/CommonLib.proto", &protobuf_RegisterTypes);
   HeaderEx::default_instance_ = new HeaderEx();
@@ -237,6 +264,7 @@ void protobuf_AddDesc_commonlib_2fCommonLib_2eproto() {
   AddressInfo::default_instance_ = new AddressInfo();
   AddressList::default_instance_ = new AddressList();
   ServerId::default_instance_ = new ServerId();
+  Cmd2Server::default_instance_ = new Cmd2Server();
   HeaderEx::default_instance_->InitAsDefaultInstance();
   Hello::default_instance_->InitAsDefaultInstance();
   HelloResult::default_instance_->InitAsDefaultInstance();
@@ -244,6 +272,7 @@ void protobuf_AddDesc_commonlib_2fCommonLib_2eproto() {
   AddressInfo::default_instance_->InitAsDefaultInstance();
   AddressList::default_instance_->InitAsDefaultInstance();
   ServerId::default_instance_->InitAsDefaultInstance();
+  Cmd2Server::default_instance_->InitAsDefaultInstance();
   ::google_lalune::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_commonlib_2fCommonLib_2eproto);
 }
 
@@ -260,6 +289,7 @@ struct StaticDescriptorInitializer_commonlib_2fCommonLib_2eproto {
 const int HeaderEx::kUidFieldNumber;
 const int HeaderEx::kGatewayIdFieldNumber;
 const int HeaderEx::kOperationIdFieldNumber;
+const int HeaderEx::kFlagFieldNumber;
 #endif  // !_MSC_VER
 
 HeaderEx::HeaderEx()
@@ -283,6 +313,7 @@ void HeaderEx::SharedCtor() {
   uid_ = 0u;
   gateway_id_ = 0u;
   operation_id_ = 0u;
+  flag_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -328,7 +359,7 @@ void HeaderEx::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  ZR_(uid_, operation_id_);
+  ZR_(uid_, flag_);
 
 #undef OFFSET_OF_FIELD_
 #undef ZR_
@@ -387,6 +418,21 @@ bool HeaderEx::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(32)) goto parse_flag;
+        break;
+      }
+
+      // optional uint32 flag = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_flag:
+          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &flag_)));
+          set_has_flag();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -431,6 +477,11 @@ void HeaderEx::SerializeWithCachedSizes(
     ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(3, this->operation_id(), output);
   }
 
+  // optional uint32 flag = 4;
+  if (has_flag()) {
+    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(4, this->flag(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google_lalune::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -454,6 +505,11 @@ void HeaderEx::SerializeWithCachedSizes(
   // optional uint32 operation_id = 3;
   if (has_operation_id()) {
     target = ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->operation_id(), target);
+  }
+
+  // optional uint32 flag = 4;
+  if (has_flag()) {
+    target = ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->flag(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -487,6 +543,13 @@ int HeaderEx::ByteSize() const {
       total_size += 1 +
         ::google_lalune::protobuf::internal::WireFormatLite::UInt32Size(
           this->operation_id());
+    }
+
+    // optional uint32 flag = 4;
+    if (has_flag()) {
+      total_size += 1 +
+        ::google_lalune::protobuf::internal::WireFormatLite::UInt32Size(
+          this->flag());
     }
 
   }
@@ -525,6 +588,9 @@ void HeaderEx::MergeFrom(const HeaderEx& from) {
     if (from.has_operation_id()) {
       set_operation_id(from.operation_id());
     }
+    if (from.has_flag()) {
+      set_flag(from.flag());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -551,6 +617,7 @@ void HeaderEx::Swap(HeaderEx* other) {
     std::swap(uid_, other->uid_);
     std::swap(gateway_id_, other->gateway_id_);
     std::swap(operation_id_, other->operation_id_);
+    std::swap(flag_, other->flag_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -2111,6 +2178,331 @@ void ServerId::Swap(ServerId* other) {
   ::google_lalune::protobuf::Metadata metadata;
   metadata.descriptor = ServerId_descriptor_;
   metadata.reflection = ServerId_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int Cmd2Server::kToServerTypeFieldNumber;
+const int Cmd2Server::kCmdTypeFieldNumber;
+const int Cmd2Server::kDataFieldNumber;
+#endif  // !_MSC_VER
+
+Cmd2Server::Cmd2Server()
+  : ::google_lalune::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:common.Cmd2Server)
+}
+
+void Cmd2Server::InitAsDefaultInstance() {
+}
+
+Cmd2Server::Cmd2Server(const Cmd2Server& from)
+  : ::google_lalune::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:common.Cmd2Server)
+}
+
+void Cmd2Server::SharedCtor() {
+  ::google_lalune::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  to_server_type_ = 0u;
+  cmd_type_ = 0u;
+  data_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+Cmd2Server::~Cmd2Server() {
+  // @@protoc_insertion_point(destructor:common.Cmd2Server)
+  SharedDtor();
+}
+
+void Cmd2Server::SharedDtor() {
+  if (data_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete data_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void Cmd2Server::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google_lalune::protobuf::Descriptor* Cmd2Server::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return Cmd2Server_descriptor_;
+}
+
+const Cmd2Server& Cmd2Server::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_commonlib_2fCommonLib_2eproto();
+  return *default_instance_;
+}
+
+Cmd2Server* Cmd2Server::default_instance_ = NULL;
+
+Cmd2Server* Cmd2Server::New() const {
+  return new Cmd2Server;
+}
+
+void Cmd2Server::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<Cmd2Server*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  if (_has_bits_[0 / 32] & 7) {
+    ZR_(to_server_type_, cmd_type_);
+    if (has_data()) {
+      if (data_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        data_->clear();
+      }
+    }
+  }
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool Cmd2Server::MergePartialFromCodedStream(
+    ::google_lalune::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google_lalune::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:common.Cmd2Server)
+  for (;;) {
+    ::std::pair< ::google_lalune::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google_lalune::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 to_server_type = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &to_server_type_)));
+          set_has_to_server_type();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_cmd_type;
+        break;
+      }
+
+      // required uint32 cmd_type = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_cmd_type:
+          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &cmd_type_)));
+          set_has_cmd_type();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_data;
+        break;
+      }
+
+      // required bytes data = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_data:
+          DO_(::google_lalune::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_data()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google_lalune::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google_lalune::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google_lalune::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:common.Cmd2Server)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:common.Cmd2Server)
+  return false;
+#undef DO_
+}
+
+void Cmd2Server::SerializeWithCachedSizes(
+    ::google_lalune::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:common.Cmd2Server)
+  // required uint32 to_server_type = 1;
+  if (has_to_server_type()) {
+    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(1, this->to_server_type(), output);
+  }
+
+  // required uint32 cmd_type = 2;
+  if (has_cmd_type()) {
+    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(2, this->cmd_type(), output);
+  }
+
+  // required bytes data = 3;
+  if (has_data()) {
+    ::google_lalune::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      3, this->data(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google_lalune::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:common.Cmd2Server)
+}
+
+::google_lalune::protobuf::uint8* Cmd2Server::SerializeWithCachedSizesToArray(
+    ::google_lalune::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:common.Cmd2Server)
+  // required uint32 to_server_type = 1;
+  if (has_to_server_type()) {
+    target = ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->to_server_type(), target);
+  }
+
+  // required uint32 cmd_type = 2;
+  if (has_cmd_type()) {
+    target = ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->cmd_type(), target);
+  }
+
+  // required bytes data = 3;
+  if (has_data()) {
+    target =
+      ::google_lalune::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        3, this->data(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google_lalune::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:common.Cmd2Server)
+  return target;
+}
+
+int Cmd2Server::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 to_server_type = 1;
+    if (has_to_server_type()) {
+      total_size += 1 +
+        ::google_lalune::protobuf::internal::WireFormatLite::UInt32Size(
+          this->to_server_type());
+    }
+
+    // required uint32 cmd_type = 2;
+    if (has_cmd_type()) {
+      total_size += 1 +
+        ::google_lalune::protobuf::internal::WireFormatLite::UInt32Size(
+          this->cmd_type());
+    }
+
+    // required bytes data = 3;
+    if (has_data()) {
+      total_size += 1 +
+        ::google_lalune::protobuf::internal::WireFormatLite::BytesSize(
+          this->data());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google_lalune::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Cmd2Server::MergeFrom(const ::google_lalune::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const Cmd2Server* source =
+    ::google_lalune::protobuf::internal::dynamic_cast_if_available<const Cmd2Server*>(
+      &from);
+  if (source == NULL) {
+    ::google_lalune::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void Cmd2Server::MergeFrom(const Cmd2Server& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_to_server_type()) {
+      set_to_server_type(from.to_server_type());
+    }
+    if (from.has_cmd_type()) {
+      set_cmd_type(from.cmd_type());
+    }
+    if (from.has_data()) {
+      set_data(from.data());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void Cmd2Server::CopyFrom(const ::google_lalune::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Cmd2Server::CopyFrom(const Cmd2Server& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Cmd2Server::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+
+  return true;
+}
+
+void Cmd2Server::Swap(Cmd2Server* other) {
+  if (other != this) {
+    std::swap(to_server_type_, other->to_server_type_);
+    std::swap(cmd_type_, other->cmd_type_);
+    std::swap(data_, other->data_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google_lalune::protobuf::Metadata Cmd2Server::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google_lalune::protobuf::Metadata metadata;
+  metadata.descriptor = Cmd2Server_descriptor_;
+  metadata.reflection = Cmd2Server_reflection_;
   return metadata;
 }
 

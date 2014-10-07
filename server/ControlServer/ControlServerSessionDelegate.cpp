@@ -18,25 +18,23 @@ void ControlServerSessionDelegate::ConnectedHandler(NetLib_ServerSession_ptr ses
 
 void ControlServerSessionDelegate::DisconnectedHandler(NetLib_ServerSession_ptr sessionptr)
 {
-	session2server.erase(sessionptr);
-	//只要维护session2server map就好，servers_info另有超时事件维护
+	//只要维护server2session就好，servers_info和server_groups另有超时事件维护
+	server2session.erase(*(IPPort*)sessionptr->GetAttachedData());
+	delete (IPPort*)sessionptr->GetAttachedData();
 }
 
 void ControlServerSessionDelegate::RecvKeepAliveHandler(NetLib_ServerSession_ptr sessionptr)
 {
 	//刷新超时时间
-	auto session_it = session2server.find(sessionptr);
-	if (session_it != session2server.end())
+	IPPort ip_port = *(IPPort*)sessionptr->GetAttachedData();
+	auto info_it = servers_info.find(ip_port);
+	if (info_it == servers_info.end())
 	{
-		auto info_it = servers_info.find(session_it->second);
-		if (info_it == servers_info.end())
-		{
-			LOGEVENTL("ERROR", "a server exist in session2server, but not in servers_info. " << log_::n("ip") << utility2::toIPs(session_it->second.first) << log_::n("port") << session_it->second.second);
-		}
-		else
-		{
-			info_it->second->refresh();
-		}
+		LOGEVENTL("ERROR", "a server exist in session2server, but not in servers_info. " << log_::n("ip") << utility2::toIPs(ip_port.first) << log_::n("port") << ip_port.second);
+	}
+	else
+	{
+		info_it->second->refresh();
 	}
 }
 
@@ -52,18 +50,26 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 				common::Hello hello;
 				if (ParseMsg(data, hello))
 				{
-					std::pair<int, int> ip_port(sessionptr->GetRemoteIPu(), hello.my_listening_port());
+					IPPort* ip_port = new IPPort(sessionptr->GetRemoteIPu(), hello.my_listening_port());
 
-					//维护session到地址的映射				
-					session2server[sessionptr] = ip_port;
+					//维护session到地址的映射
+					sessionptr->SetAttachedData((int)ip_port);
+					server2session[*ip_port] = sessionptr;
 
 					if (hello.is_server_start() == 1)
 					{
-						auto info_it = servers_info.find(ip_port);
+						auto info_it = servers_info.find(*ip_port);
 						if (info_it == servers_info.end())
 						{
-							ServerInfo* info = new ServerInfo(ip_port, hello.server_type());
-							servers_info.insert(std::make_pair(ip_port, info));
+							ServerInfo* info = new ServerInfo(*ip_port, hello.server_type());
+							servers_info.insert(std::make_pair(*ip_port, info));
+
+							//维护sessions_groupby_servertype
+							auto it_group = server_groups.find(hello.server_type());
+							if (it_group != server_groups.end())
+							{
+								it_group->second->insert(*ip_port);
+							}
 
 							common::HelloResult hello_result;
 							hello_result.set_server_id(info->addr.server_id());
@@ -103,18 +109,39 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 							common::AddressList addr_list;
 							GenerateAddressList(addr_list);
 							ReplyMsg(sessionptr, MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REFRESH, addr_list);
-							LOGEVENTL("INFO", "Send list to the new one. " << _ln("IP") << utility2::toIPs(ip_port.first) << _ln("Port") << ip_port.second);
+							LOGEVENTL("INFO", "Send list to the new one. " << _ln("IP") << utility2::toIPs(ip_port->first) << _ln("Port") << ip_port->second);
 						}
 					}
 					else
 					{
-						LOGEVENTL("INFO", "Receive Hello but not server_start. " << _ln("IP") << utility2::toIPs(ip_port.first) << _ln("Port") << ip_port.second);
+						LOGEVENTL("INFO", "Receive Hello but not server_start. " << _ln("IP") << utility2::toIPs(ip_port->first) << _ln("Port") << ip_port->second);
 					}
 				}
 			}
 			break;
 		case MSG_TYPE_CONTROL_SERVER_REPORT_LOAD:
 			//TODO
+			break;
+		case MSG_TYPE_CMD2SERVER:
+			{
+				//从后台过来的命令。后台那边还得有个权限的验证。TODO
+				common::Cmd2Server cmd;
+				if (ParseMsg(data, cmd))
+				{
+					auto it_group = server_groups.find(cmd.to_server_type());
+					if (it_group != server_groups.end())
+					{
+						for (auto it_server = it_group->second->begin(); it_server != it_group->second->end(); ++it_server)
+						{
+							auto it_session = server2session.find(*it_server);
+							if (it_session != server2session.end())
+							{
+								ReplyMsg(it_session->second, MSG_TYPE_CMD2SERVER, cmd);
+							}
+						}
+					}
+				}
+			}
 			break;
 		case MSG_TYPE_CONTROL_SERVER_CMD:
 			if (sessionptr->GetRemoteIP() == "127.0.0.1")

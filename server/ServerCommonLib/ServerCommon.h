@@ -39,6 +39,8 @@ public:
 
 	virtual void onServerRemoved(int server_type, int server_id) {}
 	virtual void onServerAdded(int server_type, int server_id) {}
+
+	virtual void onReceiveCmd(int cmd_type, const std::string& data) {}
 };
 
 //服务端默认流程：先开监听端口并启动服务，然后告诉控制服务我的端口
@@ -259,8 +261,22 @@ template<typename P>
 void ReplyMsgUid(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, uint32_t uid, P& proto)
 {
 	common::HeaderEx ex;
-	ex.set_uid(uid);
+	ex.set_uid(uid);	
 	ReplyMsgEx(sessionptr, msg_type, ex, proto);
+}
+
+//cmd_type定义
+#define TO_SERVER_CMD_TYPE__ADD_VERSION (100)
+//...
+
+template<typename P>
+void SendCmd(int to_server_type, int cmd_type, P& proto)
+{
+	common::Cmd2Server cmd2server;
+	cmd2server.set_to_server_type(to_server_type);
+	cmd2server.set_cmd_type(cmd_type);	
+	cmd2server.set_data(proto.SerializeAsString());
+	SendMsg(CONTROL_SERVER_ID, MSG_TYPE_CMD2SERVER, cmd2server);
 }
 
 #endif

@@ -21,12 +21,12 @@ bool during_startup = true;
 
 AvailableIDs<uint32_t> available_ids;
 
-std::map<NetLib_ServerSession_ptr, std::pair<int, int>> session2server;
-std::map<std::pair<int, int>, ServerInfo*> servers_info;
-std::set<NetLib_ServerSession_ptr> gateways;
+std::map<IPPort, NetLib_ServerSession_ptr> server2session;
+std::map<IPPort, ServerInfo*> servers_info;
+std::map<int, server_group*> server_groups;
 
 //这个的timeout只会因为timer而触发。如果不是的话，还得keep_alive一份timer
-void ServerTimeout(std::pair<int, int> ip_port, const boost::system::error_code& error)
+void ServerTimeout(IPPort ip_port, const boost::system::error_code& error)
 {
 	if (!error)
 	{
@@ -39,7 +39,14 @@ void ServerTimeout(std::pair<int, int> ip_port, const boost::system::error_code&
 			informAddressInfo(info_it->second->addr, MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REMOVE);
 			LOGEVENTL("INFO", "Send remove to all. " << _ln("server_id") << info_it->second->addr.server_id());
 
+			auto it_group = server_groups.find(info_it->second->addr.server_type());
+			if (it_group != server_groups.end())
+			{
+				it_group->second->erase(ip_port);
+			}
+
 			available_ids.releaseId(info_it->second->addr.server_id());
+
 			delete info_it->second;
 			servers_info.erase(info_it);
 		}
@@ -50,8 +57,21 @@ void ServerTimeout(std::pair<int, int> ip_port, const boost::system::error_code&
 	}
 }
 
-void UnInitliazeServerInfos()
+void Initialize()
 {
+	for (int s = 0; s <= SERVER_TYPE_MAX; ++s)
+	{
+		server_groups[s] = new server_group();
+	}
+}
+
+void UnInitliaze()
+{
+	for (int s = 0; s <= SERVER_TYPE_MAX; ++s)
+	{
+		delete server_groups[s];
+	}
+
 	for (auto it = servers_info.begin(); it != servers_info.end(); ++it)
 	{
 		delete it->second;
@@ -118,6 +138,8 @@ int main(int argc, char* argv[])
 
 	thread.start();
 
+	Initialize();
+
 	LoadConfig();
 
 	NetLib_Server_ptr server = NetLib_NewServer<ControlServerSessionDelegate>(&thread);
@@ -166,7 +188,7 @@ int main(int argc, char* argv[])
 		} 
 	}
 
-	UnInitliazeServerInfos();
+	UnInitliaze();
 
 	NetLib_Servers_WaitForStop();
 

@@ -19,9 +19,9 @@ extern bool during_startup;
 
 extern AvailableIDs<uint32_t> available_ids;
 
-extern std::map<NetLib_ServerSession_ptr, std::pair<int, int>> session2server;
+typedef std::pair<int, int> IPPort;
 
-void ServerTimeout(std::pair<int, int> ip_port, const boost::system::error_code& error);
+void ServerTimeout(IPPort ip_port, const boost::system::error_code& error);
 
 class ServerInfo
 {
@@ -53,16 +53,20 @@ protected:
 	boost::asio::deadline_timer _timer;
 };
 
-extern std::map<std::pair<int, int>, ServerInfo*> servers_info;
+extern std::map<IPPort, NetLib_ServerSession_ptr> server2session;
+extern std::map<IPPort, ServerInfo*> servers_info;
+
+typedef std::set<IPPort> server_group;
+extern std::map<int, server_group*> server_groups;
 
 void GenerateAddressList(common::AddressList& list);
 
 template<typename P>
 void informAddressInfo(P addr_list, int msg_type)
 {
-	for (auto session_and_ip : session2server)
+	for (auto session : server2session)
 	{
-		ReplyMsg(session_and_ip.first, msg_type, addr_list);
+		ReplyMsg(session.second, msg_type, addr_list);
 	}
 }
 

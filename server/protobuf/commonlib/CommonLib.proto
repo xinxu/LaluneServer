@@ -46,3 +46,10 @@ message ServerId
 {
 	required uint32 server_id	= 1;
 }
+
+message Cmd2Server
+{
+	required uint32 to_server_type	= 1;
+	required uint32 cmd_type		= 2;
+	required bytes data				= 3;
+}

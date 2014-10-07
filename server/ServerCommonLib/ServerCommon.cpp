@@ -100,6 +100,15 @@ public:
 				LOGEVENTL("DEBUG", "MSG_TYPE_CONTROL_SERVER_ADDR_INFO_RESTART");
 				//RESTART先啥也不干
 				break;
+			case MSG_TYPE_CMD2SERVER:
+				{
+					common::Cmd2Server cmd;
+					if (ParseMsg(data, cmd))
+					{
+						__commonlib_delegate->onReceiveCmd(cmd.cmd_type(), cmd.data());
+					}
+				}
+				break;
 			default:
 				break;
 			}
@@ -144,7 +153,14 @@ void InitializeCommonLib(ioservice_thread& thread, CommonLibDelegate* d, int my_
 	NetLibPlus_InitializeClients<Conn2ControlServerDelegate>(SERVER_TYPE_CONTROL_SERVER);
 	_NetLibPlus_UpdateServerInfo(CONTROL_SERVER_ID,	boost::asio::ip::address_v4::from_string(control_server_ip).to_ulong(), control_server_port, SERVER_TYPE_CONTROL_SERVER);
 
-	SayHello2ControlServer();
+	if (my_server_type != SERVER_TYPE_BACKGROUND)
+	{
+		SayHello2ControlServer();
+	}
+	else
+	{
+		//TODO 发另外的权限验证包。专门用于后台之类的程序。后台不需要知道具体的各服务地址，只需要连ControlServer就可以了
+	}
 }
 
 void ReportLoad(float load_factor)
@@ -169,4 +185,4 @@ void UpdateCorrespondingServer(uint64_t user_id, const common::CorrespondingServ
 	//这里直接把一个复杂结构放map里了。优化的时候可以考虑把这里改成指针什么的，或者用unordered_map
 	corresponding_server_map[user_id] = cs;
 }
-*/
+*/ 

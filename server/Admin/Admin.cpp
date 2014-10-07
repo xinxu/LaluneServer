@@ -173,7 +173,6 @@ int main(int argc, char* argv[])
 			}
 			*(uint32_t*)data = _TEST_SIZE; //最头上4字节是整个包的长度(包含这4个字节)
 			*(uint32_t*)(data + 4) = 77; 
-
 			client->SendAsync(data);
 		}
 		else if (tmp == "close")
