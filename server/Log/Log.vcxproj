@@ -57,9 +57,6 @@
   <ItemGroup>
     <None Include="..\protobuf\log\log.proto" />
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Log.rc" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DF0CCB1F-DEB3-4C01-B909-77A25C6A7A5D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
