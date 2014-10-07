@@ -8,7 +8,7 @@
 #include "utility1.h"
 #include "Log/Log.h"
 
-#define _TEST_SIZE (4000)
+#define _TEST_SIZE (20)
 
 NetLib_Client_ptr client;
 
@@ -24,7 +24,7 @@ public:
 	{
 		//data在RecvFinishHandler返回后会释放
 
-		uint32_t size = *(uint32_t*)data;
+		/*uint32_t size = *(uint32_t*)data;
 		
 		if (size >= 8)
 		{						
@@ -52,7 +52,7 @@ public:
 		else
 		{
 			printf("size less than 8.\n");
-		}
+		}*/
 	}
 
 	void ReconnectedHandler(NetLib_Client_ptr clientptr)
@@ -120,7 +120,8 @@ int main(int argc, char* argv[])
 
     LogInitializeLocalOptions(true, true, "client_simple_sample");
 	
-	client = NetLib_NewClient(std::shared_ptr<MyClientDelegate>(new MyClientDelegate));
+	//client = NetLib_NewClient(std::shared_ptr<MyClientDelegate>(new MyClientDelegate));
+	client = NetLib_NewClient<MyClientDelegate>();
 	
 	for (;;)
 	{
@@ -137,7 +138,7 @@ int main(int argc, char* argv[])
 		}
 		else if (tmp == "dest")
 		{
-			strcpy(destip, InputStr("DestinationIP", "10.0.18.31").c_str());
+			strcpy(destip, InputStr("DestinationIP", "127.0.0.1").c_str());
 		}
 		else if (tmp == "tcpport")
 		{
@@ -154,7 +155,7 @@ int main(int argc, char* argv[])
 		}
 		else if (tmp == "connect")
 		{
-			client->ConnectAsyncTCP(destip, tcpport);
+			client->ConnectAsync(destip, tcpport);
 		}
 		else if (tmp == "release")
 		{
@@ -167,12 +168,15 @@ int main(int argc, char* argv[])
 			int i;
 
 			char* data = new char[_TEST_SIZE];
-			for (i = 8; i < _TEST_SIZE; ++i)
-			{
-				data[i] = i % 77; //用于测试正确性
-			}
-			*(uint32_t*)data = _TEST_SIZE; //最头上4字节是整个包的长度(包含这4个字节)
-			*(uint32_t*)(data + 4) = 77; 
+			//for (i = 8; i < _TEST_SIZE; ++i)
+			//{
+			//	data[i] = i % 77; //用于测试正确性
+			//}
+			//*(uint32_t*)data = _TEST_SIZE; //最头上4字节是整个包的长度(包含这4个字节)
+			//*(uint32_t*)(data + 4) = 77; 
+
+			strcpy(data + 4, "hello");
+			*(uint32_t*)data = _TEST_SIZE;
 
 			client->SendAsync(data);
 		}
