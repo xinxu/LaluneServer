@@ -120,7 +120,7 @@ void InitializeCommonLib(ioservice_thread& thread, CommonLibDelegate* d, int my_
 	__my_listening_port = my_listening_port;
 	__my_server_type = my_server_type;
 
-	std::string control_server_ip = "192.168.1.16"; //默认值
+	std::string control_server_ip = CONTROL_SERVER_DEFAULT_IP; //默认值
 	int control_server_port = CONTROL_SERVER_DEFAULT_PORT;
 
 	if (argc >= 3)
@@ -136,8 +136,8 @@ void InitializeCommonLib(ioservice_thread& thread, CommonLibDelegate* d, int my_
 		CSimpleIni ini;
 		if (ini.LoadFile(utility3::ToAbsolutePath("local_config.ini").c_str()) == SI_OK)
 		{
-			control_server_ip = ini.GetValue("ControlServer", "ControlServerIP", "192.168.1.16");
-			control_server_port = ini.GetLongValue("ControlServer", "ControlServerPortP", 5432);
+			control_server_ip = ini.GetValue("ControlServer", "ControlServerIP", CONTROL_SERVER_DEFAULT_IP);
+			control_server_port = ini.GetLongValue("ControlServer", "ControlServerPortP", CONTROL_SERVER_DEFAULT_PORT);
 		}
 	}
 

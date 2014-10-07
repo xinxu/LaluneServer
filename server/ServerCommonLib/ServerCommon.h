@@ -51,6 +51,7 @@ void ReportLoad(float load_factor);
 //void UpdateCorrespondingServer(uint64_t user_id, const common::CorrespondingServer& cs);
 
 #define CONTROL_SERVER_ID (0)
+#define CONTROL_SERVER_DEFAULT_IP ("127.0.0.1")
 #define CONTROL_SERVER_DEFAULT_PORT (5432)
 
 template<typename P>

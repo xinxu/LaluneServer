@@ -87,6 +87,14 @@
   <ItemGroup>
     <ClCompile Include="Admin.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Log\Log.vcxproj">
+      <Project>{df0ccb1f-deb3-4c01-b909-77a25c6a7a5d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\NetLib\NetLib.vcxproj">
+      <Project>{38aaa34f-5fc1-4d42-a385-1ef6b380a5b5}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
