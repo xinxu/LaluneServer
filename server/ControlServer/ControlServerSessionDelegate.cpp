@@ -131,6 +131,7 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 					auto it_group = server_groups.find(cmd.to_server_type());
 					if (it_group != server_groups.end())
 					{
+						cmd.clear_to_server_type();
 						for (auto it_server = it_group->second->begin(); it_server != it_group->second->end(); ++it_server)
 						{
 							auto it_session = server2session.find(*it_server);
@@ -142,7 +143,35 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 					}
 				}
 			}
-			break;
+			break;		
+		case MSG_TYPE_REFRESH_CONFIG:
+			{
+				//从后台过来的刷配置文件命令。后台那边还得有个权限的验证。TODO
+				common::RefreshConfig rc;
+				if (ParseMsg(data, rc))
+				{
+					auto it_group = server_groups.find(rc.server_type());
+					if (it_group != server_groups.end())
+					{
+						LOGEVENTL("INFO", "new config, " << _ln("server_type") << rc.server_type() << _ln("file_name") << rc.file_name());
+						//写一份作为历史
+
+						//存到当前文件
+
+						//发给相关各服务
+						rc.clear_server_type();
+						for (auto it_server = it_group->second->begin(); it_server != it_group->second->end(); ++it_server)
+						{
+							auto it_session = server2session.find(*it_server);
+							if (it_session != server2session.end())
+							{
+								ReplyMsg(it_session->second, MSG_TYPE_REFRESH_CONFIG, rc);
+							}
+						}
+					}
+				}
+			}
+				break;
 		case MSG_TYPE_CONTROL_SERVER_CMD:
 			if (sessionptr->GetRemoteIP() == "127.0.0.1")
 			{

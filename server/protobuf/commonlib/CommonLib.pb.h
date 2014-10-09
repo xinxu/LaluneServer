@@ -41,6 +41,7 @@ class AddressInfo;
 class AddressList;
 class ServerId;
 class Cmd2Server;
+class RefreshConfig;
 
 // ===================================================================
 
@@ -733,7 +734,7 @@ class Cmd2Server : public ::google_lalune::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required uint32 to_server_type = 1;
+  // optional uint32 to_server_type = 1;
   inline bool has_to_server_type() const;
   inline void clear_to_server_type();
   static const int kToServerTypeFieldNumber = 1;
@@ -781,6 +782,115 @@ class Cmd2Server : public ::google_lalune::protobuf::Message {
 
   void InitAsDefaultInstance();
   static Cmd2Server* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RefreshConfig : public ::google_lalune::protobuf::Message {
+ public:
+  RefreshConfig();
+  virtual ~RefreshConfig();
+
+  RefreshConfig(const RefreshConfig& from);
+
+  inline RefreshConfig& operator=(const RefreshConfig& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google_lalune::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google_lalune::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google_lalune::protobuf::Descriptor* descriptor();
+  static const RefreshConfig& default_instance();
+
+  void Swap(RefreshConfig* other);
+
+  // implements Message ----------------------------------------------
+
+  RefreshConfig* New() const;
+  void CopyFrom(const ::google_lalune::protobuf::Message& from);
+  void MergeFrom(const ::google_lalune::protobuf::Message& from);
+  void CopyFrom(const RefreshConfig& from);
+  void MergeFrom(const RefreshConfig& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google_lalune::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google_lalune::protobuf::io::CodedOutputStream* output) const;
+  ::google_lalune::protobuf::uint8* SerializeWithCachedSizesToArray(::google_lalune::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google_lalune::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional uint32 server_type = 1;
+  inline bool has_server_type() const;
+  inline void clear_server_type();
+  static const int kServerTypeFieldNumber = 1;
+  inline ::google_lalune::protobuf::uint32 server_type() const;
+  inline void set_server_type(::google_lalune::protobuf::uint32 value);
+
+  // required string file_name = 2;
+  inline bool has_file_name() const;
+  inline void clear_file_name();
+  static const int kFileNameFieldNumber = 2;
+  inline const ::std::string& file_name() const;
+  inline void set_file_name(const ::std::string& value);
+  inline void set_file_name(const char* value);
+  inline void set_file_name(const char* value, size_t size);
+  inline ::std::string* mutable_file_name();
+  inline ::std::string* release_file_name();
+  inline void set_allocated_file_name(::std::string* file_name);
+
+  // required string content = 3;
+  inline bool has_content() const;
+  inline void clear_content();
+  static const int kContentFieldNumber = 3;
+  inline const ::std::string& content() const;
+  inline void set_content(const ::std::string& value);
+  inline void set_content(const char* value);
+  inline void set_content(const char* value, size_t size);
+  inline ::std::string* mutable_content();
+  inline ::std::string* release_content();
+  inline void set_allocated_content(::std::string* content);
+
+  // @@protoc_insertion_point(class_scope:common.RefreshConfig)
+ private:
+  inline void set_has_server_type();
+  inline void clear_has_server_type();
+  inline void set_has_file_name();
+  inline void clear_has_file_name();
+  inline void set_has_content();
+  inline void clear_has_content();
+
+  ::google_lalune::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google_lalune::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::std::string* file_name_;
+  ::std::string* content_;
+  ::google_lalune::protobuf::uint32 server_type_;
+  friend void  protobuf_AddDesc_commonlib_2fCommonLib_2eproto();
+  friend void protobuf_AssignDesc_commonlib_2fCommonLib_2eproto();
+  friend void protobuf_ShutdownFile_commonlib_2fCommonLib_2eproto();
+
+  void InitAsDefaultInstance();
+  static RefreshConfig* default_instance_;
 };
 // ===================================================================
 
@@ -1183,7 +1293,7 @@ inline void ServerId::set_server_id(::google_lalune::protobuf::uint32 value) {
 
 // Cmd2Server
 
-// required uint32 to_server_type = 1;
+// optional uint32 to_server_type = 1;
 inline bool Cmd2Server::has_to_server_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -1305,6 +1415,186 @@ inline void Cmd2Server::set_allocated_data(::std::string* data) {
     data_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:common.Cmd2Server.data)
+}
+
+// -------------------------------------------------------------------
+
+// RefreshConfig
+
+// optional uint32 server_type = 1;
+inline bool RefreshConfig::has_server_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void RefreshConfig::set_has_server_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void RefreshConfig::clear_has_server_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void RefreshConfig::clear_server_type() {
+  server_type_ = 0u;
+  clear_has_server_type();
+}
+inline ::google_lalune::protobuf::uint32 RefreshConfig::server_type() const {
+  // @@protoc_insertion_point(field_get:common.RefreshConfig.server_type)
+  return server_type_;
+}
+inline void RefreshConfig::set_server_type(::google_lalune::protobuf::uint32 value) {
+  set_has_server_type();
+  server_type_ = value;
+  // @@protoc_insertion_point(field_set:common.RefreshConfig.server_type)
+}
+
+// required string file_name = 2;
+inline bool RefreshConfig::has_file_name() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void RefreshConfig::set_has_file_name() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void RefreshConfig::clear_has_file_name() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void RefreshConfig::clear_file_name() {
+  if (file_name_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    file_name_->clear();
+  }
+  clear_has_file_name();
+}
+inline const ::std::string& RefreshConfig::file_name() const {
+  // @@protoc_insertion_point(field_get:common.RefreshConfig.file_name)
+  return *file_name_;
+}
+inline void RefreshConfig::set_file_name(const ::std::string& value) {
+  set_has_file_name();
+  if (file_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    file_name_ = new ::std::string;
+  }
+  file_name_->assign(value);
+  // @@protoc_insertion_point(field_set:common.RefreshConfig.file_name)
+}
+inline void RefreshConfig::set_file_name(const char* value) {
+  set_has_file_name();
+  if (file_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    file_name_ = new ::std::string;
+  }
+  file_name_->assign(value);
+  // @@protoc_insertion_point(field_set_char:common.RefreshConfig.file_name)
+}
+inline void RefreshConfig::set_file_name(const char* value, size_t size) {
+  set_has_file_name();
+  if (file_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    file_name_ = new ::std::string;
+  }
+  file_name_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:common.RefreshConfig.file_name)
+}
+inline ::std::string* RefreshConfig::mutable_file_name() {
+  set_has_file_name();
+  if (file_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    file_name_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:common.RefreshConfig.file_name)
+  return file_name_;
+}
+inline ::std::string* RefreshConfig::release_file_name() {
+  clear_has_file_name();
+  if (file_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = file_name_;
+    file_name_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void RefreshConfig::set_allocated_file_name(::std::string* file_name) {
+  if (file_name_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete file_name_;
+  }
+  if (file_name) {
+    set_has_file_name();
+    file_name_ = file_name;
+  } else {
+    clear_has_file_name();
+    file_name_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:common.RefreshConfig.file_name)
+}
+
+// required string content = 3;
+inline bool RefreshConfig::has_content() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void RefreshConfig::set_has_content() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void RefreshConfig::clear_has_content() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void RefreshConfig::clear_content() {
+  if (content_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    content_->clear();
+  }
+  clear_has_content();
+}
+inline const ::std::string& RefreshConfig::content() const {
+  // @@protoc_insertion_point(field_get:common.RefreshConfig.content)
+  return *content_;
+}
+inline void RefreshConfig::set_content(const ::std::string& value) {
+  set_has_content();
+  if (content_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    content_ = new ::std::string;
+  }
+  content_->assign(value);
+  // @@protoc_insertion_point(field_set:common.RefreshConfig.content)
+}
+inline void RefreshConfig::set_content(const char* value) {
+  set_has_content();
+  if (content_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    content_ = new ::std::string;
+  }
+  content_->assign(value);
+  // @@protoc_insertion_point(field_set_char:common.RefreshConfig.content)
+}
+inline void RefreshConfig::set_content(const char* value, size_t size) {
+  set_has_content();
+  if (content_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    content_ = new ::std::string;
+  }
+  content_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:common.RefreshConfig.content)
+}
+inline ::std::string* RefreshConfig::mutable_content() {
+  set_has_content();
+  if (content_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    content_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:common.RefreshConfig.content)
+  return content_;
+}
+inline ::std::string* RefreshConfig::release_content() {
+  clear_has_content();
+  if (content_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = content_;
+    content_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void RefreshConfig::set_allocated_content(::std::string* content) {
+  if (content_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete content_;
+  }
+  if (content) {
+    set_has_content();
+    content_ = content;
+  } else {
+    clear_has_content();
+    content_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:common.RefreshConfig.content)
 }
 
 

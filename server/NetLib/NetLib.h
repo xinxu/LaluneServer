@@ -93,9 +93,6 @@ public:
 	virtual void DisconnectedHandler(NetLib_Client_ptr clientptr, NetLib_Error error, int inner_error_code, bool& will_reconnect) {};	
 	//will_reconnect和下面ReconnectFailedHandler的参数意义相同，可读可写。
 
-	//注意: 在UDP协议下，发送失败不能保证100%是发送失败，也有可能对方收到了包，只是本地还没来得及收到确认，就断线了。
-	virtual bool SendFailedHandler(NetLib_Client_ptr clientptr, const char* data, void* pHint) { return true; } //当返回true时，表示等连成功了重发该包；当返回false时，data需要被释放
-	virtual bool SendCopyFailedHandler(NetLib_Client_ptr clientptr, const char* data_copy, void* pHint) { return true; } //当返回true时，表示等连成功了重发该包；无论如何，data_copy都不需要被释放
 	virtual void FailedDataReleaseHandler(const char* data, void* pHint) { delete[] data; } //到这儿的概率很低。仅发生在：当Client即将释放时，失败队列里有数据，且这数据不是copy出来的
 	virtual void FailedDataReleaseHandler(NetLib_Client_ptr clientptr, const char* data, void* pHint) { delete[] data; } //仅发生在Client调用了ResetFailedData()时
 	

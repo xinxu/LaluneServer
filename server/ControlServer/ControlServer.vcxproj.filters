@@ -50,6 +50,9 @@
     <ClInclude Include="..\include\utility2.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\utility1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\protobuf\commonlib\CommonLib.proto">

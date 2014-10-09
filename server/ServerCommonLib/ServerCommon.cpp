@@ -186,3 +186,12 @@ void UpdateCorrespondingServer(uint64_t user_id, const common::CorrespondingServ
 	corresponding_server_map[user_id] = cs;
 }
 */ 
+
+void RefreshConfig(int server_type, const std::string& file_name, const std::string& content)
+{
+	common::RefreshConfig rc;
+	rc.set_server_type(server_type);
+	rc.set_file_name(file_name);
+	rc.set_content(content);
+	SendMsg(CONTROL_SERVER_ID, MSG_TYPE_REFRESH_CONFIG, rc);
+}
