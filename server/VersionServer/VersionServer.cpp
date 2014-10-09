@@ -8,7 +8,8 @@
 #include "../../LaluneCommon/include/MessageTypeDef.h"
 #include "ServerCommonLib/ServerCommon.h"
 #include "VersionServerSessionDelegate.h"
-
+#include "Version.pb.h"
+#include "VersionIformation.h"
 #define VERSION_SERVER_PORT (5577)
 
 ioservice_thread thread;
@@ -20,19 +21,45 @@ class VersionServerCommonLibDelegate : public CommonLibDelegate
 public:
 	void onInitialized()
 	{
-		common::HeaderEx ex;
-		ex.set_uid(123);
-		SendCmd(SERVER_TYPE_VERSION_SERVER, TO_SERVER_CMD_TYPE__ADD_VERSION, ex);
 	}
 
 	void onConfigRefresh(const std::string& content)
 	{
+		ptree pt;
+		try{
+			read_json(content, pt);
+		}
+		catch (ptree_error & e) {
+		}
+		ptree pt_root;
+		pt_root = pt.get_child("root");
+
+		VersionIformation version_temp;
+		vector<VersionIformation> version_infor;
+		BOOST_FOREACH(boost::property_tree::ptree::value_type &v, pt_root)
+		{
+			//std::stringstream s;
+			//	write_json(s, v.second);
+			//std::string image_item = s.str();
+			//	cout << "xx" << endl;
+			//cout << image_item << endl;
+
+			version_temp.now_version = v.second.get<string>("now_ve");
+			version_temp.next_version = v.second.get<string>("next_ve");
+			version_temp.file_path = VersionIformation::GetVerctor( v.second.get<string>("path"));
+			version_temp.file_url = VersionIformation::GetVerctor(v.second.get<string>("url"));
+			version_infor.push_back(version_temp);
+		}
 
 	}
 	
 	void onReceiveCmd(int cmd_type, const std::string& data)
 	{
-		LOGEVENTL("onReceiveCmd", cmd_type);
+		lalune::AddVersion mess;
+		if (mess.ParseFromString(data))
+		{
+
+		}
 	}
 };
 
