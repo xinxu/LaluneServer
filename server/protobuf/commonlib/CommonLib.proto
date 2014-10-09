@@ -49,7 +49,14 @@ message ServerId
 
 message Cmd2Server
 {
-	required uint32 to_server_type	= 1;
+	optional uint32 to_server_type	= 1;
 	required uint32 cmd_type		= 2;
 	required bytes data				= 3;
+}
+
+message RefreshConfig
+{
+	optional uint32 server_type	= 1;
+	required string file_name	= 2;
+	required string content		= 3;
 }

@@ -266,7 +266,7 @@ void ReplyMsgUid(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, uint32_
 }
 
 //cmd_type∂®“Â
-#define TO_SERVER_CMD_TYPE__ADD_VERSION (100)
+#define TO_SERVER_CMD_TYPE_BLABLABLA (1)
 //...
 
 template<typename P>
@@ -278,5 +278,7 @@ void SendCmd(int to_server_type, int cmd_type, P& proto)
 	cmd2server.set_data(proto.SerializeAsString());
 	SendMsg(CONTROL_SERVER_ID, MSG_TYPE_CMD2SERVER, cmd2server);
 }
+
+void RefreshConfig(int to_server_type, const std::string& file_name, const std::string& content);
 
 #endif

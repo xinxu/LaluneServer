@@ -60,6 +60,11 @@ public:
 	}
 };
 
+class file_utility
+{
+	//TODO
+};
+
 template<typename T>
 class AvailableIDs
 {
