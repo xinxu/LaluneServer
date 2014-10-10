@@ -13,18 +13,38 @@
 
 ioservice_thread thread;
 
-NetLib_Server_ptr server4user;
+NetLib_Server_ptr server;
 
 class VersionServerCommonLibDelegate : public CommonLibDelegate
 {
 public:
-	void onInitialized()
+	void onConfigInitialized()
 	{
+		server = NetLib_NewServer<VersionServerSessionDelegate>(&thread);
+
+		//可以不指定端口 TODO (主要是内部端口)
+		if (!server->StartTCP(VERSION_SERVER_PORT, 1, 120)) //端口，线程数，超时时间
+		{
+			LOGEVENTL("Error", "Server Start Failed !");
+
+			NetLib_Servers_WaitForStop();
+
+			LogUnInitialize();
+
+			google_lalune::protobuf::ShutdownProtobufLibrary();
+
+			exit(0);
+		}
+
+		LOGEVENTL("Info", "Server Start Success. " << _ln("Port") << VERSION_SERVER_PORT);
+
+		ServerStarted(VERSION_SERVER_PORT);
 	}
 
-	void onConfigRefresh(const std::string& content)
+	void onConfigRefresh(const std::string& file_name, const std::string& content)
 	{
-
+		LOGEVENTL("CONFIG_REFRESH", _ln("file_name") << file_name << _ln("content") << content);
+		//TODO blablabla 收到配置文件
 	}
 	
 	void onReceiveCmd(int cmd_type, const std::string& data)
@@ -47,30 +67,12 @@ int main(int argc, char* argv[])
 #endif
 
 	NETLIB_CHECK_VERSION;
-    LogInitializeLocalOptions(true, true, "gateway");
+    LogInitializeLocalOptions(true, true, "version_server");
 
 	thread.start();
 
-	NetLib_Server_ptr server = NetLib_NewServer<VersionServerSessionDelegate>(&thread);
-
-	//可以不指定端口 TODO (主要是内部端口)
-	if (!server->StartTCP(VERSION_SERVER_PORT, 1, 120)) //端口，线程数，超时时间
-	{
-		LOGEVENTL("Error", "Server Start Failed !");
-
-		NetLib_Servers_WaitForStop();
-
-		LogUnInitialize();
-
-		google_lalune::protobuf::ShutdownProtobufLibrary();
-
-		return 0;
-	}
-	
-	LOGEVENTL("Info", "Server Start Success");
-
 	VersionServerCommonLibDelegate* cl_delegate = new VersionServerCommonLibDelegate();
-	InitializeCommonLib(thread, cl_delegate, VERSION_SERVER_PORT, SERVER_TYPE_VERSION_SERVER, argc, argv);
+	InitializeCommonLib(thread, cl_delegate, SERVER_TYPE_VERSION_SERVER, argc, argv);
 	
 	for (;;)
 	{

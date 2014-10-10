@@ -42,12 +42,15 @@ public:
 	virtual void onServerAdded(int server_type, int server_id) {}
 
 	virtual void onReceiveCmd(int cmd_type, const std::string& data) {}
+
+	virtual void onReceiveOtherDataFromControlServer(int msg_type, const char* data, int data_len) {}
 };
 
 //服务端默认流程：先开监听端口并启动服务，然后告诉控制服务我的端口
 //网关服务对外的端口和对内的端口不是一个。对外的端口晚开一会儿
 void InitializeCommonLib(class ioservice_thread& thread, CommonLibDelegate* d, int my_server_type, int argc = 0, char* argv[] = nullptr);
 
+//自己没有监听端口，或者不需要知道别人的端口，只需要和ControlServer连的，不需要调这个方法
 void ServerStarted(int my_listening_port);
 
 void ReportLoad(float load_factor);
@@ -268,6 +271,12 @@ void ReplyMsgUid(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, uint32_
 	ReplyMsgEx(sessionptr, msg_type, ex, proto);
 }
 
+template<typename P>
+void SendMsg2ControlServer(int msg_type, P& proto)
+{
+	SendMsg(CONTROL_SERVER_ID, msg_type, proto);
+}
+
 //cmd_type定义
 #define TO_SERVER_CMD_TYPE_BLABLABLA (1)
 //...
@@ -279,7 +288,7 @@ void SendCmd(int to_server_type, int cmd_type, P& proto)
 	cmd2server.set_to_server_type(to_server_type);
 	cmd2server.set_cmd_type(cmd_type);	
 	cmd2server.set_data(proto.SerializeAsString());
-	SendMsg(CONTROL_SERVER_ID, MSG_TYPE_CMD2SERVER, cmd2server);
+	SendMsg2ControlServer(MSG_TYPE_CMD2SERVER, cmd2server);
 }
 
 void RefreshConfig(int to_server_type, const std::string& file_name, const std::string& content);

@@ -118,7 +118,10 @@ public:
 					common::RefreshConfig rc;
 					if (ParseMsg(data, rc))
 					{
-						__commonlib_delegate->onConfigRefresh(rc.file_name(), rc.content());
+						for (int i = 0; i < rc.file_size(); ++i)
+						{
+							__commonlib_delegate->onConfigRefresh(rc.file(i).file_name(), rc.file(i).content());
+						}
 					}
 					if (!is_config_initialized)
 					{
@@ -128,6 +131,7 @@ public:
 				}
 				break;
 			default:
+				__commonlib_delegate->onReceiveOtherDataFromControlServer(SERVER_MSG_TYPE(data), SERVER_MSG_AFTER_HEADER_BASE(data), SERVER_MSG_LENGTH(data) - SERVER_MSG_HEADER_BASE_SIZE);
 				break;
 			}
 		}
@@ -210,7 +214,8 @@ void RefreshConfig(int server_type, const std::string& file_name, const std::str
 {
 	common::RefreshConfig rc;
 	rc.set_server_type(server_type);
-	rc.set_file_name(file_name);
-	rc.set_content(content);
+	common::ConfigFile* file = rc.add_file();
+	file->set_file_name(file_name);
+	file->set_content(content);
 	SendMsg(CONTROL_SERVER_ID, MSG_TYPE_REFRESH_CONFIG, rc);
 }

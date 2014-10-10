@@ -9,6 +9,7 @@
 #include "include/utility2.h"
 #include "ControlServerConfig.h"
 #include <boost/asio.hpp>
+#include "include/ptime2.h"
 
 void ControlServerSessionDelegate::ConnectedHandler(NetLib_ServerSession_ptr sessionptr)
 {
@@ -18,26 +19,35 @@ void ControlServerSessionDelegate::ConnectedHandler(NetLib_ServerSession_ptr ses
 
 void ControlServerSessionDelegate::DisconnectedHandler(NetLib_ServerSession_ptr sessionptr)
 {
-	//只要维护server2session就好，servers_info和server_groups另有超时事件维护
-	server2session.erase(*(IPPort*)sessionptr->GetAttachedData());
-	delete (IPPort*)sessionptr->GetAttachedData();
+	int attached_data = sessionptr->GetAttachedData();
+	if (attached_data) //如果为0，则说明在发Hello以前
+	{
+		//只要维护server2session就好，servers_info和server_groups另有超时事件维护
+		server2session.erase(*(IPPort*)attached_data);
+		delete (IPPort*)sessionptr->GetAttachedData();
+	}
 }
 
 void ControlServerSessionDelegate::RecvKeepAliveHandler(NetLib_ServerSession_ptr sessionptr)
 {
 	//刷新超时时间
-	IPPort ip_port = *(IPPort*)sessionptr->GetAttachedData();
-	auto info_it = servers_info.find(ip_port);
-	if (info_it == servers_info.end())
+	int attached_data = sessionptr->GetAttachedData();
+	if (attached_data) //如果为0，则说明在发Hello以前
 	{
-		LOGEVENTL("ERROR", "a server exist in session2server, but not in servers_info. " << log_::n("ip") << utility2::toIPs(ip_port.first) << log_::n("port") << ip_port.second);
-	}
-	else
-	{
-		info_it->second->refresh();
+		IPPort ip_port = *(IPPort*)attached_data;
+		auto info_it = servers_info.find(ip_port);
+		if (info_it == servers_info.end())
+		{
+			LOGEVENTL("ERROR", "a server exist in session2server, but not in servers_info. " << log_::n("ip") << utility2::toIPs(ip_port.first) << log_::n("port") << ip_port.second);
+		}
+		else
+		{
+			info_it->second->refresh();
+		}
 	}
 }
 
+//这个名字关系到配置文件的存放目录。如果名字有修改，需要把相应的目录也做修改。
 std::string GetServerTypeWrittenName(int server_type)
 {
 	switch (server_type)
@@ -46,24 +56,69 @@ std::string GetServerTypeWrittenName(int server_type)
 		return "gateway";
 	case SERVER_TYPE_VERSION_SERVER:
 		return "version_server";
-	case SERVER_TYPE_LOGIN_SERVER：
-			return "login_server";
-
-#define SERVER_TYPE_BASIC_INFO_SERVER (3)
-#define SERVER_TYPE_LEAGUE_SERVER (4)
-#define SERVER_TYPE_NOTICE_SERVER (5)
-#define SERVER_TYPE_RANK_SERVER (6)
-#define SERVER_TYPE_ASYNC_BATTLE_SERVER (7)
-#define SERVER_TYPE_REPLAY_SERVER (8)
-#define SERVER_TYPE_STAT_SERVER (9)
-#define SERVER_TYPE_AUTO_MATCH_SERVER (10)
-#define SERVER_TYPE_SYNC_BATTLE_SERVER (11)
-
-#define SERVER_TYPE_MAX (11)
-
-#define SERVER_TYPE_CONTROL_SERVER (50)
-#define SERVER_TYPE_BACKGROUND (51)
+	case SERVER_TYPE_ACCOUNT_SERVER:
+			return "account_server";
+	case SERVER_TYPE_BASIC_INFO_SERVER:
+		return "basic_info_server";
+	case SERVER_TYPE_LEAGUE_SERVER:
+		return "league_server";
+	case SERVER_TYPE_NOTICE_SERVER:
+		return "notice_server";
+	case SERVER_TYPE_RANK_SERVER:
+		return "rank_server";
+	case SERVER_TYPE_ASYNC_BATTLE_SERVER:
+		return "async_battle_server";
+	case SERVER_TYPE_REPLAY_SERVER:
+		return "replay_server";
+	case SERVER_TYPE_STAT_SERVER:
+		return "stat_server";
+	case SERVER_TYPE_AUTO_MATCH_SERVER:
+		return "auto_match_server";
+	case SERVER_TYPE_SYNC_BATTLE_SERVER:
+		return "sync_battle_server";
+	case SERVER_TYPE_CONTROL_SERVER:
+		return "control_server";
+	case SERVER_TYPE_BACKGROUND:
+		return "background";
+	default:
+		return "default";
 	}
+}
+
+std::map<std::pair<int, std::string>, std::string*> configs;
+
+std::string* readConfig(int server_type, const std::string& file_name)
+{
+	auto it_config = configs.find(std::make_pair(server_type, file_name));
+	if (it_config != configs.end())
+	{
+		return it_config->second;
+	}
+
+	//如果内存里没有就再读一遍
+	std::string* content = new std::string();
+	file_utility::readFile("configs/" + GetServerTypeWrittenName(server_type) + "/" + file_name, *content);
+	configs.insert(std::make_pair(std::make_pair(server_type, file_name), content));
+	return content;
+}
+
+void writeConfig(int server_type, const std::string& file_name, const std::string& content)
+{
+	//写一份作为历史
+	file_utility::writeFile("configs/" + GetServerTypeWrittenName(server_type) +
+		"/[" + time_utility::ptime_to_string4(boost::posix_time::microsec_clock::local_time()) + "] " + file_name, content);
+
+	//存到当前文件
+	file_utility::writeFile("configs/" + GetServerTypeWrittenName(server_type) + "/" + file_name, content);
+
+	//存到内存map
+	auto it_config = configs.find(std::make_pair(server_type, file_name));
+	if (it_config != configs.end())
+	{
+		delete it_config->second;
+	}
+
+	configs[std::make_pair(server_type, file_name)] = new std::string(content);	
 }
 
 //RecvFinishHandler一旦返回，data的内容就会被释放
@@ -74,14 +129,28 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 		switch (SERVER_MSG_TYPE(data))
 		{
 		case MSG_TYPE_CONTROL_SERVER_INITIALIZE:
-		{
-												   common::Initialize init;
-												   if (ParseMsg(data, init))
-												   {
-													   //取对应的配置文件
+			{
+				common::Initialize init;
+				if (ParseMsg(data, init))
+				{
+					//取对应的配置文件，发给他
 
-												   }
-		}
+					common::RefreshConfig rc;
+					rc.set_server_type(init.server_type());
+					for (auto kvp : configs)
+					{
+						if (kvp.first.first == init.server_type())
+						{
+							common::ConfigFile* file = rc.add_file();
+							file->set_file_name(kvp.first.second);
+							file->set_content(*kvp.second);
+						}
+					}
+													   
+					ReplyMsg(sessionptr, MSG_TYPE_REFRESH_CONFIG, rc);
+				}												   
+			}
+			break;
 		case MSG_TYPE_CONTROL_SERVER_SAY_HELLO:
 			{
 				common::Hello hello;
@@ -190,25 +259,39 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 					auto it_group = server_groups.find(rc.server_type());
 					if (it_group != server_groups.end())
 					{
-						LOGEVENTL("INFO", "new config, " << _ln("server_type") << rc.server_type() << _ln("file_name") << rc.file_name());
-						//写一份作为历史
-
-						//存到当前文件
-
-						//发给相关各服务
-						rc.clear_server_type();
-						for (auto it_server = it_group->second->begin(); it_server != it_group->second->end(); ++it_server)
+						for (int i = 0; i < rc.file_size(); ++i)
 						{
-							auto it_session = server2session.find(*it_server);
-							if (it_session != server2session.end())
+							LOGEVENTL("INFO", "new config, " << _ln("server_type") << rc.server_type() << _ln("file_name") << rc.file(i).file_name());
+
+							writeConfig(rc.server_type(), rc.file(i).file_name(), rc.file(i).content());
+
+							//发给相关各服务
+							rc.clear_server_type();
+							for (auto it_server = it_group->second->begin(); it_server != it_group->second->end(); ++it_server)
 							{
-								ReplyMsg(it_session->second, MSG_TYPE_REFRESH_CONFIG, rc);
+								auto it_session = server2session.find(*it_server);
+								if (it_session != server2session.end())
+								{
+									ReplyMsg(it_session->second, MSG_TYPE_REFRESH_CONFIG, rc);
+								}
 							}
 						}
 					}
 				}
 			}
-				break;
+			break;
+		case MSG_TYPE_CONTROL_SERVER_FETCH_CONFIG_REQUEST:
+			{
+				control_server::FetchConfigRequest fc;
+				if (ParseMsg(data, fc))
+				{
+					common::ConfigFile cf;
+					cf.set_file_name(fc.file_name());
+					cf.set_content(*readConfig(fc.server_type(), fc.file_name()));
+					ReplyMsg(sessionptr, MSG_TYPE_CONTROL_SERVER_FETCH_CONFIG_RESPONSE, cf);
+				}
+			}
+			break;
 		case MSG_TYPE_CONTROL_SERVER_CMD:
 			if (sessionptr->GetRemoteIP() == "127.0.0.1")
 			{

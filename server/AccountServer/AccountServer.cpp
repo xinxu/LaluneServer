@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 	
-	LOGEVENTL("Info", "Server Start Success");
+	LOGEVENTL("Info", "Server Start Success. " << _ln("Port") << ACCOUNT_SERVER_PORT);
 
 	AccountServerCommonLibDelegate* cl_delegate = new AccountServerCommonLibDelegate();
 	InitializeCommonLib(thread, cl_delegate, SERVER_TYPE_ACCOUNT_SERVER, argc, argv);

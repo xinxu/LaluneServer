@@ -84,10 +84,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
+    <ClInclude Include="..\protobuf\controlserver\ControlServer.pb.h" />
     <ClInclude Include="UpdateVersion.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.cc" />
+    <ClCompile Include="..\protobuf\controlserver\ControlServer.pb.cc" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="UpdateVersion.cpp" />
   </ItemGroup>

@@ -78,7 +78,6 @@ bool UpdateVersion::SendIformation()
 	std::string outstr = s2.str();
 	//cout << outstr << endl;
 	write_json("version_control.txt", pt);
-	
 
 	return true;
 }

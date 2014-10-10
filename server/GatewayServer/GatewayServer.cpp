@@ -18,7 +18,7 @@
 
 ioservice_thread thread;
 
-NetLib_Server_ptr server4user;
+NetLib_Server_ptr server, server4user;
 
 std::map<int, NetLib_ServerSession_ptr> user2session;
 AvailableIDs<int> available_tmp_ids; //其实不一定需要搞这么一套available_id，直接让operation_id加到从0开始也可以。但id小一点好像能省一点流量。。
@@ -59,7 +59,30 @@ NetLib_ServerSession_ptr GetSessionById(int uid)
 class GatewayCommonLibDelegate : public CommonLibDelegate
 {
 public:
-	void onInitialized()
+	void onConfigInitialized()
+	{
+		server = NetLib_NewServer<GatewaySessionDelegate>(&thread);
+
+		//可以不指定端口 TODO (主要是内部端口)
+		if (!server->StartTCP(GATEWAY_INNER_PORT, 1, 120)) //端口，线程数，超时时间
+		{
+			LOGEVENTL("Error", "Server Start Failed !");
+
+			NetLib_Servers_WaitForStop();
+
+			LogUnInitialize();
+
+			google_lalune::protobuf::ShutdownProtobufLibrary();
+
+			exit(0);
+		}
+
+		LOGEVENTL("Info", "Server Start Success. " << _ln("Port") << GATEWAY_INNER_PORT);
+
+		ServerStarted(GATEWAY_INNER_PORT);
+	}
+
+	void onAddrInitialized()
 	{
 		server4user	= NetLib_NewServer<GatewayUserSessionDelegate>(&thread);
 
@@ -68,15 +91,19 @@ public:
 		{
 			LOGEVENTL("Error", "Server4User Start Failed !");
 
-			//TODO 发出警报，或者退出程序
+			server->Stop();
+			server.reset();
+
+			NetLib_Servers_WaitForStop();
+
+			LogUnInitialize();
+
+			google_lalune::protobuf::ShutdownProtobufLibrary();
+
+			exit(0);
 		}
 
-		LOGEVENTL("Info", "Server4User Start Success");
-	}
-
-	void onConfigRefresh(const std::string& content)
-	{
-
+		LOGEVENTL("Info", "Server4User Start Success. " << _ln("Port") << GATEWAY_OUTER_PORT);
 	}
 };
 
@@ -98,26 +125,8 @@ int main(int argc, char* argv[])
 
 	thread.start();
 
-	NetLib_Server_ptr server = NetLib_NewServer<GatewaySessionDelegate>(&thread);
-
-	//可以不指定端口 TODO (主要是内部端口)
-	if (!server->StartTCP(GATEWAY_INNER_PORT, 1, 120)) //端口，线程数，超时时间
-	{
-		LOGEVENTL("Error", "Server Start Failed !");
-
-		NetLib_Servers_WaitForStop();
-
-		LogUnInitialize();
-
-		google_lalune::protobuf::ShutdownProtobufLibrary();
-
-		return 0;
-	}
-	
-	LOGEVENTL("Info", "Server Start Success");
-
 	GatewayCommonLibDelegate* cl_delegate = new GatewayCommonLibDelegate();
-	InitializeCommonLib(thread, cl_delegate, GATEWAY_INNER_PORT, SERVER_TYPE_GATEWAY_SERVER, argc, argv);
+	InitializeCommonLib(thread, cl_delegate, SERVER_TYPE_GATEWAY_SERVER, argc, argv);
 
 	NetLibPlus_InitializeClients<toBackEndDelegate>();
 	
@@ -136,6 +145,9 @@ int main(int argc, char* argv[])
 			{
 				server->Stop();
 				server.reset();
+
+				server4user->Stop();
+				server4user.reset();
 			}
 		}
 		else if (strcmp(tmp, "exit") == 0)

@@ -65,6 +65,8 @@ void Initialize()
 	}
 }
 
+extern std::map<std::pair<int, std::string>, std::string*> configs;
+
 void UnInitliaze()
 {
 	for (int s = 0; s <= SERVER_TYPE_MAX; ++s)
@@ -73,6 +75,10 @@ void UnInitliaze()
 	}
 
 	for (auto it = servers_info.begin(); it != servers_info.end(); ++it)
+	{
+		delete it->second;
+	}
+	for (auto it = configs.begin(); it != configs.end(); ++it)
 	{
 		delete it->second;
 	}
@@ -160,7 +166,7 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-	LOGEVENTL("Info", "Server Start Success");
+	LOGEVENTL("Info", "Server Start Success. " << _ln("Port") << CONTROL_SERVER_DEFAULT_PORT);
 
 	boost::asio::deadline_timer timer(thread.get_ioservice(), boost::posix_time::milliseconds(config.startup_ms));
 	timer.async_wait(boost::bind(&StartupTimer, boost::asio::placeholders::error));
