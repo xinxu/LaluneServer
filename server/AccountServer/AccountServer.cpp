@@ -7,13 +7,13 @@
 #include <google/protobuf/stubs/common.h>
 #include "../../LaluneCommon/include/MessageTypeDef.h"
 #include "ServerCommonLib/ServerCommon.h"
-#include "LoginServerSessionDelegate.h"
+#include "AccountServerSessionDelegate.h"
 
-#define LOGIN_SERVER_PORT (6834)
+#define ACCOUNT_SERVER_PORT (6834)
 
 ioservice_thread thread;
 
-class LoginServerCommonLibDelegate : public CommonLibDelegate
+class AccountServerCommonLibDelegate : public CommonLibDelegate
 {
 public:
 	void onConfigRefresh(const std::string& content)
@@ -40,10 +40,10 @@ int main(int argc, char* argv[])
 
 	thread.start();
 
-	NetLib_Server_ptr server = NetLib_NewServer<LoginServerSessionDelegate>(&thread);
+	NetLib_Server_ptr server = NetLib_NewServer<AccountServerSessionDelegate>(&thread);
 
 	//可以不指定端口 TODO (主要是内部端口)
-	if (!server->StartTCP(LOGIN_SERVER_PORT, 1, 120)) //端口，线程数，超时时间
+	if (!server->StartTCP(ACCOUNT_SERVER_PORT, 1, 120)) //端口，线程数，超时时间
 	{
 		LOGEVENTL("Error", "Server Start Failed !");
 
@@ -58,8 +58,9 @@ int main(int argc, char* argv[])
 	
 	LOGEVENTL("Info", "Server Start Success");
 
-	LoginServerCommonLibDelegate* cl_delegate = new LoginServerCommonLibDelegate();
-	InitializeCommonLib(thread, cl_delegate, LOGIN_SERVER_PORT, SERVER_TYPE_LOGIN_SERVER, argc, argv);
+	AccountServerCommonLibDelegate* cl_delegate = new AccountServerCommonLibDelegate();
+	InitializeCommonLib(thread, cl_delegate, SERVER_TYPE_ACCOUNT_SERVER, argc, argv);
+	ServerStarted(ACCOUNT_SERVER_PORT);
 	
 	for (;;)
 	{

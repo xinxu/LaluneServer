@@ -35,7 +35,7 @@ public:
 	virtual void onAddrInitialized() {} //收到过第一次地址的refresh
 	virtual void onConfigInitialized() {} //收到过第一次config的refresh
 
-	virtual void onConfigRefresh(const std::string& file_name, const std::string& content) = 0;
+	virtual void onConfigRefresh(const std::string& file_name, const std::string& content) {};
 	virtual void onGlobalConfigRefresh(const std::string& content) {}
 
 	virtual void onServerRemoved(int server_type, int server_id) {}
