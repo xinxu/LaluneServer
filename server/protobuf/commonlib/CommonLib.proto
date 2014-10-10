@@ -12,6 +12,12 @@ message HeaderEx
 
 //和控制服务器通信用的Protobuf
 
+//先发Initialize，主要是为了获取配置文件。有了配置文件，服务才能启动，然后才有之后的Hello
+message Initialize
+{
+	required uint32 server_type			= 1;
+}
+
 message Hello
 {
 	required uint32 my_listening_port	= 1;

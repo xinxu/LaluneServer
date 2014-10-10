@@ -20,9 +20,6 @@ class VersionServerCommonLibDelegate : public CommonLibDelegate
 public:
 	void onInitialized()
 	{
-		common::HeaderEx ex;
-		ex.set_uid(123);
-		SendCmd(SERVER_TYPE_VERSION_SERVER, TO_SERVER_CMD_TYPE__ADD_VERSION, ex);
 	}
 
 	void onConfigRefresh(const std::string& content)

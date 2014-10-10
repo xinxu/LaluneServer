@@ -38,6 +38,34 @@ void ControlServerSessionDelegate::RecvKeepAliveHandler(NetLib_ServerSession_ptr
 	}
 }
 
+std::string GetServerTypeWrittenName(int server_type)
+{
+	switch (server_type)
+	{
+	case SERVER_TYPE_GATEWAY_SERVER:
+		return "gateway";
+	case SERVER_TYPE_VERSION_SERVER:
+		return "version_server";
+	case SERVER_TYPE_LOGIN_SERVER：
+			return "login_server";
+
+#define SERVER_TYPE_BASIC_INFO_SERVER (3)
+#define SERVER_TYPE_LEAGUE_SERVER (4)
+#define SERVER_TYPE_NOTICE_SERVER (5)
+#define SERVER_TYPE_RANK_SERVER (6)
+#define SERVER_TYPE_ASYNC_BATTLE_SERVER (7)
+#define SERVER_TYPE_REPLAY_SERVER (8)
+#define SERVER_TYPE_STAT_SERVER (9)
+#define SERVER_TYPE_AUTO_MATCH_SERVER (10)
+#define SERVER_TYPE_SYNC_BATTLE_SERVER (11)
+
+#define SERVER_TYPE_MAX (11)
+
+#define SERVER_TYPE_CONTROL_SERVER (50)
+#define SERVER_TYPE_BACKGROUND (51)
+	}
+}
+
 //RecvFinishHandler一旦返回，data的内容就会被释放
 void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data)
 {
@@ -45,6 +73,15 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 	{
 		switch (SERVER_MSG_TYPE(data))
 		{
+		case MSG_TYPE_CONTROL_SERVER_INITIALIZE:
+		{
+												   common::Initialize init;
+												   if (ParseMsg(data, init))
+												   {
+													   //取对应的配置文件
+
+												   }
+		}
 		case MSG_TYPE_CONTROL_SERVER_SAY_HELLO:
 			{
 				common::Hello hello;

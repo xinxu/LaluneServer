@@ -32,9 +32,10 @@
 class CommonLibDelegate
 {
 public:
-	virtual void onInitialized() {} //收到过第一次refresh
+	virtual void onAddrInitialized() {} //收到过第一次地址的refresh
+	virtual void onConfigInitialized() {} //收到过第一次config的refresh
 
-	virtual void onConfigRefresh(const std::string& content) = 0;
+	virtual void onConfigRefresh(const std::string& file_name, const std::string& content) = 0;
 	virtual void onGlobalConfigRefresh(const std::string& content) {}
 
 	virtual void onServerRemoved(int server_type, int server_id) {}
@@ -45,7 +46,9 @@ public:
 
 //服务端默认流程：先开监听端口并启动服务，然后告诉控制服务我的端口
 //网关服务对外的端口和对内的端口不是一个。对外的端口晚开一会儿
-void InitializeCommonLib(class ioservice_thread& thread, CommonLibDelegate* d, int my_listening_port, int my_server_type, int argc = 0, char* argv[] = nullptr);
+void InitializeCommonLib(class ioservice_thread& thread, CommonLibDelegate* d, int my_server_type, int argc = 0, char* argv[] = nullptr);
+
+void ServerStarted(int my_listening_port);
 
 void ReportLoad(float load_factor);
 

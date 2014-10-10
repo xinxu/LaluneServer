@@ -13,7 +13,11 @@ CommonLibDelegate* __commonlib_delegate;
 int __my_listening_port, __my_server_type, __my_server_id = -1;
 NetLib_Client_ptr __conn2controlserver;
 
-bool is_initialized = false;
+std::string __control_server_ip = CONTROL_SERVER_DEFAULT_IP; //默认值
+int __control_server_port = CONTROL_SERVER_DEFAULT_PORT;
+
+bool is_config_initialized = false;
+bool is_addr_info_initialized = false;
 
 void SayHello2ControlServer(int is_server_start = 1)
 {
@@ -62,10 +66,10 @@ public:
 								__commonlib_delegate->onServerAdded(addr.server_type(), addr.server_id());
 							}
 						}
-						if (!is_initialized)
+						if (!is_addr_info_initialized)
 						{
-							is_initialized = true;
-							__commonlib_delegate->onInitialized();
+							is_addr_info_initialized = true;
+							__commonlib_delegate->onAddrInitialized();
 						}
 					}
 				}
@@ -109,6 +113,20 @@ public:
 					}
 				}
 				break;
+			case MSG_TYPE_REFRESH_CONFIG:
+				{
+					common::RefreshConfig rc;
+					if (ParseMsg(data, rc))
+					{
+						__commonlib_delegate->onConfigRefresh(rc.file_name(), rc.content());
+					}
+					if (!is_config_initialized)
+					{
+						is_config_initialized = true;
+						__commonlib_delegate->onConfigInitialized();
+					}
+				}
+				break;
 			default:
 				break;
 			}
@@ -120,24 +138,19 @@ public:
 	}
 };
 
-void InitializeCommonLib(ioservice_thread& thread, CommonLibDelegate* d, int my_listening_port, int my_server_type, int argc, char* argv[])
+void InitializeCommonLib(ioservice_thread& thread, CommonLibDelegate* d, int my_server_type, int argc, char* argv[])
 {
 	_initialize_thread(&thread);
 
 	__commonlib_delegate = d;
-
-	__my_listening_port = my_listening_port;
 	__my_server_type = my_server_type;
-
-	std::string control_server_ip = CONTROL_SERVER_DEFAULT_IP; //默认值
-	int control_server_port = CONTROL_SERVER_DEFAULT_PORT;
 
 	if (argc >= 3)
 	{
 		//从启动参数里读
 
-		control_server_ip = argv[1];
-		control_server_port = utility1::str2int(argv[2]);
+		__control_server_ip = argv[1];
+		__control_server_port = utility1::str2int(argv[2]);
 	}
 	else
 	{
@@ -145,22 +158,28 @@ void InitializeCommonLib(ioservice_thread& thread, CommonLibDelegate* d, int my_
 		CSimpleIni ini;
 		if (ini.LoadFile(utility3::ToAbsolutePath("local_config.ini").c_str()) == SI_OK)
 		{
-			control_server_ip = ini.GetValue("ControlServer", "ControlServerIP", CONTROL_SERVER_DEFAULT_IP);
-			control_server_port = ini.GetLongValue("ControlServer", "ControlServerPortP", CONTROL_SERVER_DEFAULT_PORT);
+			__control_server_ip = ini.GetValue("ControlServer", "ControlServerIP", CONTROL_SERVER_DEFAULT_IP);
+			__control_server_port = ini.GetLongValue("ControlServer", "ControlServerPortP", CONTROL_SERVER_DEFAULT_PORT);
 		}
 	}
 
 	NetLibPlus_InitializeClients<Conn2ControlServerDelegate>(SERVER_TYPE_CONTROL_SERVER);
-	_NetLibPlus_UpdateServerInfo(CONTROL_SERVER_ID,	boost::asio::ip::address_v4::from_string(control_server_ip).to_ulong(), control_server_port, SERVER_TYPE_CONTROL_SERVER);
+	_NetLibPlus_UpdateServerInfo(CONTROL_SERVER_ID, boost::asio::ip::address_v4::from_string(__control_server_ip).to_ulong(), __control_server_port, SERVER_TYPE_CONTROL_SERVER);
 
-	if (my_server_type != SERVER_TYPE_BACKGROUND)
-	{
-		SayHello2ControlServer();
+	if (my_server_type == SERVER_TYPE_BACKGROUND)
+	{ 
+		//TODO 发另外的权限验证包。专门用于后台之类的程序
 	}
-	else
-	{
-		//TODO 发另外的权限验证包。专门用于后台之类的程序。后台不需要知道具体的各服务地址，只需要连ControlServer就可以了
-	}
+
+	common::Initialize init;
+	init.set_server_type(__my_server_type);
+	SendMsg(CONTROL_SERVER_ID, MSG_TYPE_CONTROL_SERVER_INITIALIZE, init);
+}
+
+void ServerStarted(int my_listening_port)
+{
+	__my_listening_port = my_listening_port;
+	SayHello2ControlServer();
 }
 
 void ReportLoad(float load_factor)

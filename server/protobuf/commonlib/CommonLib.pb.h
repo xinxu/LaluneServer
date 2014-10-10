@@ -34,6 +34,7 @@ void protobuf_AssignDesc_commonlib_2fCommonLib_2eproto();
 void protobuf_ShutdownFile_commonlib_2fCommonLib_2eproto();
 
 class HeaderEx;
+class Initialize;
 class Hello;
 class HelloResult;
 class ReportLoad;
@@ -151,6 +152,85 @@ class HeaderEx : public ::google_lalune::protobuf::Message {
 
   void InitAsDefaultInstance();
   static HeaderEx* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Initialize : public ::google_lalune::protobuf::Message {
+ public:
+  Initialize();
+  virtual ~Initialize();
+
+  Initialize(const Initialize& from);
+
+  inline Initialize& operator=(const Initialize& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google_lalune::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google_lalune::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google_lalune::protobuf::Descriptor* descriptor();
+  static const Initialize& default_instance();
+
+  void Swap(Initialize* other);
+
+  // implements Message ----------------------------------------------
+
+  Initialize* New() const;
+  void CopyFrom(const ::google_lalune::protobuf::Message& from);
+  void MergeFrom(const ::google_lalune::protobuf::Message& from);
+  void CopyFrom(const Initialize& from);
+  void MergeFrom(const Initialize& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google_lalune::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google_lalune::protobuf::io::CodedOutputStream* output) const;
+  ::google_lalune::protobuf::uint8* SerializeWithCachedSizesToArray(::google_lalune::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google_lalune::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 server_type = 1;
+  inline bool has_server_type() const;
+  inline void clear_server_type();
+  static const int kServerTypeFieldNumber = 1;
+  inline ::google_lalune::protobuf::uint32 server_type() const;
+  inline void set_server_type(::google_lalune::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:common.Initialize)
+ private:
+  inline void set_has_server_type();
+  inline void clear_has_server_type();
+
+  ::google_lalune::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google_lalune::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google_lalune::protobuf::uint32 server_type_;
+  friend void  protobuf_AddDesc_commonlib_2fCommonLib_2eproto();
+  friend void protobuf_AssignDesc_commonlib_2fCommonLib_2eproto();
+  friend void protobuf_ShutdownFile_commonlib_2fCommonLib_2eproto();
+
+  void InitAsDefaultInstance();
+  static Initialize* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -993,6 +1073,34 @@ inline void HeaderEx::set_flag(::google_lalune::protobuf::uint32 value) {
   set_has_flag();
   flag_ = value;
   // @@protoc_insertion_point(field_set:common.HeaderEx.flag)
+}
+
+// -------------------------------------------------------------------
+
+// Initialize
+
+// required uint32 server_type = 1;
+inline bool Initialize::has_server_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Initialize::set_has_server_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Initialize::clear_has_server_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Initialize::clear_server_type() {
+  server_type_ = 0u;
+  clear_has_server_type();
+}
+inline ::google_lalune::protobuf::uint32 Initialize::server_type() const {
+  // @@protoc_insertion_point(field_get:common.Initialize.server_type)
+  return server_type_;
+}
+inline void Initialize::set_server_type(::google_lalune::protobuf::uint32 value) {
+  set_has_server_type();
+  server_type_ = value;
+  // @@protoc_insertion_point(field_set:common.Initialize.server_type)
 }
 
 // -------------------------------------------------------------------
