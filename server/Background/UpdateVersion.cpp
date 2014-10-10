@@ -29,7 +29,7 @@ bool UpdateVersion::SendIformation()
 
 
 
-	BOOST_FOREACH(boost::property_tree::ptree::value_type &v, pt_root)
+	BOOST_FOREACH(boost::property_tree::ptree::value_type &v, pt_root)  //遍历每个ptree
 	{
 		
 
@@ -49,14 +49,14 @@ bool UpdateVersion::SendIformation()
 	temp_node.next_ve = now_version;
 	int i;
 	string file_name1 = "";
-	for (i = 0; i < file_name.size(); i++)
+	for (i = 0; i < file_name.size(); i++)//文件拼接
 	{
 
 		file_name1 += (file_name[i]+"|");
 	}
 	temp_node.path = file_name1 ;
 	string file_url1 = "";
-	for (i = 0; i < file_url.size(); i++)
+	for (i = 0; i < file_url.size(); i++)//url拼接
 	{
 		file_url1 += (file_url[i] + "|");
 	}

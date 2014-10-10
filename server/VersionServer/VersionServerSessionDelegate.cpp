@@ -15,7 +15,7 @@ void VersionServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 	{
 		switch (SERVER_MSG_TYPE(data))
 		{
-		case MSG_CHECK_VERSION:
+		case MSG_CHECK_VERSION:   //客户端请求版本更新
 		{
 								  //  lalune::CheckVersionResult result;
 
@@ -37,7 +37,6 @@ void VersionServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 									  map<string, string> map_node;
 									 
 									  response.set_now_version(now_version.version_name());
-									  response.set_url_prefix("");
 									  for (i = 0; i < version_infor.size(); i++)
 									  {
 										  if (now_version.version_name() == version_infor[i].now_version)
@@ -70,9 +69,6 @@ void VersionServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 										  file_temp = response.add_file();
 										  file_temp->set_file_path(temp_node->first);
 										  file_temp->set_url_prefix(temp_node->second);
-
-
-										 
 									  }
 									 
 									

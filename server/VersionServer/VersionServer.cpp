@@ -23,7 +23,7 @@ public:
 	{
 	}
 
-	void onConfigRefresh(const std::string& content)
+	void onConfigRefresh(const std::string& content)//读取配置文件存入自己的数据结构
 	{
 		ptree pt;
 		try{
@@ -38,11 +38,7 @@ public:
 		
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &v, pt_root)
 		{
-			//std::stringstream s;
-			//	write_json(s, v.second);
-			//std::string image_item = s.str();
-			//	cout << "xx" << endl;
-			//cout << image_item << endl;
+			
 
 			version_temp.now_version = v.second.get<string>("now_ve");
 			version_temp.next_version = v.second.get<string>("next_ve");
