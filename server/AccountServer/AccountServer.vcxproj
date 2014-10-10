@@ -90,7 +90,7 @@
     <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
-    <ClInclude Include="LoginServerSessionDelegate.h" />
+    <ClInclude Include="AccountServerSessionDelegate.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Log\Log.vcxproj">
@@ -105,8 +105,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.cc" />
-    <ClCompile Include="LoginServer.cpp" />
-    <ClCompile Include="LoginServerSessionDelegate.cpp" />
+    <ClCompile Include="AccountServer.cpp" />
+    <ClCompile Include="AccountServerSessionDelegate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\LaluneCommon\protobuf\protos\Account.proto" />
