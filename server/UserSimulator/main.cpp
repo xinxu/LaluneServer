@@ -21,6 +21,10 @@ void _register()
 {
 	us->Register();
 }
+void _version()
+{
+	us->Version();
+}
 
 int main(int argc, char* argv[])
 {
@@ -58,6 +62,10 @@ int main(int argc, char* argv[])
 		else if (tmp == "register")
 		{
 			thread.get_ioservice().post(boost::bind(&_register));
+		}
+		else if (tmp == "version")
+		{
+			thread.get_ioservice().post(boost::bind(&_version));
 		}
 		else
 		{

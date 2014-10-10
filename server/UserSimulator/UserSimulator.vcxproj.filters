@@ -30,6 +30,9 @@
     <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UserSimulator.cpp">
@@ -40,6 +43,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.cc">
       <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.cc">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

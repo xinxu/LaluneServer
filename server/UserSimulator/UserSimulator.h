@@ -36,4 +36,5 @@ protected:
 public:
 	void Connect(const std::string& ip, int port);
 	void Register();
+	void Version();
 };

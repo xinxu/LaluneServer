@@ -12,10 +12,10 @@
 #include "VersionIformation.h"
 #define VERSION_SERVER_PORT (5577)
 
-ioservice_thread thread;
+ioservice_thread _thread;
 
 NetLib_Server_ptr server4user;
-
+vector<VersionIformation> version_infor;
 class VersionServerCommonLibDelegate : public CommonLibDelegate
 {
 public:
@@ -35,7 +35,7 @@ public:
 		pt_root = pt.get_child("root");
 
 		VersionIformation version_temp;
-		vector<VersionIformation> version_infor;
+		
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &v, pt_root)
 		{
 			//std::stringstream s;
@@ -50,6 +50,7 @@ public:
 			version_temp.file_url = VersionIformation::GetVerctor(v.second.get<string>("url"));
 			version_infor.push_back(version_temp);
 		}
+	//	cout << version_infor.size() << endl;
 
 	}
 	
@@ -79,9 +80,9 @@ int main(int argc, char* argv[])
 	NETLIB_CHECK_VERSION;
     LogInitializeLocalOptions(true, true, "gateway");
 
-	thread.start();
+	_thread.start();
 
-	NetLib_Server_ptr server = NetLib_NewServer<VersionServerSessionDelegate>(&thread);
+	NetLib_Server_ptr server = NetLib_NewServer<VersionServerSessionDelegate>(&_thread);
 
 	//可以不指定端口 TODO (主要是内部端口)
 	if (!server->StartTCP(VERSION_SERVER_PORT, 1, 120)) //端口，线程数，超时时间
@@ -100,7 +101,7 @@ int main(int argc, char* argv[])
 	LOGEVENTL("Info", "Server Start Success");
 
 	VersionServerCommonLibDelegate* cl_delegate = new VersionServerCommonLibDelegate();
-	InitializeCommonLib(thread, cl_delegate, VERSION_SERVER_PORT, SERVER_TYPE_VERSION_SERVER, argc, argv);
+	InitializeCommonLib(_thread, cl_delegate, VERSION_SERVER_PORT, SERVER_TYPE_VERSION_SERVER, argc, argv);
 	
 	for (;;)
 	{
