@@ -213,7 +213,15 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 				{
 					common::ConfigFile cf;
 					cf.set_file_name(fc.file_name());
-					cf.set_content(*readConfig(fc.server_type(), fc.file_name()));
+					std::string* content = readConfig(fc.server_type(), fc.file_name());
+					if (content == nullptr)
+					{
+						cf.set_content("");
+					}
+					else
+					{
+						cf.set_content(*content);
+					}
 					ReplyMsg(sessionptr, MSG_TYPE_CONTROL_SERVER_FETCH_CONFIG_RESPONSE, cf);
 				}
 			}
