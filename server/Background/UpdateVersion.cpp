@@ -39,7 +39,7 @@ bool UpdateVersion::SendIformation()
 		temp_node.path = v.second.get<string>("path");
 		temp_node.url = v.second.get<string>("url");
 		version.push_back(temp_node);
-		cout << v.second.get<string>("now_ve") << endl;
+		//cout << v.second.get<string>("now_ve") << endl;
 		//cout << v.second.get<string>("next_ve") << endl;
 		//cout << v.second.get<string>("path") << endl;
 		//cout << v.second.get<string>("url") << endl;
@@ -52,13 +52,13 @@ bool UpdateVersion::SendIformation()
 	for (i = 0; i < file_name.size(); i++)
 	{
 
-		file_name1 += file_name[i];
+		file_name1 += (file_name[i]+"|");
 	}
-	temp_node.path = ("|" + file_name1);
+	temp_node.path = file_name1 ;
 	string file_url1 = "";
 	for (i = 0; i < file_url.size(); i++)
 	{
-		file_url1 += ("|" + file_url[i]);
+		file_url1 += (file_url[i] + "|");
 	}
 	temp_node.url = file_url1;
 	version.push_back(temp_node);

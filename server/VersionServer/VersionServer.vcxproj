@@ -90,6 +90,7 @@
     <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
+    <ClInclude Include="VersionIformation.h" />
     <ClInclude Include="VersionServerSessionDelegate.h" />
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.cc" />
+    <ClCompile Include="VersionIformation.cpp" />
     <ClCompile Include="VersionServer.cpp" />
     <ClCompile Include="VersionServerSessionDelegate.cpp" />
   </ItemGroup>
