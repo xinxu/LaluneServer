@@ -1,6 +1,7 @@
 #include "UpdateVersion.h"
 #include "ServerCommon.h"
 #include "MessageTypeDef.h"
+#include <fstream>
 UpdateVersion::UpdateVersion()
 {
 }
@@ -77,7 +78,7 @@ bool UpdateVersion::SendIformation(const string &file_information)
 	std::stringstream s2;
 	write_json(s2, pt);
 	std::string outstr = s2.str();
-	cout << outstr << endl;
+	//cout << outstr << endl;
 	
 	RefreshConfig(SERVER_TYPE_VERSION_SERVER, "version_control.txt", outstr);
 	//write_json("version_control.txt", pt);
@@ -114,16 +115,18 @@ bool UpdateVersion::DelFile()
 bool UpdateVersion::Input()
 {
 	string str;
-	cout << "add  增加文件" << endl;
-	cout << "del  删除文件" << endl;
-	cin >> op_command;
-	cout << "前一个版本名" << endl;
-	cin >> pro_version;
-	cout << "当前版本名" << endl;
-	cin >> now_version;
-	cout << "输入文件名，输入end结束" << endl;
-	while (cin>>str&&str!="end")
+	ifstream fin("command.txt");
+	//cout << "add  增加文件" << endl;
+	//cout << "del  删除文件" << endl;
+	fin >> op_command;
+	//cout << "前一个版本名" << endl;
+	fin >> pro_version;
+	//cout << "当前版本名" << endl;
+	fin >> now_version;
+	//cout << "输入文件名，输入end结束" << endl;
+	while (!fin.eof())
 	{
+		fin >> str;
 		file_name.push_back(str);
 	}
 	return true;

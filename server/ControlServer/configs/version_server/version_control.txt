@@ -17,6 +17,12 @@
             "next_ve": "4.0",
             "path": "axx|",
             "url": "|"
+        },
+        {
+            "now_ve": "5.0",
+            "next_ve": "6.0",
+            "path": "xxxx|xxxxxx|xxxxxxxxx|",
+            "url": "|||"
         }
     ]
 }
