@@ -1,7 +1,7 @@
 CC = g++
 AR = ar
 
-USERHEADERS := -iquote./ -iquote../ -iquote../include/ -iquote../protobuf/ -iquote../../server/include/
+USERHEADERS := -iquote./ -iquote../ -iquote../include/ -iquote../protobuf/ -iquote../ServerCommonLib/
 OTHERHEADERS := -I/usr/local/include/boost/
 DEFINES := -D_STATIC_NETLIB_ -D_NOT_LINK_NETLIB_LIB_
 
