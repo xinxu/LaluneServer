@@ -35,6 +35,7 @@ void protobuf_ShutdownFile_controlserver_2fControlServer_2eproto();
 
 class Command;
 class CommandResult;
+class FetchConfigRequest;
 
 // ===================================================================
 
@@ -204,6 +205,18 @@ class CommandResult : public ::google_lalune::protobuf::Message {
   inline ::std::string* release_result();
   inline void set_allocated_result(::std::string* result);
 
+  // repeated uint32 params = 2;
+  inline int params_size() const;
+  inline void clear_params();
+  static const int kParamsFieldNumber = 2;
+  inline ::google_lalune::protobuf::uint32 params(int index) const;
+  inline void set_params(int index, ::google_lalune::protobuf::uint32 value);
+  inline void add_params(::google_lalune::protobuf::uint32 value);
+  inline const ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 >&
+      params() const;
+  inline ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 >*
+      mutable_params();
+
   // @@protoc_insertion_point(class_scope:control_server.CommandResult)
  private:
   inline void set_has_result();
@@ -214,12 +227,107 @@ class CommandResult : public ::google_lalune::protobuf::Message {
   ::google_lalune::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
   ::std::string* result_;
+  ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 > params_;
   friend void  protobuf_AddDesc_controlserver_2fControlServer_2eproto();
   friend void protobuf_AssignDesc_controlserver_2fControlServer_2eproto();
   friend void protobuf_ShutdownFile_controlserver_2fControlServer_2eproto();
 
   void InitAsDefaultInstance();
   static CommandResult* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class FetchConfigRequest : public ::google_lalune::protobuf::Message {
+ public:
+  FetchConfigRequest();
+  virtual ~FetchConfigRequest();
+
+  FetchConfigRequest(const FetchConfigRequest& from);
+
+  inline FetchConfigRequest& operator=(const FetchConfigRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google_lalune::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google_lalune::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google_lalune::protobuf::Descriptor* descriptor();
+  static const FetchConfigRequest& default_instance();
+
+  void Swap(FetchConfigRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  FetchConfigRequest* New() const;
+  void CopyFrom(const ::google_lalune::protobuf::Message& from);
+  void MergeFrom(const ::google_lalune::protobuf::Message& from);
+  void CopyFrom(const FetchConfigRequest& from);
+  void MergeFrom(const FetchConfigRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google_lalune::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google_lalune::protobuf::io::CodedOutputStream* output) const;
+  ::google_lalune::protobuf::uint8* SerializeWithCachedSizesToArray(::google_lalune::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google_lalune::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional uint32 server_type = 1;
+  inline bool has_server_type() const;
+  inline void clear_server_type();
+  static const int kServerTypeFieldNumber = 1;
+  inline ::google_lalune::protobuf::uint32 server_type() const;
+  inline void set_server_type(::google_lalune::protobuf::uint32 value);
+
+  // required string file_name = 2;
+  inline bool has_file_name() const;
+  inline void clear_file_name();
+  static const int kFileNameFieldNumber = 2;
+  inline const ::std::string& file_name() const;
+  inline void set_file_name(const ::std::string& value);
+  inline void set_file_name(const char* value);
+  inline void set_file_name(const char* value, size_t size);
+  inline ::std::string* mutable_file_name();
+  inline ::std::string* release_file_name();
+  inline void set_allocated_file_name(::std::string* file_name);
+
+  // @@protoc_insertion_point(class_scope:control_server.FetchConfigRequest)
+ private:
+  inline void set_has_server_type();
+  inline void clear_has_server_type();
+  inline void set_has_file_name();
+  inline void clear_has_file_name();
+
+  ::google_lalune::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google_lalune::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::std::string* file_name_;
+  ::google_lalune::protobuf::uint32 server_type_;
+  friend void  protobuf_AddDesc_controlserver_2fControlServer_2eproto();
+  friend void protobuf_AssignDesc_controlserver_2fControlServer_2eproto();
+  friend void protobuf_ShutdownFile_controlserver_2fControlServer_2eproto();
+
+  void InitAsDefaultInstance();
+  static FetchConfigRequest* default_instance_;
 };
 // ===================================================================
 
@@ -436,6 +544,140 @@ inline void CommandResult::set_allocated_result(::std::string* result) {
     result_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:control_server.CommandResult.result)
+}
+
+// repeated uint32 params = 2;
+inline int CommandResult::params_size() const {
+  return params_.size();
+}
+inline void CommandResult::clear_params() {
+  params_.Clear();
+}
+inline ::google_lalune::protobuf::uint32 CommandResult::params(int index) const {
+  // @@protoc_insertion_point(field_get:control_server.CommandResult.params)
+  return params_.Get(index);
+}
+inline void CommandResult::set_params(int index, ::google_lalune::protobuf::uint32 value) {
+  params_.Set(index, value);
+  // @@protoc_insertion_point(field_set:control_server.CommandResult.params)
+}
+inline void CommandResult::add_params(::google_lalune::protobuf::uint32 value) {
+  params_.Add(value);
+  // @@protoc_insertion_point(field_add:control_server.CommandResult.params)
+}
+inline const ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 >&
+CommandResult::params() const {
+  // @@protoc_insertion_point(field_list:control_server.CommandResult.params)
+  return params_;
+}
+inline ::google_lalune::protobuf::RepeatedField< ::google_lalune::protobuf::uint32 >*
+CommandResult::mutable_params() {
+  // @@protoc_insertion_point(field_mutable_list:control_server.CommandResult.params)
+  return &params_;
+}
+
+// -------------------------------------------------------------------
+
+// FetchConfigRequest
+
+// optional uint32 server_type = 1;
+inline bool FetchConfigRequest::has_server_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void FetchConfigRequest::set_has_server_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void FetchConfigRequest::clear_has_server_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void FetchConfigRequest::clear_server_type() {
+  server_type_ = 0u;
+  clear_has_server_type();
+}
+inline ::google_lalune::protobuf::uint32 FetchConfigRequest::server_type() const {
+  // @@protoc_insertion_point(field_get:control_server.FetchConfigRequest.server_type)
+  return server_type_;
+}
+inline void FetchConfigRequest::set_server_type(::google_lalune::protobuf::uint32 value) {
+  set_has_server_type();
+  server_type_ = value;
+  // @@protoc_insertion_point(field_set:control_server.FetchConfigRequest.server_type)
+}
+
+// required string file_name = 2;
+inline bool FetchConfigRequest::has_file_name() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void FetchConfigRequest::set_has_file_name() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void FetchConfigRequest::clear_has_file_name() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void FetchConfigRequest::clear_file_name() {
+  if (file_name_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    file_name_->clear();
+  }
+  clear_has_file_name();
+}
+inline const ::std::string& FetchConfigRequest::file_name() const {
+  // @@protoc_insertion_point(field_get:control_server.FetchConfigRequest.file_name)
+  return *file_name_;
+}
+inline void FetchConfigRequest::set_file_name(const ::std::string& value) {
+  set_has_file_name();
+  if (file_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    file_name_ = new ::std::string;
+  }
+  file_name_->assign(value);
+  // @@protoc_insertion_point(field_set:control_server.FetchConfigRequest.file_name)
+}
+inline void FetchConfigRequest::set_file_name(const char* value) {
+  set_has_file_name();
+  if (file_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    file_name_ = new ::std::string;
+  }
+  file_name_->assign(value);
+  // @@protoc_insertion_point(field_set_char:control_server.FetchConfigRequest.file_name)
+}
+inline void FetchConfigRequest::set_file_name(const char* value, size_t size) {
+  set_has_file_name();
+  if (file_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    file_name_ = new ::std::string;
+  }
+  file_name_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:control_server.FetchConfigRequest.file_name)
+}
+inline ::std::string* FetchConfigRequest::mutable_file_name() {
+  set_has_file_name();
+  if (file_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    file_name_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:control_server.FetchConfigRequest.file_name)
+  return file_name_;
+}
+inline ::std::string* FetchConfigRequest::release_file_name() {
+  clear_has_file_name();
+  if (file_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = file_name_;
+    file_name_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void FetchConfigRequest::set_allocated_file_name(::std::string* file_name) {
+  if (file_name_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete file_name_;
+  }
+  if (file_name) {
+    set_has_file_name();
+    file_name_ = file_name;
+  } else {
+    clear_has_file_name();
+    file_name_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:control_server.FetchConfigRequest.file_name)
 }
 
 

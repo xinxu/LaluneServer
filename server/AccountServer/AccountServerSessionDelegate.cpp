@@ -1,4 +1,4 @@
-#include "LoginServerSessionDelegate.h"
+#include "AccountServerSessionDelegate.h"
 #include "ServerCommon.h"
 #include "MessageTypeDef.h"
 #include "Account.pb.h"
@@ -7,7 +7,7 @@
 
 int debug_user_id_4_register = 10000;
 
-void LoginServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data)
+void AccountServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data)
 {
 	if (SERVER_MSG_LENGTH(data) >= SERVER_MSG_HEADER_BASE_SIZE)
 	{

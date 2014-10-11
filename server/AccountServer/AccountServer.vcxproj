@@ -14,7 +14,7 @@
     <ProjectGuid>{5B2F345D-A77E-4A2A-8BA6-829DC59DC6D7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>tNetLib2</RootNamespace>
-    <ProjectName>LoginServer</ProjectName>
+    <ProjectName>AccountServer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -90,7 +90,7 @@
     <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
-    <ClInclude Include="LoginServerSessionDelegate.h" />
+    <ClInclude Include="AccountServerSessionDelegate.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Log\Log.vcxproj">
@@ -105,8 +105,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.cc" />
-    <ClCompile Include="LoginServer.cpp" />
-    <ClCompile Include="LoginServerSessionDelegate.cpp" />
+    <ClCompile Include="AccountServer.cpp" />
+    <ClCompile Include="AccountServerSessionDelegate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\LaluneCommon\protobuf\protos\Account.proto" />

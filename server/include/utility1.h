@@ -61,8 +61,30 @@ public:
 };
 
 class file_utility
-{
-	//TODO
+{	
+public:
+	static void writeFile(const std::string& file_path, const std::string& content)
+	{
+		FILE* f = fopen(file_path.c_str(), "wb+"); //这里没有判f是否为空。如果file_path所在的文件夹不存在，会崩
+		fwrite(content.c_str(), 1, content.size(), f);
+		fclose(f);
+	}
+
+	static void readFile(const std::string& file_path, std::string& content)
+	{
+		FILE* f = fopen(file_path.c_str(), "rb+"); //这里没有判f是否为空。如果file_path所在的文件夹不存在，会崩
+#define BYTES_READ_EACH_TIME (256 * 1024)
+		content.reserve(BYTES_READ_EACH_TIME);
+		for (;;)
+		{
+			char buf[BYTES_READ_EACH_TIME];
+			size_t len = fread(buf, 1, BYTES_READ_EACH_TIME, f);
+			if (len == 0) break;
+			content.append(buf, len);
+			if (len < BYTES_READ_EACH_TIME) break;
+		}
+		fclose(f);
+	}
 };
 
 template<typename T>

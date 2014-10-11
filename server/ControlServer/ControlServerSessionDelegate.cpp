@@ -8,6 +8,7 @@
 #include "include/utility1.h"
 #include "include/utility2.h"
 #include "ControlServerConfig.h"
+#include "Config.h"
 #include <boost/asio.hpp>
 
 void ControlServerSessionDelegate::ConnectedHandler(NetLib_ServerSession_ptr sessionptr)
@@ -18,23 +19,31 @@ void ControlServerSessionDelegate::ConnectedHandler(NetLib_ServerSession_ptr ses
 
 void ControlServerSessionDelegate::DisconnectedHandler(NetLib_ServerSession_ptr sessionptr)
 {
-	//只要维护server2session就好，servers_info和server_groups另有超时事件维护
-	server2session.erase(*(IPPort*)sessionptr->GetAttachedData());
-	delete (IPPort*)sessionptr->GetAttachedData();
+	int attached_data = sessionptr->GetAttachedData();
+	if (attached_data) //如果为0，则说明在发Hello以前
+	{
+		//只要维护server2session就好，servers_info和server_groups另有超时事件维护
+		server2session.erase(*(IPPort*)attached_data);
+		delete (IPPort*)sessionptr->GetAttachedData();
+	}
 }
 
 void ControlServerSessionDelegate::RecvKeepAliveHandler(NetLib_ServerSession_ptr sessionptr)
 {
 	//刷新超时时间
-	IPPort ip_port = *(IPPort*)sessionptr->GetAttachedData();
-	auto info_it = servers_info.find(ip_port);
-	if (info_it == servers_info.end())
+	int attached_data = sessionptr->GetAttachedData();
+	if (attached_data) //如果为0，则说明在发Hello以前
 	{
-		LOGEVENTL("ERROR", "a server exist in session2server, but not in servers_info. " << log_::n("ip") << utility2::toIPs(ip_port.first) << log_::n("port") << ip_port.second);
-	}
-	else
-	{
-		info_it->second->refresh();
+		IPPort ip_port = *(IPPort*)attached_data;
+		auto info_it = servers_info.find(ip_port);
+		if (info_it == servers_info.end())
+		{
+			LOGEVENTL("ERROR", "a server exist in session2server, but not in servers_info. " << log_::n("ip") << utility2::toIPs(ip_port.first) << log_::n("port") << ip_port.second);
+		}
+		else
+		{
+			info_it->second->refresh();
+		}
 	}
 }
 
@@ -45,6 +54,29 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 	{
 		switch (SERVER_MSG_TYPE(data))
 		{
+		case MSG_TYPE_CONTROL_SERVER_INITIALIZE:
+			{
+				common::Initialize init;
+				if (ParseMsg(data, init))
+				{
+					//取对应的配置文件，发给他
+
+					common::RefreshConfig rc;
+					rc.set_server_type(init.server_type());
+					for (auto kvp : configs)
+					{
+						if (kvp.first.first == init.server_type())
+						{
+							common::ConfigFile* file = rc.add_file();
+							file->set_file_name(kvp.first.second);
+							file->set_content(*kvp.second);
+						}
+					}
+													   
+					ReplyMsg(sessionptr, MSG_TYPE_REFRESH_CONFIG, rc);
+				}												   
+			}
+			break;
 		case MSG_TYPE_CONTROL_SERVER_SAY_HELLO:
 			{
 				common::Hello hello;
@@ -153,25 +185,39 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 					auto it_group = server_groups.find(rc.server_type());
 					if (it_group != server_groups.end())
 					{
-						LOGEVENTL("INFO", "new config, " << _ln("server_type") << rc.server_type() << _ln("file_name") << rc.file_name());
-						//写一份作为历史
-
-						//存到当前文件
-
-						//发给相关各服务
-						rc.clear_server_type();
-						for (auto it_server = it_group->second->begin(); it_server != it_group->second->end(); ++it_server)
+						for (int i = 0; i < rc.file_size(); ++i)
 						{
-							auto it_session = server2session.find(*it_server);
-							if (it_session != server2session.end())
+							LOGEVENTL("INFO", "new config, " << _ln("server_type") << rc.server_type() << _ln("file_name") << rc.file(i).file_name());
+
+							writeConfig(rc.server_type(), rc.file(i).file_name(), rc.file(i).content());
+
+							//发给相关各服务
+							rc.clear_server_type();
+							for (auto it_server = it_group->second->begin(); it_server != it_group->second->end(); ++it_server)
 							{
-								ReplyMsg(it_session->second, MSG_TYPE_REFRESH_CONFIG, rc);
+								auto it_session = server2session.find(*it_server);
+								if (it_session != server2session.end())
+								{
+									ReplyMsg(it_session->second, MSG_TYPE_REFRESH_CONFIG, rc);
+								}
 							}
 						}
 					}
 				}
 			}
-				break;
+			break;
+		case MSG_TYPE_CONTROL_SERVER_FETCH_CONFIG_REQUEST:
+			{
+				control_server::FetchConfigRequest fc;
+				if (ParseMsg(data, fc))
+				{
+					common::ConfigFile cf;
+					cf.set_file_name(fc.file_name());
+					cf.set_content(*readConfig(fc.server_type(), fc.file_name()));
+					ReplyMsg(sessionptr, MSG_TYPE_CONTROL_SERVER_FETCH_CONFIG_RESPONSE, cf);
+				}
+			}
+			break;
 		case MSG_TYPE_CONTROL_SERVER_CMD:
 			if (sessionptr->GetRemoteIP() == "127.0.0.1")
 			{

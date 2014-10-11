@@ -11,3 +11,9 @@ message CommandResult
 	required string result	= 1;
 	repeated uint32 params	= 2;
 }
+
+message FetchConfigRequest
+{
+	optional uint32 server_type	= 1;
+	required string file_name	= 2;
+}

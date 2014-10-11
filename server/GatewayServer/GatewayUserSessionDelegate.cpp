@@ -48,7 +48,7 @@ void GatewayUserSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr sess
 				{
 					common::HeaderEx ex;
 					char* send_buf;
-					if (server_type == SERVER_TYPE_VERSION_SERVER || server_type == SERVER_TYPE_LOGIN_SERVER) //这两个服务是在登陆以前，于是要加上operation_id（否则不知道回给哪个用户）。否则的话是加user_id
+					if (server_type == SERVER_TYPE_VERSION_SERVER || server_type == SERVER_TYPE_ACCOUNT_SERVER) //这两个服务是在登陆以前，于是要加上operation_id（否则不知道回给哪个用户）。否则的话是加user_id
 					{
 						int tmp_id = sessionptr->GetAttachedData();
 						if (tmp_id == 0)
