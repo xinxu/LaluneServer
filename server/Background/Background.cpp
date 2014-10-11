@@ -50,7 +50,6 @@ int main(int argc, char* argv[])
 	fc.set_file_name("version_control.txt");
 	SendMsg2ControlServer(MSG_TYPE_CONTROL_SERVER_FETCH_CONFIG_REQUEST, fc);
 
-	UpdateVersion Up;
 	//Up = new UpdateVersion();
 	
 	//delete Up;
