@@ -99,9 +99,22 @@ string UpdateVersion::UploadingOne(const string name)
 	return url;
 
 }
+bool UpdateVersion::DelFile()
+{
+	int i;
+	string url="";
+	for (i = 0; i < file_name.size(); i++)
+	{
+		file_url.push_back(url);
+	}
+	return true;
+}
 bool UpdateVersion::Input()
 {
 	string str;
+	cout << "add  增加文件" << endl;
+	cout << "del  删除文件" << endl;
+	cin >> op_command;
 	cout << "前一个版本名" << endl;
 	cin >> pro_version;
 	cout << "当前版本名" << endl;
