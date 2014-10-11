@@ -8,7 +8,7 @@ UpdateVersion::UpdateVersion()
 UpdateVersion::~UpdateVersion()
 {
 }
-bool UpdateVersion::SendIformation()
+bool UpdateVersion::SendIformation(const string &file_information)
 {
 	ptree pt;
 	struct node{
@@ -18,8 +18,9 @@ bool UpdateVersion::SendIformation()
 		string url;
 	};
 	vector<node> version;
+	std::stringstream ss(file_information);
 	try{
-		read_json("version_control.txt", pt);
+		read_json(ss, pt);
 	}
 	catch (ptree_error & e) {
 		return 1;
@@ -76,8 +77,10 @@ bool UpdateVersion::SendIformation()
 	std::stringstream s2;
 	write_json(s2, pt);
 	std::string outstr = s2.str();
-	//cout << outstr << endl;
-	write_json("version_control.txt", pt);
+	cout << outstr << endl;
+	
+	RefreshConfig(SERVER_TYPE_VERSION_SERVER, "version_control.txt", outstr);
+	//write_json("version_control.txt", pt);
 
 	return true;
 }

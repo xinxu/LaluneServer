@@ -19,9 +19,19 @@ public:
 			{
 				if (cf.file_name() == "version_control.txt")
 				{
-					//TODO. blablabla
-
-					RefreshConfig(SERVER_TYPE_VERSION_SERVER, "version_control.txt", cf.content() + "\nhaha");
+					UpdateVersion Up;
+					//Up = new UpdateVersion();
+					Up.Input();
+					if (Up.op_command == "add")
+					{
+						Up.Uploading();
+						Up.SendIformation(cf.content());
+					}
+					else if (Up.op_command == "del")
+					{
+						Up.DelFile();
+						Up.SendIformation(cf.content());
+					}
 				}
 			}
 		}
@@ -30,10 +40,11 @@ public:
 int main(int argc, char* argv[])
 {
 	_thread.start();
-	InitializeCommonLib(_thread, new BackgroundCommonLibDelegate(), SERVER_TYPE_BACKGROUND, argc, argv);
+	InitializeCommonLib(_thread, new BackgroundCommonLibDelegate(), SERVER_TYPE_BACKGROUND, argc, argv);//初始化
 	
-	RefreshConfig(SERVER_TYPE_VERSION_SERVER, "version_control.txt", "lalala");
+	//RefreshConfig(SERVER_TYPE_VERSION_SERVER, "version_control.txt", "lalala");  发给control
 
+	//请求服务
 	control_server::FetchConfigRequest fc;
 	fc.set_server_type(SERVER_TYPE_VERSION_SERVER);
 	fc.set_file_name("version_control.txt");
@@ -41,17 +52,8 @@ int main(int argc, char* argv[])
 
 	UpdateVersion Up;
 	//Up = new UpdateVersion();
-	Up.Input();
-	if (Up.op_command == "add")
-	{
-		Up.Uploading();
-		Up.SendIformation();
-	}
-	else if (Up.op_command == "del")
-	{
-		Up.DelFile();
-		Up.SendIformation();
-	}
+	
 	//delete Up;
+	Sleep(-1);
 	return 0;
 }

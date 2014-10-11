@@ -19,7 +19,7 @@ class UpdateVersion
 public:
 	UpdateVersion();
 	~UpdateVersion();
-	bool SendIformation();//发送信息给controlserver
+	bool SendIformation(const string &file_information);//发送信息给controlserver
 	bool Uploading();//上传全部文件
 	string UploadingOne(const string name);//上传一个文件，返回url
 	bool Input();
