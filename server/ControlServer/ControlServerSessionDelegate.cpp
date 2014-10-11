@@ -8,8 +8,8 @@
 #include "include/utility1.h"
 #include "include/utility2.h"
 #include "ControlServerConfig.h"
+#include "Config.h"
 #include <boost/asio.hpp>
-#include "include/ptime2.h"
 
 void ControlServerSessionDelegate::ConnectedHandler(NetLib_ServerSession_ptr sessionptr)
 {
@@ -45,80 +45,6 @@ void ControlServerSessionDelegate::RecvKeepAliveHandler(NetLib_ServerSession_ptr
 			info_it->second->refresh();
 		}
 	}
-}
-
-//这个名字关系到配置文件的存放目录。如果名字有修改，需要把相应的目录也做修改。
-std::string GetServerTypeWrittenName(int server_type)
-{
-	switch (server_type)
-	{
-	case SERVER_TYPE_GATEWAY_SERVER:
-		return "gateway";
-	case SERVER_TYPE_VERSION_SERVER:
-		return "version_server";
-	case SERVER_TYPE_ACCOUNT_SERVER:
-			return "account_server";
-	case SERVER_TYPE_BASIC_INFO_SERVER:
-		return "basic_info_server";
-	case SERVER_TYPE_LEAGUE_SERVER:
-		return "league_server";
-	case SERVER_TYPE_NOTICE_SERVER:
-		return "notice_server";
-	case SERVER_TYPE_RANK_SERVER:
-		return "rank_server";
-	case SERVER_TYPE_ASYNC_BATTLE_SERVER:
-		return "async_battle_server";
-	case SERVER_TYPE_REPLAY_SERVER:
-		return "replay_server";
-	case SERVER_TYPE_STAT_SERVER:
-		return "stat_server";
-	case SERVER_TYPE_AUTO_MATCH_SERVER:
-		return "auto_match_server";
-	case SERVER_TYPE_SYNC_BATTLE_SERVER:
-		return "sync_battle_server";
-	case SERVER_TYPE_CONTROL_SERVER:
-		return "control_server";
-	case SERVER_TYPE_BACKGROUND:
-		return "background";
-	default:
-		return "default";
-	}
-}
-
-std::map<std::pair<int, std::string>, std::string*> configs;
-
-std::string* readConfig(int server_type, const std::string& file_name)
-{
-	auto it_config = configs.find(std::make_pair(server_type, file_name));
-	if (it_config != configs.end())
-	{
-		return it_config->second;
-	}
-
-	//如果内存里没有就再读一遍
-	std::string* content = new std::string();
-	file_utility::readFile("configs/" + GetServerTypeWrittenName(server_type) + "/" + file_name, *content);
-	configs.insert(std::make_pair(std::make_pair(server_type, file_name), content));
-	return content;
-}
-
-void writeConfig(int server_type, const std::string& file_name, const std::string& content)
-{
-	//写一份作为历史
-	file_utility::writeFile("configs/" + GetServerTypeWrittenName(server_type) +
-		"/[" + time_utility::ptime_to_string4(boost::posix_time::microsec_clock::local_time()) + "] " + file_name, content);
-
-	//存到当前文件
-	file_utility::writeFile("configs/" + GetServerTypeWrittenName(server_type) + "/" + file_name, content);
-
-	//存到内存map
-	auto it_config = configs.find(std::make_pair(server_type, file_name));
-	if (it_config != configs.end())
-	{
-		delete it_config->second;
-	}
-
-	configs[std::make_pair(server_type, file_name)] = new std::string(content);	
 }
 
 //RecvFinishHandler一旦返回，data的内容就会被释放

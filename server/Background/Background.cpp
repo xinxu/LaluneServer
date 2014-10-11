@@ -32,6 +32,8 @@ int main(int argc, char* argv[])
 	_thread.start();
 	InitializeCommonLib(_thread, new BackgroundCommonLibDelegate(), SERVER_TYPE_BACKGROUND, argc, argv);
 	
+	RefreshConfig(SERVER_TYPE_VERSION_SERVER, "version_control.txt", "lalala");
+
 	control_server::FetchConfigRequest fc;
 	fc.set_server_type(SERVER_TYPE_VERSION_SERVER);
 	fc.set_file_name("version_control.txt");
