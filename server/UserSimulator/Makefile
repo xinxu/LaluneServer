@@ -1,7 +1,7 @@
 CC = g++
 AR = ar
 
-USERHEADERS := -iquote../ -iquote../include/
+USERHEADERS := -iquote../ -iquote../../../LaluneCommon/3rdparty/protobuf/src/ -iquote../ -iquote../../3rdparty/boost/ -iquote../../../LaluneCommon/include -iquote../../../LaluneCommon/protobuf -iquote../ServerCommonLib -iquote../protobuf -iquote../../../LaluneCommon/protobuf/protos/out
 OTHERHEADERS := -I/usr/local/include/boost/
 DEFINES := -D_STATIC_NETLIB_
 LIBPATH := -L/usr/local/lib/
@@ -15,13 +15,13 @@ DEBUG := NO
 ifeq (YES, $(DEBUG))
 	DEFINES += -D_DEBUG
 	CXXFLAGS += -g
-	USRLIBS += ../Log/libLog_d.a ../NetLib/libNetLib_d.a
-	prog := NetLib_Client_SimpleSample_d
+	USRLIBS += ../Log/libLog_d.a ../NetLib/libNetLib_d.a ../ServerCommonLib/libServerCommon_d.a
+	prog := UserSimulator_d
 	cfgName := Debug
 else
 	CXXFLAGS += -g -O3
-	USRLIBS += ../Log/libLog.a ../NetLib/libNetLib.a
-	prog := NetLib_Client_SimpleSample
+	USRLIBS += ../Log/libLog.a ../NetLib/libNetLib.a ../ServerCommonLib/libServerCommon.a
+	prog := UserSimulator
 	cfgName := Release
 endif
 
@@ -31,7 +31,7 @@ CXXFLAGS += $(USERHEADERS) $(DEFINES)
 MMCXXFLAGS := $(CXXFLAGS)
 CXXFLAGS += $(OTHERHEADERS)
 
-srcs := NetLib_Client_Sample.cpp
+srcs := $(wildcard *.cpp) ../../../LaluneCommon/protobuf/protos/out/Version.pb.cc
 
 todep = $(cfgName)/$(basename $(notdir $(1))).d
 toobj = $(cfgName)/$(basename $(notdir $(1))).o
