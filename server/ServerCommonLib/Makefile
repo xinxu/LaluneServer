@@ -1,7 +1,7 @@
 CC = g++
 AR = ar
 
-USERHEADERS := -iquote./ -iquote../
+USERHEADERS := -iquote./ -iquote../../../LaluneCommon/3rdparty/protobuf/src/ -iquote../NetLib/ -iquote../ -iquote../protobuf/ -iquote../../../LaluneCommon/include/
 OTHERHEADERS := -I/usr/local/include/boost/
 DEFINES := -D_STATIC_NETLIB_
 
@@ -12,11 +12,11 @@ DEBUG := NO
 ifeq (YES, $(DEBUG))
 	DEFINES += -D_DEBUG
 	CXXFLAGS += -g
-	prog := libNetLib_d.a
+	prog := libServerCommon_d.a
 	cfgName := Debug
 else
 	CXXFLAGS += -g -O3
-	prog := libNetLib.a
+	prog := libServerCommon.a
 	cfgName := Release
 endif
 
@@ -24,7 +24,7 @@ CXXFLAGS += $(USERHEADERS) $(DEFINES)
 MMCXXFLAGS := $(CXXFLAGS)
 CXXFLAGS += $(OTHERHEADERS)
 
-srcs := $(wildcard *.cpp)
+srcs := $(wildcard *.cpp) ../protobuf/commonlib/CommonLib.pb.cc
 
 todep = $(cfgName)/$(basename $(notdir $(1))).d
 toobj = $(cfgName)/$(basename $(notdir $(1))).o
