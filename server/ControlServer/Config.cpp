@@ -57,11 +57,7 @@ std::string* readConfig(int server_type, const std::string& file_name)
 		return it_config->second;
 	}
 
-	//如果内存里没有就再读一遍
-	std::string* content = new std::string();
-	file_utility::readFile("configs/" + GetServerTypeWrittenName(server_type) + "/" + file_name, *content);
-	configs.insert(std::make_pair(std::make_pair(server_type, file_name), content));
-	return content;
+	return nullptr;
 }
 
 void writeConfig(int server_type, const std::string& file_name, const std::string& content)
