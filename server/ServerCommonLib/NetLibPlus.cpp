@@ -9,11 +9,11 @@
 #include <boost/thread/locks.hpp>
 #include "Log/Log.h"
 
-ioservice_thread* __thread;
+ioservice_thread* _thread;
 
 void _initialize_thread(class ioservice_thread* thread)
 {
-	__thread = thread;
+	_thread = thread;
 }
 
 typedef struct tag_delegate_and_flag
@@ -62,7 +62,7 @@ void try_start_a_client(const NetLibPlus_ServerInfo& ServerInfo) //±ØÐëÔÚËøÄÚµ÷Ó
 		}
 		
 		it->second->InitializeDelegate(delegate_to_use.delegateptr);
-		it->second->ResetClient(ServerInfo.IP, ServerInfo.port, __thread, delegate_to_use.flags);
+		it->second->ResetClient(ServerInfo.IP, ServerInfo.port, _thread, delegate_to_use.flags);
 	}
 	else
 	{
