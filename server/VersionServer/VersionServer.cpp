@@ -22,7 +22,7 @@ class VersionServerCommonLibDelegate : public CommonLibDelegate
 public:
 	void onConfigInitialized()
 	{
-		server = NetLib_NewServer<VersionServerSessionDelegate>(&thread);
+		server = NetLib_NewServer<VersionServerSessionDelegate>(&_thread);
 
 		//可以不指定端口 TODO (主要是内部端口)
 		if (!server->StartTCP(VERSION_SERVER_PORT, 1, 120)) //端口，线程数，超时时间
