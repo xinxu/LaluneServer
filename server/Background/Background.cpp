@@ -4,6 +4,7 @@
 #include "controlserver/ControlServer.pb.h"
 #include "ioservice_thread.h"
 #include "UpdateVersion.h"
+#include "Log/Log.h"
 
 ioservice_thread _thread;
 
@@ -28,6 +29,11 @@ public:
 				}
 			}
 		}
+		else if (msg_type == MSG_TYPE_REFRESH_CONFIG_RESPONSE)
+		{
+			//refresh success
+			LOGEVENTL("INFO", "refresh success");
+		}
 	}
 };
 int main(int argc, char* argv[])
@@ -35,7 +41,7 @@ int main(int argc, char* argv[])
 	_thread.start();
 	InitializeCommonLib(_thread, new BackgroundCommonLibDelegate(), SERVER_TYPE_BACKGROUND, argc, argv);//初始化
 	
-	//RefreshConfig(SERVER_TYPE_VERSION_SERVER, "version_control.txt", "lalala");  发给control
+	//RefreshConfig(SERVER_TYPE_VERSION_SERVER, "version_control.txt", "lalala");  //发给control
 
 	//请求服务
 	control_server::FetchConfigRequest fc;

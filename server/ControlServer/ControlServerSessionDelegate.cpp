@@ -202,6 +202,7 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 								}
 							}
 						}
+						ReplyEmptyMsg(sessionptr, MSG_TYPE_REFRESH_CONFIG_RESPONSE);
 					}
 				}
 			}
