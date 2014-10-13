@@ -115,19 +115,34 @@ bool UpdateVersion::DelFile()
 bool UpdateVersion::Input()
 {
 	string str;
-	ifstream fin("command.txt");
-	//cout << "add  增加文件" << endl;
-	//cout << "del  删除文件" << endl;
-	fin >> op_command;
-	//cout << "前一个版本名" << endl;
-	fin >> pro_version;
-	//cout << "当前版本名" << endl;
-	fin >> now_version;
-	//cout << "输入文件名，输入end结束" << endl;
-	while (!fin.eof())
+	ptree pt;
+	try{
+		read_json("input.txt", pt);
+	}
+	catch (ptree_error & e) {
+	}
+	ptree pt_add;
+	now_version = pt.get<string>("to");
+	pro_version = pt.get<string>("from");
+	pt_add = pt.get_child("A");
+	BOOST_FOREACH(boost::property_tree::ptree::value_type &v, pt_add)
 	{
-		fin >> str;
-		file_name.push_back(str);
+		file_name.push_back(v.second.get<string>("name"));
+		file_url.push_back(v.second.get<string>("path"));
+	}
+	ptree pt_del;
+	pt_del = pt.get_child("D");
+	BOOST_FOREACH(boost::property_tree::ptree::value_type &v1, pt_del)
+	{
+		file_name.push_back(v1.second.get<string>(""));
+		file_url.push_back("");
+	}
+	
+	int i;
+	
+	for (i = 0; i < file_url.size(); i++)
+	{
+		cout << file_url[i] << endl;
 	}
 	return true;
 	
