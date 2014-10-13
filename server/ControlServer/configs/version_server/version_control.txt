@@ -23,6 +23,12 @@
             "next_ve": "6.0",
             "path": "xxxx|xxxxxx|xxxxxxxxx|",
             "url": "|||"
+        },
+        {
+            "now_ve": "v1.0",
+            "next_ve": "v1.3",
+            "path": "2.txt|dir\/3.txt|1.txt|",
+            "url": "http:\/\/180.150.178.148\/v1.3\/2.tar.gz|http:\/\/180.150.178.148\/v1.3\/dir-3.tar.gz||"
         }
     ]
 }

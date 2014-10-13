@@ -78,7 +78,7 @@ bool UpdateVersion::SendIformation(const string &file_information)
 	std::stringstream s2;
 	write_json(s2, pt);
 	std::string outstr = s2.str();
-	//cout << outstr << endl;
+	cout << outstr << endl;
 	
 	RefreshConfig(SERVER_TYPE_VERSION_SERVER, "version_control.txt", outstr);
 	//write_json("version_control.txt", pt);

@@ -33,6 +33,8 @@ public:
 		{
 			//refresh success
 			LOGEVENTL("INFO", "refresh success");
+
+			exit(0);
 		}
 	}
 };
