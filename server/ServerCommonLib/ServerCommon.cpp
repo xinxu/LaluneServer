@@ -210,6 +210,18 @@ void UpdateCorrespondingServer(uint64_t user_id, const common::CorrespondingServ
 }
 */ 
 
+void ReplyEmptyMsg(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type)
+{
+	char* send_buf = new char[SERVER_MSG_HEADER_BASE_SIZE];
+	SERVER_MSG_LENGTH(send_buf) = SERVER_MSG_HEADER_BASE_SIZE;		// 数据包的字节数（含msghead）
+	SERVER_MSG_TYPE(send_buf) = msg_type;
+	SERVER_MSG_ERROR(send_buf) = 0;
+	SERVER_MSG_HEADER_EX_LEN(send_buf) = 0;
+	SERVER_MSG_RESERVED(send_buf) = 0;
+
+	sessionptr->SendAsync(send_buf);
+}
+
 void RefreshConfig(int server_type, const std::string& file_name, const std::string& content)
 {
 	common::RefreshConfig rc;

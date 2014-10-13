@@ -219,6 +219,8 @@ bool SendMsg(uint32_t msg_type, uint32_t op_id, uint8_t error_code, P proto) //°
 }
 */
 
+void ReplyEmptyMsg(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type); //°üÍ·ÎÞUserID£¬ÇÒÎÞ¾ßÌåProtobufµÄ°æ±¾
+
 template<typename P>
 void ReplyMsg(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, P& proto) //°üÍ·ÎÞUserIDµÄ°æ±¾
 {
