@@ -143,7 +143,9 @@ void initializeConfigs()
 				continue;
 			}
 
-			readConfig(server_type, file_name);
+			std::string* content = new std::string();
+			file_utility::readFile("configs/" + GetServerTypeWrittenName(server_type) + "/" + file_name, *content);
+			configs.insert(std::make_pair(std::make_pair(server_type, file_name), content));
 		}
 	}
 	else
