@@ -16,12 +16,12 @@ ifeq (YES, $(DEBUG))
 	DEFINES += -D_DEBUG
 	CXXFLAGS += -g
 	USRLIBS += ../Log/libLog_d.a ../NetLib/libNetLib_d.a ../ServerCommonLib/libServerCommon_d.a
-	prog := VersionServer_d
+	prog := CombatServer_d
 	cfgName := Debug
 else
 	CXXFLAGS += -g -O3
 	USRLIBS += ../Log/libLog.a ../NetLib/libNetLib.a ../ServerCommonLib/libServerCommon.a
-	prog := VersionServer
+	prog := CombatServer
 	cfgName := Release
 endif
 
@@ -31,7 +31,7 @@ CXXFLAGS += $(USERHEADERS) $(DEFINES)
 MMCXXFLAGS := $(CXXFLAGS)
 CXXFLAGS += $(OTHERHEADERS)
 
-srcs := $(wildcard *.cpp) ../../../LaluneCommon/protobuf/protos/out/Version.pb.cc
+srcs := $(wildcard *.cpp) ../../../LaluneCommon/protobuf/protos/out/Battle.pb.cc
 
 todep = $(cfgName)/$(basename $(notdir $(1))).d
 toobj = $(cfgName)/$(basename $(notdir $(1))).o
