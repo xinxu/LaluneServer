@@ -29,6 +29,7 @@ void VersionServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 						
 								  if (ParseMsgOpId(data, op_id, now_version))
 								  {
+									  LOGEVENTL("INFO", "now_version " << now_version);
 									  int i, j;
 									//  cout << version_infor.size() << endl;
 									//  now_version.set_version_name("1.0");
@@ -79,6 +80,10 @@ void VersionServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 									  }*/
 									  
 									  ReplyMsgOpId(sessionptr, MSG_CHECK_VERSION_RESULT, op_id, response);
+								  }
+								  else
+								  {
+									  LOGEVENTL("info", "protobuf error");
 								  }
 						
 
