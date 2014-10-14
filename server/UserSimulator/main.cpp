@@ -8,7 +8,7 @@ extern ioservice_thread thread;
 
 std::shared_ptr<UserSimulator> us;
 
-#define GATEWAY_SERVER_DEFAULT_IP ("127.0.0.1")
+#define GATEWAY_SERVER_DEFAULT_IP ("192.168.1.43")
 #define GATEWAY_SERVER_DEFAULT_PORT (6677)
 
 void initialize()

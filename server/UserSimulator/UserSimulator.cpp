@@ -12,7 +12,7 @@
 #include "MessageTypeDef.h"
 #include "ioservice_thread.h"
 #include "Version.pb.h"
-
+#include <iostream>
 ioservice_thread thread;
 
 void UserSimulator::Connect(const std::string& ip, int port)
@@ -56,8 +56,19 @@ void UserSimulator::RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
 					<< _ln("uid") << response.uid() << _ln("pwd") << response.pwd()
 					<< _ln("errStr") << response.errstr());
 			}
+		}break;
+		case MSG_CHECK_VERSION_RESULT:
+		{
+										 lalune::CheckVersionResult  test_result;
+										 test_result.ParseFromArray(MSG_DATA(data), MSG_DATA_LEN(data));
+										 std::cout<<test_result.now_version()<<std::endl;
+										 for (int i = 0; i < test_result.file_size(); i++)
+										 {
+											 std::cout << test_result.file(i).file_path() << std::endl;
+											 std::cout << test_result.file(i).url_prefix() << std::endl;
+										 }
+										 
 		}
-			break;
 		default:
 			break;
 		}
