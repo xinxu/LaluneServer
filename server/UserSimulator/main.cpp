@@ -17,15 +17,6 @@ void initialize()
 	us->Connect(GATEWAY_SERVER_DEFAULT_IP, GATEWAY_SERVER_DEFAULT_PORT);
 }
 
-void _register()
-{
-	us->Register();
-}
-void _version()
-{
-	us->Version();
-}
-
 int main(int argc, char* argv[])
 {
 	//Check Memory Leaks
@@ -45,9 +36,7 @@ int main(int argc, char* argv[])
 
 	thread.start();
 
-	auto us = std::make_shared<UserSimulator>();
 	thread.get_ioservice().post(boost::bind(&initialize));
-	thread.get_ioservice().post(boost::bind(&_register));
 	
 	//TODO： 要支持跑简易脚本
 
@@ -61,11 +50,11 @@ int main(int argc, char* argv[])
 		}
 		else if (tmp == "register")
 		{
-			thread.get_ioservice().post(boost::bind(&_register));
+			thread.get_ioservice().post(boost::bind(&UserSimulator::Register, us));
 		}
-		else if (tmp == "version")
+		else if (tmp.compare(0, 7, "version") == 0)
 		{
-			thread.get_ioservice().post(boost::bind(&_version));
+			thread.get_ioservice().post(boost::bind(&UserSimulator::Version, us, tmp.substr(8)));
 		}
 		else
 		{

@@ -28,9 +28,10 @@ void UserSimulator::Register()
 	auto_register.set_nick(utility1::generateRandomString(6));
 	SendMsg(MSG_TYPE_AUTOREGISTER_REQUEST, auto_register);
 }
-void UserSimulator::Version()
+void UserSimulator::Version(const std::string& version_name)
 {
 	lalune::CheckVersion now_version;
+	now_version.set_version_name(version_name);
 	//now_version.set_nick(utility1::generateRandomString(6));
 	SendMsg(MSG_CHECK_VERSION, now_version);
 }
