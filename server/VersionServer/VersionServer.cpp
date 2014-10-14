@@ -47,10 +47,10 @@ public:
 	{
 		LOGEVENTL("CONFIG_REFRESH", _ln("file_name") << file_name << _ln("content") << content);
 		//TODO blablabla 收到配置文件
-
+		std::stringstream ss(content);
 		ptree pt;
 		try{
-			read_json(content, pt);
+			read_json(ss, pt);
 		}
 		catch (ptree_error & e) {
 		}
