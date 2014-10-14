@@ -70,7 +70,7 @@ void try_start_a_client(const NetLibPlus_ServerInfo& ServerInfo) //±ØÐëÔÚËøÄÚµ÷Ó
 	}
 }
 
-void _NetLibPlus_UpdateServerInfo(int ServerID, int Ip, int Port, int ServerType)
+void _NetLibPlus_UpdateServerInfo(int ServerID, uint32_t Ip, int Port, int ServerType)
 {
 	if (NetLibPlus_Clients_Shutdown) return;
 
@@ -103,7 +103,7 @@ void _NetLibPlus_UpdateServerInfo(int ServerID, int Ip, int Port, int ServerType
 	LOGEVENTL("NetLib_Info", log_::n("ServerInfoSize") << serverinfos.size() << log_::n("ServerID") << ServerID << log_::n("IP") << utility2::toIPs(Ip) << log_::n("Port") << Port);
 }
 
-void _NetLibPlus_RemoveServerInfo(int ServerID, int Ip, int Port, int ServerType)
+void _NetLibPlus_RemoveServerInfo(int ServerID, uint32_t Ip, int Port, int ServerType)
 {
 	if (NetLibPlus_Clients_Shutdown) return;
 

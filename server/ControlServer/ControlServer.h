@@ -19,7 +19,7 @@ extern bool during_startup;
 
 extern AvailableIDs<uint32_t> available_ids;
 
-typedef std::pair<int, int> IPPort;
+typedef std::pair<uint32_t, int> IPPort;
 
 void ServerTimeout(IPPort ip_port, const boost::system::error_code& error);
 
