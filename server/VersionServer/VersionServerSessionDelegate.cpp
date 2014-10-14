@@ -29,7 +29,7 @@ void VersionServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 						
 								  if (ParseMsgOpId(data, op_id, now_version))
 								  {
-									  LOGEVENTL("INFO", "now_version " << now_version);
+							
 									  int i, j;
 									//  cout << version_infor.size() << endl;
 									//  now_version.set_version_name("1.0");
@@ -71,7 +71,7 @@ void VersionServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 										  file_temp->set_file_path(temp_node->first);
 										  file_temp->set_url_prefix(temp_node->second);
 									  }
-									 
+									  LOGEVENTL("INFO", _ln("now_version") << now_version.version_name()<< _ln("new_version")<<response.now_version());
 									
 									/*  for (i = 0; i < response.file_size(); i++)
 									  {
