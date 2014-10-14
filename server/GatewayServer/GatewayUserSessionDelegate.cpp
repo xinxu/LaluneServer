@@ -26,6 +26,8 @@ void GatewayUserSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr sess
 {
 	if (MSG_LENGTH(data) >= MSG_HEADER_BASE_SIZE)
 	{
+		LOGEVENTL("DEBUG", "Receive from user: " << log_::bytes_display(data, MSG_LENGTH(data)));
+
 		int server_type = MSG_TYPE(data) / MSG_TYPE_SPAN;
 		switch (server_type)
 		{

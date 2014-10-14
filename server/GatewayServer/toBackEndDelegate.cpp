@@ -39,6 +39,8 @@ void toBackEndDelegate::RecvFinishHandler(std::shared_ptr<NetLibPlus_Client> cli
 
 				memcpy(MSG_DATA(send_buf), SERVER_MSG_DATA(data), SERVER_MSG_DATA_LEN(data));
 
+				LOGEVENTL("DEBUG", "Reply to user: " << log_::bytes_display(send_buf, len));
+
 				user_session->SendAsync(send_buf);
 			}
 			else
