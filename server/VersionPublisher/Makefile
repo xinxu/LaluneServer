@@ -15,12 +15,12 @@ DEBUG := NO
 ifeq (YES, $(DEBUG))
 	DEFINES += -D_DEBUG
 	CXXFLAGS += -g
-	USRLIBS += ../Log/libLog_d.a ../NetLib/libNetLib_d.a ../ServerCommonLib/libServerCommon_d.a
+	USRLIBS += ../Log/libLog_d.a ../ServerCommonLib/libServerCommon_d.a ../NetLib/libNetLib_d.a
 	prog := VersionPublisher_d
 	cfgName := Debug
 else
 	CXXFLAGS += -g -O3
-	USRLIBS += ../Log/libLog.a ../NetLib/libNetLib.a ../ServerCommonLib/libServerCommon.a
+	USRLIBS += ../Log/libLog.a ../ServerCommonLib/libServerCommon.a ../NetLib/libNetLib.a
 	prog := VersionPublisher
 	cfgName := Release
 endif
