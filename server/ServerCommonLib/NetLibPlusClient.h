@@ -7,7 +7,8 @@ class NetLibPlus_Client_Imp : public NetLibPlus_Client, public NetLib_Client_Del
 {
 private:
 	std::shared_ptr<NetLibPlus_Client_Delegate> m_delegate;
-	int m_ServerID, m_RemoteServerIP, m_RemoteServerPort;
+	int m_ServerID, m_RemoteServerPort;
+	uint32_t m_RemoteServerIP;
 	NetLib_Client_ptr m_client;
 	std::queue< netlib_packet > failed_data_queue;
 
