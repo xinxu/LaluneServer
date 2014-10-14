@@ -103,7 +103,7 @@ void GenerateAddressList(common::AddressList& list)
 	}
 }
 
-void StartupTimer(const boost::system::error_code& error)
+void StartupTimer(int something, const boost::system::error_code& error)
 {
 	if (!error)
 	{
@@ -114,6 +114,11 @@ void StartupTimer(const boost::system::error_code& error)
 		common::AddressList addr_list;
 		GenerateAddressList(addr_list);
 		informAddressInfo(addr_list, MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REFRESH);
+
+	}
+	else
+	{
+
 	}
 }
 
@@ -170,8 +175,9 @@ int main(int argc, char* argv[])
 
 	LOGEVENTL("Info", "Server Start Success. " << _ln("Port") << CONTROL_SERVER_DEFAULT_PORT);
 
-	boost::asio::deadline_timer timer(thread.get_ioservice(), boost::posix_time::milliseconds(config.startup_ms));
-	timer.async_wait(boost::bind(&StartupTimer, boost::asio::placeholders::error));
+	/*boost::asio::deadline_timer timer(thread.get_ioservice());
+	timer.expires_from_now(boost::posix_time::milliseconds(config.startup_ms));
+	timer.async_wait(boost::bind(&StartupTimer, boost::asio::placeholders::error));*/     //timer
 
 	for (;;)
 	{
