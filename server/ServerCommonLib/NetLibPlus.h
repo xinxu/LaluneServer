@@ -9,9 +9,9 @@
 void _initialize_thread(class ioservice_thread* thread);
 
 //该方法通常由ServerCommonLib内部调用，也可以自行调用
-void _NetLibPlus_UpdateServerInfo(int ServerID, int Ip, int Port, int ServerType);
+void _NetLibPlus_UpdateServerInfo(int ServerID, uint32_t Ip, int Port, int ServerType);
 
-void _NetLibPlus_RemoveServerInfo(int ServerID, int Ip, int Port, int ServerType);
+void _NetLibPlus_RemoveServerInfo(int ServerID, uint32_t Ip, int Port, int ServerType);
 
 class NetLibPlus_Client
 {
@@ -52,7 +52,7 @@ std::shared_ptr<NetLibPlus_Client> NetLibPlus_get_next_Client(const char* Server
 
 typedef struct tagNetLibPlus_ServerInfo
 {
-	int IP;
+	uint32_t IP;
 	int port;
 	int ServerType;
 	int ServerID;	
