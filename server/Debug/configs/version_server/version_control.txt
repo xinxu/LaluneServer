@@ -1,34 +1,40 @@
 {
     "root": [
         {
-            "now_ve": "1.1",
-            "next_ve": "1.2",
-            "path": "xxx.txt|",
-            "url": "xxx|"
+            "now_ve": "init",
+            "next_ve": "1014t",
+            "path": "config\/aura\/aura.csv|config\/aura\/aura.json|config\/aura\/aura.plist|config\/aura\/aura.xlsx|config\/battle.xml|config\/buff\/buff.csv|config\/buff\/buff.json|config\/buff\/buff.plist|config\/buff\/buff.xlsx|config\/bullet_effect.plist|config\/character\/character.csv|config\/character\/character.json|config\/character\/character.plist|config\/character\/character.xlsx|config\/convert.bat|config\/convert.py|config\/normalattack\/normalattack.csv|config\/normalattack\/normalattack.json|config\/normalattack\/normalattack.plist|config\/normalattack\/normalattack.xlsx|config\/servant\/servant.csv|config\/servant\/servant.json|config\/servant\/servant.plist|config\/servant\/servant.xlsx|config\/skill\/skill.csv|config\/skill\/skill.json|config\/skill\/skill.plist|config\/skill\/skill.xlsx|",
+            "url": "http:\/\/192.168.1.43\/update\/1014t\/config-aura-aura.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-aura-aura.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-aura-aura.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-aura-aura.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-battle.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-buff-buff.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-buff-buff.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-buff-buff.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-buff-buff.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-bullet_effect.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-character-character.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-character-character.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-character-character.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-character-character.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-convert.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-convert.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-normalattack-normalattack.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-normalattack-normalattack.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-normalattack-normalattack.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-normalattack-normalattack.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-servant-servant.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-servant-servant.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-servant-servant.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-servant-servant.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-skill-skill.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-skill-skill.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-skill-skill.tar.gz|http:\/\/192.168.1.43\/update\/1014t\/config-skill-skill.tar.gz|"
         },
         {
-            "now_ve": "2.0",
-            "next_ve": "3.0",
-            "path": "123.xx|234.xx|",
-            "url": "||"
+            "now_ve": "1014t",
+            "next_ve": "1014",
+            "path": "",
+            "url": ""
         },
-        {
-            "now_ve": "3.0",
-            "next_ve": "4.0",
-            "path": "axx|",
-            "url": "|"
-        },
-        {
-            "now_ve": "5.0",
-            "next_ve": "6.0",
-            "path": "xxxx|xxxxxx|xxxxxxxxx|",
-            "url": "|||"
-        },
-        {
-            "now_ve": "v1.0",
-            "next_ve": "v1.3",
-            "path": "2.txt|dir\/3.txt|1.txt|",
-            "url": "http:\/\/180.150.178.148\/v1.3\/2.tar.gz|http:\/\/180.150.178.148\/v1.3\/dir-3.tar.gz||"
-        }
+	{
+		"now_ve": "1014",
+		"next_ve": "cyj",
+		"path": "index.htm|",
+		"url": "http://192.168.1.43/update/3.zip|"
+	},
+	{
+		"now_ve": "cyj",
+		"next_ve": "cyj_del",
+		"path": "index.htm|",
+		"url": "|"
+	},
+	{
+		"now_ve": "cyj_del",
+		"next_ve": "cyj3",
+		"path": "wow/index.htm|",
+		"url": "http://192.168.1.43/update/4.zip|"
+	},
+	{
+		"now_ve": "cyj3",
+		"next_ve": "big",
+		"path": "py.mp3|",
+		"url": "http://192.168.1.43/update/py.zip|"
+	}
     ]
 }

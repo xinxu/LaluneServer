@@ -237,6 +237,10 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 					{
 						LOGEVENTL("Info", "Reload config: " << config_file_path);
 						thread.get_ioservice().post(boost::bind(&LoadConfig));
+						
+						control_server::CommandResult cmd_result;
+						cmd_result.set_result("will reload now..");
+						ReplyMsg(sessionptr, MSG_TYPE_CONTROL_SERVER_CMD_RESULT, cmd_result);
 					}
 					else
 					{
