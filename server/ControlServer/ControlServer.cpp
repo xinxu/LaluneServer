@@ -175,9 +175,9 @@ int main(int argc, char* argv[])
 
 	LOGEVENTL("Info", "Server Start Success. " << _ln("Port") << CONTROL_SERVER_DEFAULT_PORT);
 
-	/*boost::asio::deadline_timer timer(thread.get_ioservice());
+	boost::asio::deadline_timer timer(thread.get_ioservice());
 	timer.expires_from_now(boost::posix_time::milliseconds(config.startup_ms));
-	timer.async_wait(boost::bind(&StartupTimer, boost::asio::placeholders::error));*/     //timer
+	timer.async_wait(boost::bind(&StartupTimer, boost::asio::placeholders::error));
 
 	for (;;)
 	{
