@@ -1,0 +1,19 @@
+﻿生成启动时间为 2014/10/14 12:11:37。
+     1>项目“E:\work\LaluneServer\server\CombatServer\CombatServer.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\..\LaluneCommon\3rdparty\protobuf\src\ /IE:\work\LaluneServer\server\CombatServer\..\ /I..\..\3rdparty\boost\ /IE:\work\LaluneServer\server\CombatServer\..\..\..\LaluneCommon\include /IE:\work\LaluneServer\server\CombatServer\..\..\..\LaluneCommon\protobuf /IE:\work\LaluneServer\server\CombatServer\..\ServerCommonLib /IE:\work\LaluneServer\server\CombatServer\..\protobuf /IE:\work\LaluneServer\server\CombatServer\..\..\..\LaluneCommon\protobuf\protos\out /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D _STATIC_NETLIB_ /D _WIN32_WINNT=0x0501 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt CombatServer.cpp
+         CombatServer.cpp
+     1>e:\work\lalunecommon\include\messagetypedef.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\work\LaluneServer\server\Debug\CombatServer.exe" /INCREMENTAL /NOLOGO /LIBPATH:E:\work\LaluneServer\server\CombatServer\../lib/ /LIBPATH:E:\work\LaluneServer\server\CombatServer\../../3rdparty/boost/stage/lib/ ..\..\..\LaluneCommon\3rdparty\protobuf\vsprojects\Debug\libprotobuf.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\work\LaluneServer\server\Debug\CombatServer.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\work\LaluneServer\server\Debug\CombatServer.lib" /MACHINE:X86 Debug\Battle.pb.obj
+         Debug\CombatServer.obj
+         Debug\ControlCombat.obj
+         E:\work\LaluneServer\server\lib\Logd.lib
+         E:\work\LaluneServer\server\lib\NetLibd.lib
+         E:\work\LaluneServer\server\lib\ServerCommond.lib
+         CombatServer.vcxproj -> E:\work\LaluneServer\server\Debug\CombatServer.exe
+     1>已完成生成项目“E:\work\LaluneServer\server\CombatServer\CombatServer.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:04.75

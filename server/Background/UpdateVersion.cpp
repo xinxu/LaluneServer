@@ -117,7 +117,7 @@ bool UpdateVersion::Input()
 	string str;
 	ptree pt;
 	try{
-		read_json("input.txt", pt);
+		read_json("output.json", pt);
 	}
 	catch (ptree_error & e) {
 	}
