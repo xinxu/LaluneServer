@@ -23,16 +23,9 @@ public:
 					UpdateVersion Up;
 					//Up = new UpdateVersion();
 					Up.Input();
-					if (Up.op_command == "add")
-					{
-						Up.Uploading();
-						Up.SendIformation(cf.content());
-					}
-					else if (Up.op_command == "del")
-					{
-						Up.DelFile();
-						Up.SendIformation(cf.content());
-					}
+					string str = cf.content();
+					assert(str != "");
+					Up.SendIformation(str);
 				}
 			}
 		}
@@ -40,6 +33,8 @@ public:
 		{
 			//refresh success
 			LOGEVENTL("INFO", "refresh success");
+
+			exit(0);
 		}
 	}
 };
