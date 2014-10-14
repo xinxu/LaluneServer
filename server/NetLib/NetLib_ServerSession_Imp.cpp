@@ -249,12 +249,12 @@ bool NetLib_ServerSession_Imp::SendCopyFailedHandler(const char* data_copy, void
 	return false;
 }
 
-int NetLib_ServerSession_Imp::GetAttachedData()
+long NetLib_ServerSession_Imp::GetAttachedData()
 {
 	return m_attached_data;
 }
 
-void NetLib_ServerSession_Imp::SetAttachedData(int d)
+void NetLib_ServerSession_Imp::SetAttachedData(long d)
 {
 	m_attached_data = d;
 }

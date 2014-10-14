@@ -153,8 +153,8 @@ public:
 	virtual std::string GetLocalAddress() = 0;
 
 	//这两方法里面都是没进锁的，后加的。。
-	virtual int GetAttachedData() = 0; //默认值是0
-	virtual void SetAttachedData(int d) = 0;
+	virtual long GetAttachedData() = 0; //默认值是0
+	virtual void SetAttachedData(long d) = 0;
 };
 
 #define NetLib_ServerSession_ptr std::shared_ptr<NetLib_ServerSession_Interface>
