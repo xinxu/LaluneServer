@@ -1,12 +1,12 @@
 CC = g++
 AR = ar
 
-USERHEADERS := -iquote../ -iquote../include/
+USERHEADERS := -iquote../ -iquote../../../LaluneCommon/3rdparty/protobuf/src/ -iquote../ -iquote../../3rdparty/boost/ -iquote../../../LaluneCommon/include -iquote../../../LaluneCommon/protobuf -iquote../ServerCommonLib -iquote../protobuf -iquote../../../LaluneCommon/protobuf/protos/out -iquote../include/
 OTHERHEADERS := -I/usr/local/include/boost/
 DEFINES := -D_STATIC_NETLIB_
 LIBPATH := -L/usr/local/lib/
 LIBS :=
-USRLIBS :=
+USRLIBS := 
 
 CXXFLAGS := -std=c++0x
 
@@ -15,13 +15,13 @@ DEBUG := NO
 ifeq (YES, $(DEBUG))
 	DEFINES += -D_DEBUG
 	CXXFLAGS += -g
-	USRLIBS += ../Log/libLog_d.a ../NetLib/libNetLib_d.a
-	prog := NetLib_Client_SimpleSample_d
+	USRLIBS += ../Log/libLog_d.a ../ServerCommonLib/libServerCommon_d.a ../NetLib/libNetLib_d.a
+	prog := VersionPublisher_d
 	cfgName := Debug
 else
 	CXXFLAGS += -g -O3
-	USRLIBS += ../Log/libLog.a ../NetLib/libNetLib.a
-	prog := NetLib_Client_SimpleSample
+	USRLIBS += ../Log/libLog.a ../ServerCommonLib/libServerCommon.a ../NetLib/libNetLib.a
+	prog := VersionPublisher
 	cfgName := Release
 endif
 
@@ -31,7 +31,7 @@ CXXFLAGS += $(USERHEADERS) $(DEFINES)
 MMCXXFLAGS := $(CXXFLAGS)
 CXXFLAGS += $(OTHERHEADERS)
 
-srcs := NetLib_Client_Sample.cpp
+srcs := $(wildcard *.cpp) ../protobuf/controlserver/ControlServer.pb.cc
 
 todep = $(cfgName)/$(basename $(notdir $(1))).d
 toobj = $(cfgName)/$(basename $(notdir $(1))).o
@@ -40,21 +40,20 @@ objs := $(foreach s,$(srcs),$(call toobj,$(s)))
 deps := $(foreach s,$(srcs),$(call todep,$(s)))
 
 #must recursively call make, because include instruction is static.
-default : dep 
+default : dep
 	make target --no-print-directory
 
 refproj :
 	make -C ../NetLib/
 	make -C ../Log/
+	make -C ../ServerCommonLib/
 
 all : refproj default
 
 target : $(prog)
 
-$(prog) : $(objs) $(USRLIBS)
+$(prog) : $(objs) $(USRLIBS)	
 	$(CC) $(LIBPATH) $(objs) -o$(prog) $(USRLIBS) $(LIBS)
-
-#../NetLib/libNetLib.a :
 
 -include $(deps)
 

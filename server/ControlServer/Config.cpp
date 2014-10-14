@@ -8,6 +8,7 @@
 #include "ControlServerConfig.h"
 #include "Log/Log.h"
 #include "MessageTypeDef.h"
+#include "include/ToAbsolutePath.h"
 
 //这个名字关系到配置文件的存放目录。如果名字有修改，需要把相应的目录也做修改。
 std::string GetServerTypeWrittenName(int server_type)
@@ -63,11 +64,11 @@ std::string* readConfig(int server_type, const std::string& file_name)
 void writeConfig(int server_type, const std::string& file_name, const std::string& content)
 {
 	//写一份作为历史
-	file_utility::writeFile("configs/" + GetServerTypeWrittenName(server_type) +
-		"/[" + time_utility::ptime_to_string4(boost::posix_time::microsec_clock::local_time()) + "] " + file_name, content);
+	file_utility::writeFile(utility3::ToAbsolutePath("configs/" + GetServerTypeWrittenName(server_type) +
+		"/[" + time_utility::ptime_to_string4(boost::posix_time::microsec_clock::local_time()) + "] " + file_name), content);
 
 	//存到当前文件
-	file_utility::writeFile("configs/" + GetServerTypeWrittenName(server_type) + "/" + file_name, content);
+	file_utility::writeFile(utility3::ToAbsolutePath("configs/" + GetServerTypeWrittenName(server_type) + "/" + file_name), content);
 
 	//存到内存map
 	auto it_config = configs.find(std::make_pair(server_type, file_name));
@@ -113,6 +114,9 @@ void writeConfig(int server_type, const std::string& file_name, const std::strin
 
 void initializeConfigs()
 {
+	//改成绝对路径
+	config.server_configs_list_file = utility3::ToAbsolutePath(config.server_configs_list_file);
+
 	std::string content;
 	file_utility::readFile(config.server_configs_list_file, content);
 
@@ -144,7 +148,7 @@ void initializeConfigs()
 			}
 
 			std::string* content = new std::string();
-			file_utility::readFile("configs/" + GetServerTypeWrittenName(server_type) + "/" + file_name, *content);
+			file_utility::readFile(utility3::ToAbsolutePath("configs/" + GetServerTypeWrittenName(server_type) + "/" + file_name), *content);
 			configs.insert(std::make_pair(std::make_pair(server_type, file_name), content));
 		}
 	}

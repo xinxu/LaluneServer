@@ -90,8 +90,8 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.cc" />
     <ClCompile Include="..\protobuf\controlserver\ControlServer.pb.cc" />
-    <ClCompile Include="Background.cpp" />
     <ClCompile Include="UpdateVersion.cpp" />
+    <ClCompile Include="VersionPublisher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Log\Log.vcxproj">
@@ -99,6 +99,9 @@
     </ProjectReference>
     <ProjectReference Include="..\NetLib\NetLib.vcxproj">
       <Project>{38aaa34f-5fc1-4d42-a385-1ef6b380a5b5}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ServerCommonLib\ServerCommonLib.vcxproj">
+      <Project>{9f15547d-8152-4790-8519-8f12725cacf3}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -19,7 +19,7 @@ void ControlServerSessionDelegate::ConnectedHandler(NetLib_ServerSession_ptr ses
 
 void ControlServerSessionDelegate::DisconnectedHandler(NetLib_ServerSession_ptr sessionptr)
 {
-	int attached_data = sessionptr->GetAttachedData();
+	long attached_data = sessionptr->GetAttachedData();
 	if (attached_data) //如果为0，则说明在发Hello以前
 	{
 		//只要维护server2session就好，servers_info和server_groups另有超时事件维护
@@ -31,7 +31,7 @@ void ControlServerSessionDelegate::DisconnectedHandler(NetLib_ServerSession_ptr 
 void ControlServerSessionDelegate::RecvKeepAliveHandler(NetLib_ServerSession_ptr sessionptr)
 {
 	//刷新超时时间
-	int attached_data = sessionptr->GetAttachedData();
+	long attached_data = sessionptr->GetAttachedData();
 	if (attached_data) //如果为0，则说明在发Hello以前
 	{
 		IPPort ip_port = *(IPPort*)attached_data;
@@ -85,7 +85,7 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 					IPPort* ip_port = new IPPort(sessionptr->GetRemoteIPu(), hello.my_listening_port());
 
 					//维护session到地址的映射
-					sessionptr->SetAttachedData((int)ip_port);
+					sessionptr->SetAttachedData((long)ip_port);
 					server2session[*ip_port] = sessionptr;
 
 					if (hello.is_server_start() == 1)

@@ -5,6 +5,7 @@
 #include "ioservice_thread.h"
 #include "UpdateVersion.h"
 #include "Log/Log.h"
+#include <boost/asio.hpp>
 
 ioservice_thread _thread;
 
@@ -42,8 +43,6 @@ int main(int argc, char* argv[])
 {
 	_thread.start();
 	InitializeCommonLib(_thread, new BackgroundCommonLibDelegate(), SERVER_TYPE_BACKGROUND, argc, argv);//初始化
-	
-	//RefreshConfig(SERVER_TYPE_VERSION_SERVER, "version_control.txt", "lalala");  //发给control
 
 	//请求服务
 	control_server::FetchConfigRequest fc;
@@ -51,9 +50,7 @@ int main(int argc, char* argv[])
 	fc.set_file_name("version_control.txt");
 	SendMsg2ControlServer(MSG_TYPE_CONTROL_SERVER_FETCH_CONFIG_REQUEST, fc);
 
-	//Up = new UpdateVersion();
-	
-	//delete Up;
-	Sleep(-1);
+	boost::this_thread::sleep(boost::posix_time::hours(1000));
+
 	return 0;
 }

@@ -42,7 +42,7 @@ protected:
 	//SendCopyAsync直接失败(session已经断了)，就进这个方法
 	void SendCopyAsyncFailed(std::shared_ptr<NetLib_ServerSession_Imp> keep_alive, const char* data_copy, void* pHint);
 
-	int m_attached_data;
+	long m_attached_data;
 
 public:	
 	virtual ~NetLib_ServerSession_Imp(); //don't directly delete
@@ -59,8 +59,8 @@ public:
 
 	std::string GetLocalAddress();
 
-	int GetAttachedData(); 
-	void SetAttachedData(int d);
+	long GetAttachedData(); 
+	void SetAttachedData(long d);
 
 	void Disconnect();
 };
