@@ -12,7 +12,8 @@ std::shared_ptr<UserSimulator> us[100];
 #define GATEWAY_SERVER_DEFAULT_PORT (6677)
 
 
-#define COMBATE_SERVER_DEFAULT_IP ("192.168.1.16")//("180.150.178.148")
+//#define COMBATE_SERVER_DEFAULT_IP ("192.168.1.16")//("180.150.178.148")
+#define COMBATE_SERVER_DEFAULT_IP ("180.150.178.148")//("180.150.178.148")
 #define COMBATE_SERVER_DEFAULT_PORT (5000)
 /*void initialize()
 {

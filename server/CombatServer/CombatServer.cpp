@@ -42,7 +42,7 @@ int main()
 	_thread.start();
 	server4user = NetLib_NewServer<CombatServerSessionDelegate>(&_thread);
 	//超时时间得可以中途重设 TODO
-	if (!server4user->StartTCP(5000, 1, 25)) //端口，线程数，超时时间  （客户端现在是15秒发个心跳包）
+	if (!server4user->StartTCP(5000, 1, 25, NETLIB_FLAG_TCP_NODELAY)) //端口，线程数，超时时间  （客户端现在是15秒发个心跳包）
 	{
 		LOGEVENTL("Error", "Server4User Start Failed !");
 		exit(0);
