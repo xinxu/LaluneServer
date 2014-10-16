@@ -84,12 +84,14 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.h" />
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.h" />
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
     <ClInclude Include="UserSimulator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.cc" />
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.cc" />
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.cc" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="UserSimulator.cpp" />
