@@ -1,192 +1,62 @@
-﻿#include <boost/asio.hpp>
-#include <boost/bind.hpp>
-#include "NetLib/NetLib.h"
-#include <memory.h>
-#include <google/protobuf/stubs/common.h>
-#include <boost/thread.hpp>
-#include "interactive_input.h"
-#include "utility1.h"
+﻿#include "MessageTypeDef.h"
+#include "ServerCommon.h"
+#include "commonlib/CommonLib.pb.h"
+#include "controlserver/ControlServer.pb.h"
+#include "ioservice_thread.h"
 #include "Log/Log.h"
+#include <boost/asio.hpp>
+#include "utility1.h"
 
-#define _TEST_SIZE (4000)
+ioservice_thread _thread;
 
-NetLib_Client_ptr client;
-
-class MyClientDelegate : public NetLib_Client_Delegate
+class AdminCommonLibDelegate : public CommonLibDelegate
 {
 public:
-	void ConnectedHandler(NetLib_Client_ptr clientptr)
+	void onReceiveOtherDataFromControlServer(int msg_type, const char* data, int data_len)
 	{
-		LOGEVENTL("Info", "connected");	
-	}
-
-	void RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
-	{
-		//data在RecvFinishHandler返回后会释放
-
-		uint32_t size = *(uint32_t*)data;
-		
-		if (size >= 8)
-		{						
-			uint32_t cmd = *(uint32_t*)(data + 4);
-
-			bool correct = true;
-			unsigned int i;
-			for (i = 8; i < size; ++i)
+		if (msg_type == MSG_TYPE_CONTROL_SERVER_CMD_RESULT)
+		{
+			control_server::CommandResult cr;
+			if (cr.ParseFromArray(data, data_len))
 			{
-				if (data[i] != i % cmd) 
-				{
-					correct = false;
-					break;
-				}
-			}
-			if (correct)
-			{
-				printf("data correct.\n");
-			}
-			else
-			{
-				printf("data WRONG!!!! (%d)\n", i);
+				LOGEVENTL("RESULT", cr.result());
 			}
 		}
-		else
-		{
-			printf("size less than 8.\n");
-		}
-	}
-
-	void ReconnectedHandler(NetLib_Client_ptr clientptr)
-	{	
-		//重连成功
-		LOGEVENTL("Info", "reconnect success !");
-	}
-
-	void ReconnectFailedHandler(NetLib_Client_ptr clientptr, bool& will_continue_reconnect)
-	{
-		if (will_continue_reconnect)
-		{
-			printf("reconnecting...\n");
-		}
-	}
-
-	void DisconnectedHandler(NetLib_Client_ptr clientptr, NetLib_Error error, int error_code, bool& will_reconnect)
-	{
-		if (error == close_by_local)
-		{
-			LOGEVENTL("Info", "disconnected by local.");
-		}
-		else
-		{
-			LOGEVENTL("Info", "disconnect: " << error << ", " << error_code);
-			//will_reconnect = false;
-			if (will_reconnect)
-			{
-				printf("reconnecting..\n");
-			}
-		}
-	}
-
-	bool SendFailedHandler(NetLib_Client_ptr clientptr, const char* data, void* pHint)
-	{
-		LOGEVENTL("Debug", "send failed. data: " << hex((std::size_t)data) << ", Hint: " << (std::size_t)pHint);
-		//delete[] data; 返回true了就不用delete
-		return true;
-	}
-
-	bool SendCopyFailedHandler(NetLib_Client_ptr clientptr, const char* data_copy, void* pHint)
-	{
-		LOGEVENTL("Debug", "send copy failed. data: " << hex((std::size_t)data_copy) << ", Hint: " << (std::size_t)pHint);
-		return true;
 	}
 };
 
-char destip[100] = "127.0.0.1";
-int tcpport = 2345;
+void SendCmd(std::string cmd_line)
+{
+	std::vector<std::string> args;
+	utility1::split(cmd_line, args, ' ');
+
+	control_server::Command cmd;
+	cmd.set_command_name(args[0]);
+	for (unsigned int i = 1; i < args.size(); ++i)
+	{
+		cmd.add_args(args[i]);
+	}
+	SendMsg2ControlServer(MSG_TYPE_CONTROL_SERVER_CMD, cmd);
+}
 
 int main(int argc, char* argv[])
-{ 
-		//Check Memory Leaks
-#if WIN32
-	// Get the current bits
-	int tmp = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
+{
+	_thread.start();
+	InitializeCommonLib(_thread, new AdminCommonLibDelegate(), SERVER_TYPE_BACKGROUND, argc, argv);//初始化
 
-	tmp |= _CRTDBG_LEAK_CHECK_DF;
-
-	// Set the new bits
-	_CrtSetDbgFlag(tmp);
-#endif
-
-	NETLIB_CHECK_VERSION;
-
-    LogInitializeLocalOptions(true, true, "client_simple_sample");
-	
-	client = NetLib_NewClient(std::shared_ptr<MyClientDelegate>(new MyClientDelegate));
-	
 	for (;;)
 	{
-		std::string tmp;
-		if (! std::getline(std::cin, tmp))
-		{			
+		std::string cmd_line;
+		if (!std::getline(std::cin, cmd_line))
+		{
 			boost::this_thread::sleep(boost::posix_time::hours(1));
 			continue;
 		}
 
-		if (tmp == "new")
-		{
-			client = NetLib_NewClient(std::shared_ptr<MyClientDelegate>(new MyClientDelegate));
-		}
-		else if (tmp == "dest")
-		{
-			strcpy(destip, InputStr("DestinationIP", "10.0.18.31").c_str());
-		}
-		else if (tmp == "tcpport")
-		{
-			tcpport = Input("TCPPort", 1248);
-		}
-		else if (tmp == "wait")
-		{
-			NetLib_Clients_WaitForStop();
-			LOGEVENTL("Debug", "Wait Finish");
-		}
-		else if (tmp == "exit")
-		{
-			break;
-		}
-		else if (tmp == "connect")
-		{
-			client->ConnectAsyncTCP(destip, tcpport);
-		}
-		else if (tmp == "release")
-		{
-			client->Disconnect(); //用完client得记得调用Disconnect方法，他才会正确释放。
-			client.reset();		//使得外部没有引用计数
-			printf("release success\n");
-		}
-		else if (tmp == "send")
-		{
-			int i;
-
-			char* data = new char[_TEST_SIZE];
-			for (i = 8; i < _TEST_SIZE; ++i)
-			{
-				data[i] = i % 77; //用于测试正确性
-			}
-			*(uint32_t*)data = _TEST_SIZE; //最头上4字节是整个包的长度(包含这4个字节)
-			*(uint32_t*)(data + 4) = 77; 
-			client->SendAsync(data);
-		}
-		else if (tmp == "close")
-		{
-			client->Disconnect(); //Disconnect之后会触发DisconnectedHandler, error为0
-		}
-		else
-		{
-			printf("client_sample: unrecognized command: %s\n", tmp.c_str());
-		}
+		_thread.get_ioservice().post(boost::bind(&SendCmd, cmd_line));
 	}
-	
-	google_lalune::protobuf::ShutdownProtobufLibrary(); 
+
+	google_lalune::protobuf::ShutdownProtobufLibrary();
 
 	return 0;
 }
-

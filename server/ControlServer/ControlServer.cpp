@@ -93,6 +93,8 @@ void LoadConfig()
 		config.timeout_sec = ini.GetLongValue("ControlServer", "TimeoutSec", _CONFIG_DEFAULT_TIMEOUT_SEC); //这个参数目前只在启动的时候有效，Reload了也不管用
 		config.server_configs_list_file = ini.GetValue("ControlServer", "ServerConfigsListFile", "configs/list.json"); //这个参数目前只在启动的时候有效，Reload了也不管用
 	}
+
+	initializeConfigs();
 }
 
 void GenerateAddressList(common::AddressList& list)
@@ -103,7 +105,7 @@ void GenerateAddressList(common::AddressList& list)
 	}
 }
 
-void StartupTimer(int something, const boost::system::error_code& error)
+void StartupTimer(const boost::system::error_code& error)
 {
 	if (!error)
 	{
@@ -114,11 +116,6 @@ void StartupTimer(int something, const boost::system::error_code& error)
 		common::AddressList addr_list;
 		GenerateAddressList(addr_list);
 		informAddressInfo(addr_list, MSG_TYPE_CONTROL_SERVER_ADDR_INFO_REFRESH);
-
-	}
-	else
-	{
-
 	}
 }
 
@@ -152,8 +149,6 @@ int main(int argc, char* argv[])
 	Initialize();
 
 	LoadConfig();
-
-	initializeConfigs();
 
 	NetLib_Server_ptr server = NetLib_NewServer<ControlServerSessionDelegate>(&thread);
 

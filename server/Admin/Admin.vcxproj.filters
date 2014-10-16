@@ -18,10 +18,21 @@
     <ClInclude Include="..\NetLib\NetLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\protobuf\controlserver\ControlServer.pb.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Admin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\protobuf\controlserver\ControlServer.pb.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\protobuf\controlserver\ControlServer.proto">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
