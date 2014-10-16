@@ -192,6 +192,8 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 							writeConfig(rc.server_type(), rc.file(i).file_name(), rc.file(i).content());
 
 							//发给相关各服务
+
+							//TOMODIFY
 							rc.clear_server_type();
 							for (auto it_server = it_group->second->begin(); it_server != it_group->second->end(); ++it_server)
 							{
@@ -236,10 +238,36 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 					if (cmd.command_name() == "reload")
 					{
 						LOGEVENTL("Info", "Reload config: " << config_file_path);
-						thread.get_ioservice().post(boost::bind(&LoadConfig));
+						LoadConfig();
 						
 						control_server::CommandResult cmd_result;
-						cmd_result.set_result("will reload now..");
+						cmd_result.set_result("config reloaded.");
+						ReplyMsg(sessionptr, MSG_TYPE_CONTROL_SERVER_CMD_RESULT, cmd_result);
+					}
+					else if (cmd.command_name() == "refresh_config")
+					{
+						LOGEVENTL("Info", "Refresh all the configs to these servers");
+						initializeConfigs();
+
+						common::RefreshConfig rc;
+						rc.set_server_type(init.server_type());
+
+						//TOMODIFY
+
+						for (auto kvp : configs)
+						{
+							if (kvp.first.first == init.server_type())
+							{
+								common::ConfigFile* file = rc.add_file();
+								file->set_file_name(kvp.first.second);
+								file->set_content(*kvp.second);
+							}
+						}
+
+						ReplyMsg(sessionptr, MSG_TYPE_REFRESH_CONFIG, rc);
+
+						control_server::CommandResult cmd_result;
+						cmd_result.set_result("all the configs have been refreshed.");
 						ReplyMsg(sessionptr, MSG_TYPE_CONTROL_SERVER_CMD_RESULT, cmd_result);
 					}
 					else

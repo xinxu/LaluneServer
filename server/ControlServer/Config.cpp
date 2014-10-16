@@ -125,6 +125,9 @@ void initializeConfigs()
 
 	if (document.IsArray())
 	{
+		unInitializeConfigs();
+		configs.clear();
+
 		for (int i = 0; i < document.Size(); ++i)
 		{
 			int server_type;
