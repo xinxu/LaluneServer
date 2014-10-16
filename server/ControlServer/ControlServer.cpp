@@ -91,10 +91,8 @@ void LoadConfig()
 	{
 		config.startup_ms = ini.GetLongValue("ControlServer", "StartupMS", _CONFIG_DEFAULT_STARTUP_MS); //这个参数目前只在启动的时候有效，Reload了也不管用
 		config.timeout_sec = ini.GetLongValue("ControlServer", "TimeoutSec", _CONFIG_DEFAULT_TIMEOUT_SEC); //这个参数目前只在启动的时候有效，Reload了也不管用
-		config.server_configs_list_file = ini.GetValue("ControlServer", "ServerConfigsListFile", "configs/list.json"); //这个参数目前只在启动的时候有效，Reload了也不管用
+		config.server_configs_list_file = ini.GetValue("ControlServer", "ServerConfigsListFile", "configs/list.json");
 	}
-
-	initializeConfigs();
 }
 
 void GenerateAddressList(common::AddressList& list)
@@ -149,6 +147,8 @@ int main(int argc, char* argv[])
 	Initialize();
 
 	LoadConfig();
+
+	initializeConfigs();
 
 	NetLib_Server_ptr server = NetLib_NewServer<ControlServerSessionDelegate>(&thread);
 

@@ -1,7 +1,7 @@
 CC = g++
 AR = ar
 
-USERHEADERS := -iquote../ -iquote../../../LaluneCommon/3rdparty/protobuf/src/ -iquote../ -iquote../../3rdparty/boost/ -iquote../../../LaluneCommon/include -iquote../../../LaluneCommon/protobuf -iquote../ServerCommonLib -iquote../protobuf -iquote../../../LaluneCommon/protobuf/protos/out
+USERHEADERS := -iquote../ -iquote../../../LaluneCommon/3rdparty/protobuf/src/ -iquote../ -iquote../../3rdparty/boost/ -iquote../../../LaluneCommon/include -iquote../../../LaluneCommon/protobuf -iquote../ServerCommonLib -iquote../protobuf -iquote../../../LaluneCommon/protobuf/protos/out -iquote../include
 OTHERHEADERS := -I/usr/local/include/boost/
 DEFINES := -D_STATIC_NETLIB_
 LIBPATH := -L/usr/local/lib/
@@ -31,7 +31,7 @@ CXXFLAGS += $(USERHEADERS) $(DEFINES)
 MMCXXFLAGS := $(CXXFLAGS)
 CXXFLAGS += $(OTHERHEADERS)
 
-srcs := $(wildcard *.cpp) ../../../LaluneCommon/protobuf/protos/out/Version.pb.cc
+srcs := $(wildcard *.cpp) $(wildcard ../../../LaluneCommon/protobuf/protos/out/*.pb.cc)
 
 todep = $(cfgName)/$(basename $(notdir $(1))).d
 toobj = $(cfgName)/$(basename $(notdir $(1))).o
