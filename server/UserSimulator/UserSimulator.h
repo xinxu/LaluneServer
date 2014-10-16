@@ -2,7 +2,18 @@
 
 #include "NetLib/NetLib.h"
 #include "MessageTypeDef.h"
-
+#include "NetLib\NetLib.h"
+#include "include/ioservice_thread.h"
+#include "MessageTypeDef.h"
+#include <boost/asio.hpp>
+#include <boost/thread.hpp>
+#include "Log\Log.h"
+#include <google/protobuf/stubs/common.h>
+#include "Battle.pb.h"
+#include "include/ptime2.h"
+#include <map>
+#include <vector>
+#include <boost/bind.hpp>
 class UserSimulator : public NetLib_Client_Delegate, public std::enable_shared_from_this<UserSimulator>
 {
 protected:
@@ -37,4 +48,13 @@ public:
 	void Connect(const std::string& ip, int port);
 	void Register();
 	void Version(const std::string& version_name);
+	void Combat(int id);
+	void StartupTimer(const boost::system::error_code& error);
+	UserSimulator();
+private:
+	boost::asio::deadline_timer timer1;
+	int p_id;
+	std::vector<uint64_t> ping[10];
+	std::string section[10];
+	uint64_t time_begin, time_now;
 };

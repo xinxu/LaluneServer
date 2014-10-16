@@ -7,11 +7,14 @@
     <ClInclude Include="..\NetLib\NetLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ControlCombat.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.h">
       <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="OneGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CombateCommon.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -29,11 +32,11 @@
     <ClCompile Include="CombatServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ControlCombat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.cc">
       <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="OneGame.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
