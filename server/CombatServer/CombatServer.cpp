@@ -1,12 +1,12 @@
-#include "CombateCommon.h"
+ï»¿#include "CombateCommon.h"
 #include "OneGame.h"
 ioservice_thread _thread;
 OneGame game0;
 class CombatServerSessionDelegate : public NetLib_ServerSession_Delegate
 {
 private:
-	map<int,OneGame> all_game;//ÓÎÏ·idµ½¾ßÌåÓÎÏ·Ó³Éä
-	map<NetLib_ServerSession_ptr, int> ptr_to_gameid;//Á¬½Óµ½ÓÎÏ·id µÄÓ³Éä
+	map<int,OneGame> all_game;//æ¸¸æˆidåˆ°å…·ä½“æ¸¸æˆæ˜ å°„
+	map<NetLib_ServerSession_ptr, int> ptr_to_gameid;//è¿æ¥åˆ°æ¸¸æˆid çš„æ˜ å°„
 public:
 	//void ConnectedHandler(NetLib_ServerSession_ptr sessionptr);
 	void DisconnectedHandler(NetLib_ServerSession_ptr sessionptr, NetLib_Error error, int inner_error_code)
@@ -41,12 +41,16 @@ int main()
 	shared_ptr <NetLib_Server_Interface> server4user;
 	_thread.start();
 	server4user = NetLib_NewServer<CombatServerSessionDelegate>(&_thread);
-	//³¬Ê±Ê±¼äµÃ¿ÉÒÔÖĞÍ¾ÖØÉè TODO
-	if (!server4user->StartTCP(5000, 1, 25)) //¶Ë¿Ú£¬Ïß³ÌÊı£¬³¬Ê±Ê±¼ä  £¨¿Í»§¶ËÏÖÔÚÊÇ15Ãë·¢¸öĞÄÌø°ü£©
+	//è¶…æ—¶æ—¶é—´å¾—å¯ä»¥ä¸­é€”é‡è®¾ TODO
+	if (!server4user->StartTCP(5000, 1, 25)) //ç«¯å£ï¼Œçº¿ç¨‹æ•°ï¼Œè¶…æ—¶æ—¶é—´  ï¼ˆå®¢æˆ·ç«¯ç°åœ¨æ˜¯15ç§’å‘ä¸ªå¿ƒè·³åŒ…ï¼‰
 	{
 		LOGEVENTL("Error", "Server4User Start Failed !");
 		exit(0);
 	}
+#ifdef WIN32
 	Sleep(-1);
+#else
+	sleep(-1);
+#endif
 	exit(0);
 }
