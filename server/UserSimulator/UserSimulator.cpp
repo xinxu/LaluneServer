@@ -157,6 +157,7 @@ void UserSimulator::RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
 								 else if ((time_ping / 1000) < 100)
 								 {
 									 ping[5].push_back(time_ping);
+									 std::cout << time_ping<<std::endl;
 								 }
 								 else if ((time_ping / 1000) < 200)
 								 {
