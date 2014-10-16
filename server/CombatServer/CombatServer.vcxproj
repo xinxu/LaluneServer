@@ -90,7 +90,8 @@
     <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
-    <ClInclude Include="ControlCombat.h" />
+    <ClInclude Include="CombateCommon.h" />
+    <ClInclude Include="OneGame.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Log\Log.vcxproj">
@@ -106,7 +107,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.cc" />
     <ClCompile Include="CombatServer.cpp" />
-    <ClCompile Include="ControlCombat.cpp" />
+    <ClCompile Include="OneGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\LaluneCommon\protobuf\protos\Battle.proto" />
