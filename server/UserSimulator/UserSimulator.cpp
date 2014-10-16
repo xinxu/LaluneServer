@@ -29,7 +29,7 @@ int tm2;*/
 void UserSimulator::Connect(const std::string& ip, int port)
 {
 	_client = NetLib_NewClient(shared_from_this(), &thread);
-	_client->ConnectAsync(ip.c_str(), port, NETLIB_CLIENT_ENABLE_RECONNECT_ON_FIRST_CONNECT | NETLIB_CLIENT_FLAG_KEEP_ALIVE);
+	_client->ConnectAsync(ip.c_str(), port, NETLIB_CLIENT_ENABLE_RECONNECT_ON_FIRST_CONNECT | NETLIB_CLIENT_FLAG_KEEP_ALIVE | NETLIB_FLAG_TCP_NODELAY);
 	_client->SetKeepAliveIntervalSeconds(30);
 }
 
@@ -116,6 +116,9 @@ void UserSimulator::RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
 		}break;
 		case MSG_TYPE_SYNC_BATTLE_GAME_ACTION:
 		{
+												 uint32_t empty = 4;
+												 _client->SendCopyAsync((const char*)(&empty));
+												 
 						 lalune::GameActions actions;
 						 lalune::GameAction action;
 						 int i;
@@ -162,6 +165,7 @@ void UserSimulator::RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
 								 else
 								 {
 									 ping[7].push_back(time_ping);
+									 std::cout << time_ping/1000 << std::endl;
 								 }
 							 }
 						 }
