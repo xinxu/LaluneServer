@@ -4,8 +4,8 @@
 #include <memory.h>
 #include <google/protobuf/stubs/common.h>
 #include <boost/thread.hpp>
-#include "interactive_input.h"
-#include "utility1.h"
+#include "include/interactive_input.h"
+#include "include/utility1.h"
 #include "Log/Log.h"
 #include "UserSimulator.h"
 #include "Account.pb.h"
