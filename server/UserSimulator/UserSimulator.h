@@ -57,7 +57,7 @@ private:
 	unsigned int p_id;
 	//std::vector<uint64_t> ping[10];
 #define PING_RANGE_COUNT (30)
-	int ping[PING_RANGE_COUNT + 1];
-	std::string section[PING_RANGE_COUNT + 1];
-	uint64_t time_begin, time_now;
+//	int ping[PING_RANGE_COUNT + 1];
+//	std::string section[PING_RANGE_COUNT + 1];
+//	uint64_t time_begin, time_now;
 };
