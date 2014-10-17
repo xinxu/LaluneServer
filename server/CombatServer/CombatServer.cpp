@@ -7,7 +7,7 @@
 using namespace boost::uuids;
 ioservice_thread _thread;
 //OneGame game0;
-map<uuid, OneGame*> gameid_to_onegame;//游戏id到具体游戏映射
+map<uuid, shared_ptr<OneGame>> gameid_to_onegame;//游戏id到具体游戏映射
 map<NetLib_ServerSession_ptr, uuid> ptr_to_gameid;//连接到游戏id 的映射
 uuid now_game_id;
 //list<OneGame*> game_all;
@@ -19,12 +19,15 @@ public:
 	//void ConnectedHandler(NetLib_ServerSession_ptr sessionptr);
 	void DisconnectedHandler(NetLib_ServerSession_ptr sessionptr, NetLib_Error error, int inner_error_code)
 	{
-		//cout << "asf" << endl;
+		cout << "end" << endl;
 		gameid_to_onegame[ptr_to_gameid[sessionptr]]->DelConnect(sessionptr);
-		if (gameid_to_onegame[ptr_to_gameid[sessionptr]]->client_connect.size() == 0)
+		if (gameid_to_onegame.size() != 0&&gameid_to_onegame[ptr_to_gameid[sessionptr]]->client_connect.size() == 0)
 		{
-			delete gameid_to_onegame[ptr_to_gameid[sessionptr]];
+			//OneGame *one_game_temp;
+			//one_game_temp = gameid_to_onegame[ptr_to_gameid[sessionptr]];
+			//delete gameid_to_onegame[ptr_to_gameid[sessionptr]];
 			gameid_to_onegame.erase(ptr_to_gameid[sessionptr]);
+			//delete one_game_temp;
 		}
 		ptr_to_gameid.erase(sessionptr);
 	}
@@ -35,16 +38,18 @@ public:
 		switch (MSG_TYPE(data))
 		{
 		case MSG_TYPE_SYNC_BATTLE_CONNECT_TO_GAME:
-		{												
+		{						
+													 
 				 if (gameid_to_onegame.size() == 0 || (gameid_to_onegame[now_game_id]->client_connect.size() == 6))
 				 {
 					 random_generator rgen;//随机生成器
 					 uuid u = rgen();//生成一个随机的UUID
 				//	 assert(u.version() == uuid::version_random_number_based);
 				//	 std::cout << u << endl;
-					 OneGame *one_game_temp=new OneGame();
+					 shared_ptr<OneGame> one_game_temp = std::make_shared<OneGame>();
 					 gameid_to_onegame[u] = one_game_temp;
 					 now_game_id = u;
+
 
 				 }
 				 gameid_to_onegame[now_game_id]->ConnectToGame(sessionptr, data);
@@ -53,7 +58,10 @@ public:
 		}break;
 		case MSG_TYPE_SYNC_BATTLE_GAME_ACTION:
 		{
-			  gameid_to_onegame[ptr_to_gameid[sessionptr]]->BattleGameAction(sessionptr, data);
+				if (gameid_to_onegame.count(ptr_to_gameid[sessionptr]) == 1)
+				{
+					 gameid_to_onegame[ptr_to_gameid[sessionptr]]->BattleGameAction(sessionptr, data);
+				}
 
 		}break;
 		default:

@@ -6,7 +6,7 @@
 #include <iostream>
 extern ioservice_thread thread;
 
-std::shared_ptr<UserSimulator> us[100];
+std::shared_ptr<UserSimulator> us[2000];
 
 #define GATEWAY_SERVER_DEFAULT_IP ("192.168.1.43")
 #define GATEWAY_SERVER_DEFAULT_PORT (6677)
@@ -19,10 +19,10 @@ std::shared_ptr<UserSimulator> us[100];
 	us = std::make_shared<UserSimulator>();
 	us->Connect(GATEWAY_SERVER_DEFAULT_IP, GATEWAY_SERVER_DEFAULT_PORT);
 }*/
-void initcombate()
+void initcombate(int id_num)
 {
 	int i;
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < id_num; i++)
 	{
 
 		us[i] = std::make_shared<UserSimulator>();
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 	thread.start();
 
 	//thread.get_ioservice().post(boost::bind(&initialize));
-	thread.get_ioservice().post(boost::bind(&initcombate));
+	/*thread.get_ioservice().post(boost::bind(&initcombate));*/
 	
 	//TODO： 要支持跑简易脚本
 	for (;;)
@@ -74,6 +74,8 @@ int main(int argc, char* argv[])
 			std::string str;
 			std::cin >> id_num;
 			getchar();
+			thread.get_ioservice().post(boost::bind(&initcombate,id_num));
+			Sleep(1000);
 			for (int i = 0; i < id_num;i++)
 				thread.get_ioservice().post(boost::bind(&UserSimulator::Combat, us[i],i));
 		}

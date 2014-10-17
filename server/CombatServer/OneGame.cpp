@@ -44,7 +44,7 @@ void OneGame::ConnectToGame(NetLib_ServerSession_ptr sessionptr, char *data)
 
 		const int time_space = 33;
 		timer->expires_from_now(boost::posix_time::milliseconds(time_space));
-		timer->async_wait(boost::bind(&OneGame::StartupTimer,this ,boost::asio::placeholders::error));
+		timer->async_wait(boost::bind(&OneGame::ActionsReturn, this, shared_from_this(), boost::asio::placeholders::error));
 	}
 
 }
@@ -58,7 +58,7 @@ void OneGame::BattleGameAction(NetLib_ServerSession_ptr sessionptr, char *data)
 	actions.push_back(proto_game_action);
 
 }
-void OneGame::StartupTimer(const boost::system::error_code& error)
+void OneGame::ActionsReturn(shared_ptr<OneGame> keep_alive, const boost::system::error_code& error)
 {
 	if (!error)
 	{
@@ -66,7 +66,7 @@ void OneGame::StartupTimer(const boost::system::error_code& error)
 		const int time_space = 33;
 		//boost::asio::deadline_timer timer(_thread.get_ioservice());
 		timer->expires_from_now(boost::posix_time::milliseconds(time_space));
-		timer->async_wait(boost::bind(&OneGame::StartupTimer, this, boost::asio::placeholders::error));
+		timer->async_wait(boost::bind(&OneGame::ActionsReturn, this, shared_from_this(),  boost::asio::placeholders::error));
 
 		lalune::GameActions proto_actions;
 		auto action_temp = actions.begin();

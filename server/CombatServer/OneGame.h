@@ -13,28 +13,27 @@
 #include <vector>
 #include <boost/bind.hpp>
 using namespace std; 
-class OneGame
+class OneGame : public std::enable_shared_from_this<OneGame>
 {
 public:
 	OneGame() 
 	{
-		timer = new boost::asio::deadline_timer(_thread.get_ioservice());
+		timer = std::make_shared<boost::asio::deadline_timer>(_thread.get_ioservice());
 	}
 	~OneGame()
 	{
-		delete timer;
 	}
 	void ConnectToGame(NetLib_ServerSession_ptr sessionptr, char *data);
 	void BattleGameAction(NetLib_ServerSession_ptr sessionptr, char *data);
-	void StartupTimer(const boost::system::error_code& error);
+	void ActionsReturn(shared_ptr<OneGame>, const boost::system::error_code& error);
 	void DelConnect(NetLib_ServerSession_ptr sessionptr)
 	{
 		client_connect.erase(sessionptr);
 	}
-	map<NetLib_ServerSession_ptr, int> client_connect;
+	map<NetLib_ServerSession_ptr, unsigned int> client_connect;
 	uint64_t start_time, now_time;
 	vector<lalune::GameAction> actions;
-	boost::asio::deadline_timer *timer;
+	std::shared_ptr<boost::asio::deadline_timer> timer;
 	
 private:
 

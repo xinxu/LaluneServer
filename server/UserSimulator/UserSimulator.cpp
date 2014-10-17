@@ -16,6 +16,10 @@
 #include "Battle.pb.h"
 #include "include/ptime2.h"
 #include <vector>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+using namespace boost::uuids;
 ioservice_thread thread;
 /*boost::asio::deadline_timer timer1(thread.get_ioservice());
 int p_id;
@@ -57,8 +61,11 @@ void UserSimulator::Version(const std::string& version_name)
 void UserSimulator::Combat(int id)
 {
 	lalune::ConnectToGame connect;
-	connect.set_player_uid(id);
-	p_id = id;
+	random_generator rgen;//随机生成器
+	uuid u = rgen();
+	p_id = unsigned int(*(char *)&u);
+	std::cout << p_id << std::endl;
+	connect.set_player_uid(p_id);
 	connect.set_access_token("111");
 	//now_version.set_nick(utility1::generateRandomString(6));
 	SendMsg(MSG_TYPE_SYNC_BATTLE_CONNECT_TO_GAME, connect);
@@ -84,6 +91,15 @@ void UserSimulator::StartupTimer(const boost::system::error_code& error)
 	}
 }
 //int tm = 0;
+void UserSimulator::ReconnectedHandler(NetLib_Client_ptr clientptr)
+{
+	lalune::ConnectToGame connect;
+	connect.set_player_uid(p_id);
+	connect.set_access_token("111");
+	//now_version.set_nick(utility1::generateRandomString(6));
+	SendMsg(MSG_TYPE_SYNC_BATTLE_CONNECT_TO_GAME, connect);
+
+}
 void UserSimulator::RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
 {
 	if (MSG_LENGTH(data) >= MSG_HEADER_BASE_SIZE)

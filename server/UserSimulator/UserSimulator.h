@@ -50,10 +50,11 @@ public:
 	void Version(const std::string& version_name);
 	void Combat(int id);
 	void StartupTimer(const boost::system::error_code& error);
+	void ReconnectedHandler(NetLib_Client_ptr clientptr);
 	UserSimulator();
 private:
 	boost::asio::deadline_timer timer1;
-	int p_id;
+	unsigned int p_id;
 	//std::vector<uint64_t> ping[10];
 #define PING_RANGE_COUNT (30)
 	int ping[PING_RANGE_COUNT + 1];
