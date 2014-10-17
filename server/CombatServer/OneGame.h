@@ -31,12 +31,12 @@ public:
 	{
 		client_connect.erase(sessionptr);
 	}
-	
-private:
 	map<NetLib_ServerSession_ptr, int> client_connect;
 	uint64_t start_time, now_time;
 	vector<lalune::GameAction> actions;
 	boost::asio::deadline_timer *timer;
+	
+private:
 
 };
 
