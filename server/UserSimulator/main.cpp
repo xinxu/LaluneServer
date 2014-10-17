@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 			std::cin >> id_num;
 			getchar();
 			thread.get_ioservice().post(boost::bind(&initcombate,id_num));
-			Sleep(1000);
+			sleep(1000);
 			for (int i = 0; i < id_num;i++)
 				thread.get_ioservice().post(boost::bind(&UserSimulator::Combat, us[i],i));
 		}
