@@ -54,7 +54,9 @@ public:
 private:
 	boost::asio::deadline_timer timer1;
 	int p_id;
-	std::vector<uint64_t> ping[10];
-	std::string section[10];
+	//std::vector<uint64_t> ping[10];
+#define PING_RANGE_COUNT (30)
+	int ping[PING_RANGE_COUNT + 1];
+	std::string section[PING_RANGE_COUNT + 1];
 	uint64_t time_begin, time_now;
 };

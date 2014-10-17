@@ -25,7 +25,14 @@ uint64_t time_begin, time_now;
 int tm2;*/
  UserSimulator::UserSimulator():timer1(thread.get_ioservice())
 {
+	 memset(ping, 0, sizeof(ping));
+	 for (int i = 0; i < PING_RANGE_COUNT; ++i)
+	 {
+		 section[i] = "[" + utility1::int2str(i * 10) + "ms-" + utility1::int2str((i + 1) * 10) + "ms]";
+	 }
+	 section[PING_RANGE_COUNT] = "[" + utility1::int2str(PING_RANGE_COUNT * 10) + "ms+]";
 }
+
 void UserSimulator::Connect(const std::string& ip, int port)
 {
 	_client = NetLib_NewClient(shared_from_this(), &thread);
@@ -134,62 +141,30 @@ void UserSimulator::RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
 								// std::cout << *(uint64_t*)(actions.actions(i).action_data().c_str()) << std::endl;
 								// std::cout <<(time- *(uint64_t*)(actions.actions(i).action_data().c_str())) << std:: endl;
 								 time_ping = (time - *(uint64_t*)(actions.actions(i).action_data().c_str()));
-								 if ((time_ping / 1000) < 10)
+
+								 int range = time_ping / 1000 / 10;
+
+								 if (range >= PING_RANGE_COUNT)
 								 {
-									 ping[0].push_back(time_ping);
-								 }
-								 else if ((time_ping / 1000) < 20)
-								 {
-									 ping[1].push_back(time_ping);
-								 }
-								 else if ((time_ping / 1000) < 30)
-								 {
-									 ping[2].push_back(time_ping);
-								 }
-								 else if ((time_ping / 1000) < 40)
-								 {
-									 ping[3].push_back(time_ping);
-								 }
-								 else if ((time_ping / 1000) < 50)
-								 {
-									 ping[4].push_back(time_ping);
-								 }
-								 else if ((time_ping / 1000) < 100)
-								 {
-									 ping[5].push_back(time_ping);
-									 std::cout << time_ping<<std::endl;
-								 }
-								 else if ((time_ping / 1000) < 200)
-								 {
-									 ping[6].push_back(time_ping);
+									 ping[PING_RANGE_COUNT] ++;
 								 }
 								 else
 								 {
-									 ping[7].push_back(time_ping);
-									 std::cout << time_ping/1000 << std::endl;
+									 ping[range] ++;
 								 }
 							 }
 						 }
 						 time_now = ptime2(boost::posix_time::microsec_clock::local_time()).get_u64();
-						 section[0] = "0-10     ";
-						 section[1] = "10-20    ";
-						 section[2] = "20-30    ";
-						 section[3] = "30-40    ";
-						 section[4] = "40-50    ";
-						 section[5] = "50-100   ";
-						 section[6] = "100-200  ";
-						 section[7] = ">200     ";
 
 						 if ((time_now - time_begin) / 1000000 >= 30 )
 						 {
-
 							 std::cout << p_id << std::endl;
 							 LOGEVENTL("info","p_id"<<p_id);
 							 time_begin = ptime2(boost::posix_time::microsec_clock::local_time()).get_u64();
-							 for (i = 0; i < 8; i++)
+							 for (i = 0; i <= PING_RANGE_COUNT; i++)
 							 {
-								 std::cout <<section[i]<< ping[i].size() <<std:: endl;
-								 LOGEVENTL("info", "section  ping:" <<section[i]<<ping[i].size());
+								 //std::cout << section[i] << ping[i] << std::endl;
+								 LOGEVENTL("PING", _ln(section[i]) << ping[i]);
 							 }
 						 }
 			 
