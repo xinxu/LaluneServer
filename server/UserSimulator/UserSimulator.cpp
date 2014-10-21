@@ -161,7 +161,7 @@ void UserSimulator::RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
 						 }
 						 
 			 
-		}
+		}break;
 		default:
 			break;
 		}
