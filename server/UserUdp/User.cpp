@@ -82,6 +82,9 @@ public:
 	}
 	void ReceiveFinished(char *data, const boost::system::error_code &error, std::size_t)
 	{
+		if (!error || error == boost::asio::error::message_size)
+		{
+		
 		switch (MSG_TYPE(data))
 		{
 		case MSG_TYPE_SYNC_BATTLE_GAME_START:
@@ -122,7 +125,7 @@ public:
 		default:
 			break;
 		}
-
+		}
 		delete []data;
 		Receive();
 	}

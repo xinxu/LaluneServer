@@ -52,7 +52,8 @@ public:
 		//std::string str = (char *)&client_endpoint.address();
 		//std::cout << client_endpoint_one.address() << std::endl;
 		//std::cout << client_endpoint_one.port() << std::endl;
-		if (!error)
+		if (!error || error == boost::asio::error::message_size)
+		
 		{
 			switch (MSG_TYPE(data))
 			{

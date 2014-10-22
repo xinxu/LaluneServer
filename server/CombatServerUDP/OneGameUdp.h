@@ -27,10 +27,16 @@ public:
 	}*/
 	void SendFinished(char *data, const boost::system::error_code &error, std::size_t)
 	{
+		if (!error || error == boost::asio::error::message_size)
+		{
+		}
 		delete []data;
 	}
 	void ReceivedFinishend(const boost::system::error_code &error, std::size_t)
 	{
+		if (!error || error == boost::asio::error::message_size)
+		{
+		}
 	}
 	map<udp::endpoint, unsigned int> client_connect;
 	uint64_t start_time, now_time;
