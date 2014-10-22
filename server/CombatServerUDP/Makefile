@@ -16,12 +16,12 @@ ifeq (YES, $(DEBUG))
 	DEFINES += -D_DEBUG
 	CXXFLAGS += -g
 	USRLIBS += ../Log/libLog_d.a ../NetLib/libNetLib_d.a ../ServerCommonLib/libServerCommon_d.a
-	prog := CombatServer_d
+	prog := CombatServerUDP_d
 	cfgName := Debug
 else
 	CXXFLAGS += -g -O3
 	USRLIBS += ../Log/libLog.a ../NetLib/libNetLib.a ../ServerCommonLib/libServerCommon.a
-	prog := CombatServer
+	prog := CombatServerUDP
 	cfgName := Release
 endif
 
