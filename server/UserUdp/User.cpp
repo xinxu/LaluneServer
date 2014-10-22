@@ -22,7 +22,7 @@ std::string section[PING_RANGE_COUNT + 1];
 class User
 {
 public:
-	User(boost::asio::io_service &io_service,int id) :socket_client(io_service), server_endpoint(boost::asio::ip::address::from_string("127.0.0.1"), 5350),
+	User(boost::asio::io_service &io_service,int id) :socket_client(io_service), server_endpoint(boost::asio::ip::address::from_string("192.168.1.42"), 5350),
 		timer1(io_service)
 	{
 		p_id = id;
@@ -43,7 +43,7 @@ public:
 		connect.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)MSG_DATA(send_buff));
 		socket_client.async_send_to(boost::asio::buffer(send_buff, MSG_LENGTH(send_buff)+1),
 			server_endpoint,
-			boost::bind(&User::SendFinished, this,send_buff, boost::asio::placeholders::error)
+			boost::bind(&User::SendFinished, this, send_buff, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred)
 			);
 	}
 	void Receive()
@@ -52,7 +52,7 @@ public:
 		socket_client.async_receive_from(
 			boost::asio::buffer(receive_buff, 200),
 			server_endpoint,
-			boost::bind(&User::ReceiveFinished, this, receive_buff, boost::asio::placeholders::error)
+			boost::bind(&User::ReceiveFinished, this, receive_buff, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred)
 			);
 	}
 	void User::PlayAction(const boost::system::error_code& error)
@@ -75,14 +75,13 @@ public:
 			action.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)MSG_DATA(send_buff));
 			socket_client.async_send_to(boost::asio::buffer(send_buff, MSG_LENGTH(send_buff) + 1),
 				server_endpoint,
-				boost::bind(&User::SendFinished, this, send_buff, boost::asio::placeholders::error)
+				boost::bind(&User::SendFinished, this, send_buff, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred)
 				);
 			//SendMsg(MSG_TYPE_SYNC_BATTLE_GAME_ACTION, action);
 		}
 	}
-	void ReceiveFinished(char *data, const boost::system::error_code &error)
+	void ReceiveFinished(char *data, const boost::system::error_code &error, std::size_t)
 	{
-		
 		switch (MSG_TYPE(data))
 		{
 		case MSG_TYPE_SYNC_BATTLE_GAME_START:
@@ -127,7 +126,7 @@ public:
 		delete []data;
 		Receive();
 	}
-	void SendFinished(char *data, const boost::system::error_code &error)
+	void SendFinished(char *data, const boost::system::error_code &error, std::size_t)
 	{
 		//std::cout << "xxzx " << std::endl;
 		delete []data;
@@ -148,25 +147,25 @@ int main()
 		section[i] = "[" + utility1::int2str(i * 10) + "ms-" + utility1::int2str((i + 1) * 10) + "ms]";
 	}
 	section[PING_RANGE_COUNT] = "[" + utility1::int2str(PING_RANGE_COUNT * 10) + "ms+]";
-	boost::asio::ip::address addr = boost::asio::ip::address::from_string("127.0.0.1");
-	udp::endpoint server_endpoint(addr, 5350);
+	//boost::asio::ip::address addr = boost::asio::ip::address::from_string("192.168.1.42");
+	//udp::endpoint server_endpoint(addr, 5350);
 	int i;
-	//boost::asio::io_service io_service;
+	
 	_thread.start();
 	for (i = 0; i < 6; i++)
 	{
 		User *server=new User(_thread.get_ioservice(),i);
+		
 		//io_service[i].run();
 	}
 	//_thread.get_ioservice().run();
-	//io_service.run();
 	uint64_t time_begin, time_now;
 	time_begin = ptime2(boost::posix_time::microsec_clock::local_time()).get_u64();
 	while (1)
 	{
 		time_now = ptime2(boost::posix_time::microsec_clock::local_time()).get_u64();
 
-		if ((time_now - time_begin) / 1000000 >= 31)
+		if ((time_now - time_begin) / 1000000 >= 30)
 		{
 			int i;
 			time_begin = ptime2(boost::posix_time::microsec_clock::local_time()).get_u64();

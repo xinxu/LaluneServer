@@ -25,11 +25,11 @@ public:
 	{
 		client_connect.erase(sessionptr);
 	}*/
-	void SendFinished(char *data, const boost::system::error_code &error)
+	void SendFinished(char *data, const boost::system::error_code &error, std::size_t)
 	{
 		delete []data;
 	}
-	void ReceivedFinishend(const boost::system::error_code &error)
+	void ReceivedFinishend(const boost::system::error_code &error, std::size_t)
 	{
 	}
 	map<udp::endpoint, unsigned int> client_connect;
