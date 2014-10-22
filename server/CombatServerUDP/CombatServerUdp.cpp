@@ -93,7 +93,11 @@ int main()
 	boost::asio::io_service io_service;
 	CombatServer server(io_service, 5350);
 	io_service.run();
+#if WIN32
 	Sleep(-1);
+#else
+	sleep(-1);
+#endif
 	return 0;
 }
 /** @file UdpEchoServer.cpp

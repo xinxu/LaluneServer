@@ -177,7 +177,11 @@ int main()
 			}
 		}
 	}
+#if WIN32
 	Sleep(-1);
+#else
+	sleep(-1);
+#endif
 	return 0;
 
 }
