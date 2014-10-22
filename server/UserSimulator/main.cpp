@@ -12,7 +12,7 @@ std::shared_ptr<UserSimulator> us[2000];
 #define GATEWAY_SERVER_DEFAULT_PORT (6677)
 
 
-#define COMBATE_SERVER_DEFAULT_IP ("127.0.0.1")//("180.150.178.148")
+#define COMBATE_SERVER_DEFAULT_IP ("192.168.1.42")//("180.150.178.148")
 #define COMBATE_SERVER_DEFAULT_PORT (5000)
 /*void initialize()
 {
@@ -75,7 +75,11 @@ int main(int argc, char* argv[])
 			std::cin >> id_num;
 			getchar();
 			thread.get_ioservice().post(boost::bind(&initcombate,id_num));
-			sleep(1000);
+#ifdef WIN32
+			Sleep(1000);
+#else
+			sleep(1);
+#endif
 			for (int i = 0; i < id_num;i++)
 				thread.get_ioservice().post(boost::bind(&UserSimulator::Combat, us[i],i));
 		}

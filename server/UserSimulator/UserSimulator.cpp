@@ -61,8 +61,8 @@ void UserSimulator::Version(const std::string& version_name)
 void UserSimulator::Combat(int id)
 {
 	lalune::ConnectToGame connect;
-	p_id = rand() * 32768 + rand();
-	std::cout << p_id << std::endl;
+	p_id = (uint32_t)rand() * 32768 + rand();
+	//std::cout << p_id << std::endl;
 	connect.set_player_uid(p_id); 
 	connect.set_access_token("111");
 	//now_version.set_nick(utility1::generateRandomString(6));
