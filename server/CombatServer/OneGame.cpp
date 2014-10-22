@@ -42,9 +42,9 @@ void OneGame::ConnectToGame(NetLib_ServerSession_ptr sessionptr, char *data)
 			player->first->SendCopyAsync(send_buf);
 		}
 
-		const int time_space = 33;
+		/*const int time_space = 33;
 		timer->expires_from_now(boost::posix_time::milliseconds(time_space));
-		timer->async_wait(boost::bind(&OneGame::ActionsReturn, this, shared_from_this(), boost::asio::placeholders::error));
+		timer->async_wait(boost::bind(&OneGame::ActionsReturn, this, shared_from_this(), boost::asio::placeholders::error));*/
 	}
 
 }
@@ -57,38 +57,61 @@ void OneGame::BattleGameAction(NetLib_ServerSession_ptr sessionptr, char *data)
 	proto_game_action.set_time_from_game_start(now_time - start_time);
 	actions.push_back(proto_game_action);
 
-}
-void OneGame::ActionsReturn(shared_ptr<OneGame> keep_alive, const boost::system::error_code& error)
-{
-	if (!error)
+	lalune::GameActions proto_actions;
+	auto action_temp = actions.begin();
+	for (; action_temp != actions.end(); action_temp++)
 	{
-
-		const int time_space = 33;
-		//boost::asio::deadline_timer timer(_thread.get_ioservice());
-		timer->expires_from_now(boost::posix_time::milliseconds(time_space));
-		timer->async_wait(boost::bind(&OneGame::ActionsReturn, this, shared_from_this(),  boost::asio::placeholders::error));
-
-		lalune::GameActions proto_actions;
-		auto action_temp = actions.begin();
-		for (; action_temp != actions.end(); action_temp++)
-		{
-			lalune::GameAction *proto_action;
-			proto_action = proto_actions.add_actions();
-			*proto_action = *action_temp;
-		}
-		actions.clear();
-		int proto_size = proto_actions.ByteSize();
-		char* send_buf = new char[MSG_HEADER_BASE_SIZE + proto_size];
-		MSG_LENGTH(send_buf) = MSG_HEADER_BASE_SIZE + proto_size;		// 数据包的字节数（含msghead）
-		MSG_TYPE(send_buf) = MSG_TYPE_SYNC_BATTLE_GAME_ACTION;
-		MSG_ERROR(send_buf) = 0;
-		MSG_ENCRYPTION_TYPE(send_buf) = 0;
-		MSG_RESERVED(send_buf) = 0;
-		proto_actions.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)MSG_DATA(send_buf));
-		auto player = client_connect.begin();
-		for (; player != client_connect.end(); player++)
-		{
-			player->first->SendCopyAsync(send_buf);
-		}
+		lalune::GameAction *proto_action;
+		proto_action = proto_actions.add_actions();
+		*proto_action = *action_temp;
 	}
+	actions.clear();
+	int proto_size = proto_actions.ByteSize();
+	char* send_buf = new char[MSG_HEADER_BASE_SIZE + proto_size];
+	MSG_LENGTH(send_buf) = MSG_HEADER_BASE_SIZE + proto_size;		// 数据包的字节数（含msghead）
+	MSG_TYPE(send_buf) = MSG_TYPE_SYNC_BATTLE_GAME_ACTION;
+	MSG_ERROR(send_buf) = 0;
+	MSG_ENCRYPTION_TYPE(send_buf) = 0;
+	MSG_RESERVED(send_buf) = 0;
+	proto_actions.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)MSG_DATA(send_buf));
+	auto player = client_connect.begin();
+	for (; player != client_connect.end(); player++)
+	{
+		player->first->SendCopyAsync(send_buf);
+	}
+
 }
+//void OneGame::ActionsReturn(shared_ptr<OneGame> keep_alive, const boost::system::error_code& error)
+//{
+//	if (!error)
+//	{
+//
+//		const int time_space = 33;
+//		//boost::asio::deadline_timer timer(_thread.get_ioservice());
+//		timer->expires_from_now(boost::posix_time::milliseconds(time_space));
+//		timer->async_wait(boost::bind(&OneGame::ActionsReturn, this, shared_from_this(),  boost::asio::placeholders::error));
+//
+//		lalune::GameActions proto_actions;
+//		auto action_temp = actions.begin();
+//		for (; action_temp != actions.end(); action_temp++)
+//		{
+//			lalune::GameAction *proto_action;
+//			proto_action = proto_actions.add_actions();
+//			*proto_action = *action_temp;
+//		}
+//		actions.clear();
+//		int proto_size = proto_actions.ByteSize();
+//		char* send_buf = new char[MSG_HEADER_BASE_SIZE + proto_size];
+//		MSG_LENGTH(send_buf) = MSG_HEADER_BASE_SIZE + proto_size;		// 数据包的字节数（含msghead）
+//		MSG_TYPE(send_buf) = MSG_TYPE_SYNC_BATTLE_GAME_ACTION;
+//		MSG_ERROR(send_buf) = 0;
+//		MSG_ENCRYPTION_TYPE(send_buf) = 0;
+//		MSG_RESERVED(send_buf) = 0;
+//		proto_actions.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)MSG_DATA(send_buf));
+//		auto player = client_connect.begin();
+//		for (; player != client_connect.end(); player++)
+//		{
+//			player->first->SendCopyAsync(send_buf);
+//		}
+//	}
+//}
