@@ -21,20 +21,12 @@
 #include <boost/uuid/uuid_io.hpp>
 using namespace boost::uuids;
 ioservice_thread thread;
-/*boost::asio::deadline_timer timer1(thread.get_ioservice());
-int p_id;
-std::vector<uint64_t> ping[10];
-std::string section[10];
-uint64_t time_begin, time_now;
-int tm2;*/
+ int ping[PING_RANGE_COUNT + 1];
+ std::string section[PING_RANGE_COUNT + 1];
+ uint64_t time_begin, time_now;
  UserSimulator::UserSimulator():timer1(thread.get_ioservice())
 {
-	 memset(ping, 0, sizeof(ping));
-	 for (int i = 0; i < PING_RANGE_COUNT; ++i)
-	 {
-		 section[i] = "[" + utility1::int2str(i * 10) + "ms-" + utility1::int2str((i + 1) * 10) + "ms]";
-	 }
-	 section[PING_RANGE_COUNT] = "[" + utility1::int2str(PING_RANGE_COUNT * 10) + "ms+]";
+	 
 }
 
 void UserSimulator::Connect(const std::string& ip, int port)
@@ -61,8 +53,7 @@ void UserSimulator::Version(const std::string& version_name)
 void UserSimulator::Combat(int id)
 {
 	lalune::ConnectToGame connect;
-	p_id = (uint32_t)rand() * 32768 + rand();
-	//std::cout << p_id << std::endl;
+	p_id = id;
 	connect.set_player_uid(p_id); 
 	connect.set_access_token("111");
 	//now_version.set_nick(utility1::generateRandomString(6));
@@ -129,7 +120,7 @@ void UserSimulator::RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
 		case MSG_TYPE_SYNC_BATTLE_GAME_START:
 		{
 						std::cout << "start" << std::endl;
-						time_begin = ptime2(boost::posix_time::microsec_clock::local_time()).get_u64();
+						
 						
 						timer1.expires_from_now(boost::posix_time::milliseconds(400));
 						timer1.async_wait(boost::bind(&UserSimulator::StartupTimer,this, boost::asio::placeholders::error));
@@ -168,21 +159,9 @@ void UserSimulator::RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
 								 }
 							 }
 						 }
-						 time_now = ptime2(boost::posix_time::microsec_clock::local_time()).get_u64();
-
-						 if ((time_now - time_begin) / 1000000 >= 30 )
-						 {
-							 std::cout << p_id << std::endl;
-							 LOGEVENTL("info","p_id"<<p_id);
-							 time_begin = ptime2(boost::posix_time::microsec_clock::local_time()).get_u64();
-							 for (i = 0; i <= PING_RANGE_COUNT; i++)
-							 {
-								 //std::cout << section[i] << ping[i] << std::endl;
-								 LOGEVENTL("PING", _ln(section[i]) << ping[i]);
-							 }
-						 }
+						 
 			 
-		}
+		}break;
 		default:
 			break;
 		}
