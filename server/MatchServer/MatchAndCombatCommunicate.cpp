@@ -21,6 +21,7 @@ void SendMsg(NetLib_ServerSession_ptr &sessionptr, uint32_t msg_type, P& proto)
 void MatchAndCombatCommunicate::ConnectedHandler(std::shared_ptr<NetLibPlus_Client> clientptr)
 {
 	client_ptr = clientptr;
+	std::cout << "xx" << std::endl;
 
 }
 void MatchAndCombatCommunicate::ReconnectedHandler(std::shared_ptr<NetLibPlus_Client> clientptr)

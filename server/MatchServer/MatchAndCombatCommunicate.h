@@ -11,6 +11,7 @@
 #include "Battle.pb.h"
 class MatchAndCombatCommunicate :public NetLibPlus_Client_Delegate
 {
+public:
 	void RecvFinishHandler(std::shared_ptr<NetLibPlus_Client> clientptr, char* data);
 	void ConnectedHandler(std::shared_ptr<NetLibPlus_Client> clientptr);
 	void ReconnectedHandler(std::shared_ptr<NetLibPlus_Client> clientptr);

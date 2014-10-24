@@ -116,6 +116,7 @@ public:
 				std::string str = proto_game_id.game_id();
 				shared_ptr<OneGameUdp> one_game_temp = std::make_shared<OneGameUdp>();
 				gameid_to_onegame[str] = one_game_temp;
+				std::cout << str << endl;
 			}break;
 			}
 		}
@@ -127,19 +128,21 @@ class CombatServerTcp:public CommonLibDelegate
 public:
 	void onConfigInitialized()
 	{
-		_thread.start();
 		server = NetLib_NewServer<CombatMatchCommunicate>(&_thread);
 		if (!server->StartTCP(COMBAT_MATCH_PORT, 1, 120)) //端口，线程数，超时时间
 		{
 			LOGEVENTL("Error", "Server Start Failed !");
 			exit(0);
 		}
-
+		ServerStarted(COMBAT_MATCH_PORT);
+		LOGEVENTL("INFO", "CombatServer Start Success");
 	}
+	
 
 };
 int main(int argc, char* argv[])
 {
+	_thread.start();
 	//boost::asio::io_service io_service;
 	LogInitializeLocalOptions(true, true, "match_server");
 	CombatServerTcp* cl_delegate = new CombatServerTcp();

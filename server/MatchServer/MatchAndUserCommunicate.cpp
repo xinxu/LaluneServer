@@ -7,7 +7,7 @@
 using namespace boost::uuids;
 std::queue<NetLib_ServerSession_ptr> user;
 std::queue<std::string> game_id;
-const int player_num = 2;
+const int player_num = 1;
 std::shared_ptr<NetLibPlus_Client> client_ptr;
 void MatchAndUserCommunicate::RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data)
 {
@@ -29,6 +29,7 @@ void MatchAndUserCommunicate::RecvFinishHandler(NetLib_ServerSession_ptr session
 				std::string game_id_one;
 				ss >> game_id_one;
 				game_id.push(game_id_one);
+				std::cout << game_id_one << std::endl;
 				//发送给战斗服务，创建一个房间
 				lalune::SendGameId proto_gameid;
 				proto_gameid.set_game_id(game_id_one.c_str());

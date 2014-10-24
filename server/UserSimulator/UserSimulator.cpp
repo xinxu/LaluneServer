@@ -87,11 +87,11 @@ void UserSimulator::ConnectedHandler(NetLib_Client_ptr clientptr)
 //int tm = 0;
 void UserSimulator::ReconnectedHandler(NetLib_Client_ptr clientptr)
 {
-	lalune::ConnectToGame connect;
-	connect.set_player_uid(p_id);
-	connect.set_access_token("111");
-	//now_version.set_nick(utility1::generateRandomString(6));
-	SendMsg(MSG_TYPE_SYNC_BATTLE_CONNECT_TO_GAME, connect);
+	//lalune::ConnectToGame connect;
+	//connect.set_player_uid(p_id);
+	//connect.set_access_token("111");
+	////now_version.set_nick(utility1::generateRandomString(6));
+	//SendMsg(MSG_TYPE_SYNC_BATTLE_CONNECT_TO_GAME, connect);
 
 }
 void UserSimulator::RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)

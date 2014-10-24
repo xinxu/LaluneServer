@@ -9,7 +9,6 @@ class MatchAndUserConnect :public CommonLibDelegate
 public:
 	void onConfigInitialized()
 	{
-		_thread.start();
 		server = NetLib_NewServer<MatchAndUserCommunicate>(&_thread);
 		if (!server->StartTCP(MATCH_USER_PORT, 1, 120)) //端口，线程数，超时时间
 		{
@@ -17,6 +16,7 @@ public:
 			exit(0);
 		}
 
+		ServerStarted(MATCH_USER_PORT);
 	}
 private:
 
@@ -24,6 +24,7 @@ private:
 
 int main(int argc, char* argv[])
 {
+	_thread.start();
 	LogInitializeLocalOptions(true, true, "match_server");
 	MatchAndUserConnect* cl_delegate = new MatchAndUserConnect();
 	InitializeCommonLib(_thread, cl_delegate, SERVER_TYPE_AUTO_MATCH_SERVER, argc, argv);
