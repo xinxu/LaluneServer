@@ -24,10 +24,10 @@ ioservice_thread thread;
  int ping[PING_RANGE_COUNT + 1];
  std::string section[PING_RANGE_COUNT + 1];
  uint64_t time_begin, time_now;
- UserSimulator::UserSimulator():timer1(thread.get_ioservice())
+ /*UserSimulator::UserSimulator():timer1(thread.get_ioservice())
 {
 	 
-}
+}*/
 
 void UserSimulator::Connect(const std::string& ip, int port)
 {
@@ -49,7 +49,12 @@ void UserSimulator::Version(const std::string& version_name)
 	//now_version.set_nick(utility1::generateRandomString(6));
 	SendMsg(MSG_CHECK_VERSION, now_version);
 }
-
+void UserSimulator::Match()
+{
+	lalune::MatchRequest proto_match_request;
+	proto_match_request.set_player_id(1);
+	SendMsg(MSG_TYPE_AUTOMATCH_MATCH_REQUEST, proto_match_request);
+}
 void UserSimulator::Combat(int id)
 {
 	lalune::ConnectToGame connect;
@@ -64,21 +69,21 @@ void UserSimulator::ConnectedHandler(NetLib_Client_ptr clientptr)
 {
 
 }
-void UserSimulator::StartupTimer(const boost::system::error_code& error)
-{
-	if (!error)
-	{
-
-		lalune::GameAction action;
-		timer1.expires_from_now(boost::posix_time::milliseconds(400));
-		timer1.async_wait(boost::bind(&UserSimulator::StartupTimer, this, boost::asio::placeholders::error));
-		uint64_t time;
-		time = ptime2(boost::posix_time::microsec_clock::local_time()).get_u64();
-		action.set_action_data(std::string((char*)&time, 8));
-		action.set_player_uid(p_id);
-		SendMsg(MSG_TYPE_SYNC_BATTLE_GAME_ACTION, action);
-	}
-}
+//void UserSimulator::StartupTimer(const boost::system::error_code& error)
+//{
+//	if (!error)
+//	{
+//
+//		lalune::GameAction action;
+//		timer1.expires_from_now(boost::posix_time::milliseconds(400));
+//		timer1.async_wait(boost::bind(&UserSimulator::StartupTimer, this, boost::asio::placeholders::error));
+//		uint64_t time;
+//		time = ptime2(boost::posix_time::microsec_clock::local_time()).get_u64();
+//		action.set_action_data(std::string((char*)&time, 8));
+//		action.set_player_uid(p_id);
+//		SendMsg(MSG_TYPE_SYNC_BATTLE_GAME_ACTION, action);
+//	}
+//}
 //int tm = 0;
 void UserSimulator::ReconnectedHandler(NetLib_Client_ptr clientptr)
 {
@@ -122,8 +127,8 @@ void UserSimulator::RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
 						std::cout << "start" << std::endl;
 						
 						
-						timer1.expires_from_now(boost::posix_time::milliseconds(400));
-						timer1.async_wait(boost::bind(&UserSimulator::StartupTimer,this, boost::asio::placeholders::error));
+					/*	timer1.expires_from_now(boost::posix_time::milliseconds(400));
+						timer1.async_wait(boost::bind(&UserSimulator::StartupTimer,this, boost::asio::placeholders::error));*/
 						
 		}break;
 		case MSG_TYPE_SYNC_BATTLE_GAME_ACTION:

@@ -18,12 +18,17 @@
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include "OneGameUdp.h"
+#include "ServerCommonLib/ServerCommon.h"
 using boost::asio::ip::udp;
 using namespace boost::uuids;
 using namespace std;
-map<uuid, shared_ptr<OneGameUdp>> gameid_to_onegame;//游戏id到具体游戏映射
-map<udp::endpoint, uuid> ptr_to_gameid;//连接到游戏id 的映射
+map<string, shared_ptr<OneGameUdp>> gameid_to_onegame;//游戏id到具体游戏映射
+map<udp::endpoint, string> ptr_to_gameid;//连接到游戏id 的映射
+ioservice_thread _thread;
 uuid now_game_id;
+NetLib_Server_ptr server;
+#define COMBAT_MATCH_PORT 5710
+#define COMBAT_USER_PORT 5350
 class CombatServer
 {
 public:
@@ -59,16 +64,19 @@ public:
 			{
 			case MSG_TYPE_SYNC_BATTLE_CONNECT_TO_GAME:
 			{
-				if (gameid_to_onegame.size() == 0 || (gameid_to_onegame[now_game_id]->client_connect.size() == 6))
-				{
-					random_generator rgen;//随机生成器
-					uuid u = rgen();//生成一个随机的UUID
-					shared_ptr<OneGameUdp> one_game_temp = std::make_shared<OneGameUdp>();
-					gameid_to_onegame[u] = one_game_temp;
-					now_game_id = u;
-				}
-				gameid_to_onegame[now_game_id]->ConnectToGame(socket_server, client_endpoint, data);
-				ptr_to_gameid[client_endpoint] = now_game_id;
+				//if (gameid_to_onegame.size() == 0 || (gameid_to_onegame[now_game_id]->client_connect.size() == 6))
+				//{
+				//	random_generator rgen;//随机生成器
+				//	uuid u = rgen();//生成一个随机的UUID
+				//	shared_ptr<OneGameUdp> one_game_temp = std::make_shared<OneGameUdp>();
+				//	gameid_to_onegame[u] = one_game_temp;
+				//	now_game_id = u;
+				//}
+				lalune::ConnectToGame proto_connect;
+				proto_connect.ParseFromArray(MSG_DATA(data), MSG_DATA_LEN(data));
+				cout << proto_connect.access_token() << endl;
+				gameid_to_onegame[proto_connect.access_token()]->ConnectToGame(socket_server, client_endpoint, data);
+				ptr_to_gameid[client_endpoint] = proto_connect.access_token();
 				cout << client_endpoint << endl;
 
 			}break;
@@ -90,14 +98,53 @@ public:
 private:
 	udp::socket socket_server;
 	udp::endpoint client_endpoint;
-	//char receive_buff[200];
-	//char send_buff[200];
+	
 };
-int main()
+class CombatMatchCommunicate : public NetLib_ServerSession_Delegate
 {
-	boost::asio::io_service io_service;
-	CombatServer server(io_service, 5350);
-	io_service.run();
+public:
+	void RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data)
+	{
+		if (SERVER_MSG_LENGTH(data) >= SERVER_MSG_HEADER_BASE_SIZE)
+		{
+			switch (SERVER_MSG_TYPE(data))
+			{
+			case MSG_TYPE_SYNC_BATTLE_CREATE_GAME:
+			{
+				lalune::SendGameId proto_game_id;
+				proto_game_id.ParseFromArray(SERVER_MSG_DATA(data), SERVER_MSG_DATA_LEN(data));
+				std::string str = proto_game_id.game_id();
+				shared_ptr<OneGameUdp> one_game_temp = std::make_shared<OneGameUdp>();
+				gameid_to_onegame[str] = one_game_temp;
+			}break;
+			}
+		}
+	}
+
+};
+class CombatServerTcp:public CommonLibDelegate
+{
+public:
+	void onConfigInitialized()
+	{
+		_thread.start();
+		server = NetLib_NewServer<CombatMatchCommunicate>(&_thread);
+		if (!server->StartTCP(COMBAT_MATCH_PORT, 1, 120)) //端口，线程数，超时时间
+		{
+			LOGEVENTL("Error", "Server Start Failed !");
+			exit(0);
+		}
+
+	}
+
+};
+int main(int argc, char* argv[])
+{
+	//boost::asio::io_service io_service;
+	LogInitializeLocalOptions(true, true, "match_server");
+	CombatServerTcp* cl_delegate = new CombatServerTcp();
+	InitializeCommonLib(_thread, cl_delegate, SERVER_TYPE_SYNC_BATTLE_SERVER, argc, argv);
+	CombatServer server(_thread.get_ioservice(), COMBAT_USER_PORT);
 #if WIN32
 	Sleep(-1);
 #else
@@ -105,45 +152,3 @@ int main()
 #endif
 	return 0;
 }
-/** @file UdpEchoServer.cpp
-*  @note Hangzhou Hikvision System Technology Co., Ltd. All Rights Reserved.
-*  @brief an udp server, echo what the client say.
-*
-*  @author Zou Tuoyu
-*  @date 2012/11/28
-*
-*  @note 历史记录：
-*  @note V1.0.0.0 创建
-*/
-
-////boost
-//#include <boost/asio.hpp>
-//
-////stl
-//#include <string>
-//#include <iostream>
-//
-//using namespace std;
-//using boost::asio::ip::udp;
-//int main()
-//{
-//	boost::asio::io_service io_service;
-//	boost::asio::ip::udp::socket udp_socket(io_service, udp::endpoint(udp::v4(), 7474));
-//	//boost::asio::ip::udp::endpoint local_add(boost::asio::ip::address::from_string("127.0.0.1"), 7474);
-//
-//	//udp_socket.open(local_add.protocol());
-//	//udp_socket.bind(local_add);
-//
-//	char receive_buffer[1024] = { 0 };
-//	while (true)
-//	{
-//		boost::asio::ip::udp::endpoint send_point;
-//		udp_socket.receive_from(boost::asio::buffer(receive_buffer, 1024), send_point);
-//		cout << "recv:" << receive_buffer << endl;
-//		udp_socket.send_to(boost::asio::buffer(receive_buffer), send_point);
-//
-//		memset(receive_buffer, 0, 1024);
-//	}
-//
-//	return 1;
-//}

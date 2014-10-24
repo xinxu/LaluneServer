@@ -18,6 +18,7 @@ void OneGame::ConnectToGame(NetLib_ServerSession_ptr sessionptr, char *data)
 	MSG_RESERVED(send_buf) = 0;
 	proto_connect_response.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)MSG_DATA(send_buf));
 	sessionptr->SendCopyAsync(send_buf);
+	delete []send_buf;
 
 	//¿ªÊ¼ÓÎÏ·
 	const int player_num = 6;
@@ -41,7 +42,7 @@ void OneGame::ConnectToGame(NetLib_ServerSession_ptr sessionptr, char *data)
 		{
 			player->first->SendCopyAsync(send_buf);
 		}
-
+		delete[]send_buf;
 		/*const int time_space = 33;
 		timer->expires_from_now(boost::posix_time::milliseconds(time_space));
 		timer->async_wait(boost::bind(&OneGame::ActionsReturn, this, shared_from_this(), boost::asio::placeholders::error));*/
@@ -79,6 +80,7 @@ void OneGame::BattleGameAction(NetLib_ServerSession_ptr sessionptr, char *data)
 	{
 		player->first->SendCopyAsync(send_buf);
 	}
+	delete[]send_buf;
 
 }
 //void OneGame::ActionsReturn(shared_ptr<OneGame> keep_alive, const boost::system::error_code& error)

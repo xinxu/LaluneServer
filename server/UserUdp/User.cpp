@@ -22,7 +22,7 @@ std::string section[PING_RANGE_COUNT + 1];
 class User
 {
 public:
-	User(boost::asio::io_service &io_service,int id) :socket_client(io_service), server_endpoint(boost::asio::ip::address::from_string("192.168.1.42"), 5350),
+	User(boost::asio::io_service &io_service,int id) :socket_client(io_service), server_endpoint(boost::asio::ip::address::from_string("180.150.178.148"), 5350),/*180.150.178.148*/
 		timer1(io_service)
 	{
 		p_id = id;
@@ -155,7 +155,7 @@ int main()
 	int i;
 	
 	_thread.start();
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < 96; i++)
 	{
 		User *server=new User(_thread.get_ioservice(),i);
 		

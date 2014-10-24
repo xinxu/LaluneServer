@@ -46,7 +46,7 @@ void MatchAndCombatCommunicate::RecvFinishHandler(std::shared_ptr<NetLibPlus_Cli
 				user.pop();
 				SendMsg(user_one, MSG_TYPE_AUTOMATCH_MATCH_REQUEST, proto_response);
 			}
-		}
+		}break;
 		}
 	}
 }

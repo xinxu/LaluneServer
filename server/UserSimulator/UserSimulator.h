@@ -51,9 +51,10 @@ public:
 	void Combat(int id);
 	void StartupTimer(const boost::system::error_code& error);
 	void ReconnectedHandler(NetLib_Client_ptr clientptr);
-	UserSimulator();
+	void UserSimulator::Match();
+	/*UserSimulator();*/
 private:
-	boost::asio::deadline_timer timer1;
+	/*boost::asio::deadline_timer timer1;*/
 	unsigned int p_id;
 	//std::vector<uint64_t> ping[10];
 #define PING_RANGE_COUNT (30)
