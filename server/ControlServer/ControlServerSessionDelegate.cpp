@@ -7,6 +7,7 @@
 #include <boost/bind.hpp>
 #include "include/utility1.h"
 #include "include/utility2.h"
+#include "include/macros.h"
 #include "ControlServerConfig.h"
 #include "Config.h"
 #include <boost/asio.hpp>
@@ -43,6 +44,22 @@ void ControlServerSessionDelegate::RecvKeepAliveHandler(NetLib_ServerSession_ptr
 		else
 		{
 			info_it->second->refresh();
+		}
+	}
+}
+
+void SendConfigToServerGroup(int server_type, common::RefreshConfig& rc)
+{
+	//发给该类型的各服务
+	FIND_AND_ASSERT(it_group, server_groups, server_type, "server_groups", "server_type")
+	{
+		auto group_ptr = it_group->second;
+		for (auto ipport : *group_ptr)
+		{
+			FIND_AND_ASSERT_(it_session, server2session, ipport, "server2session", "ipport", utility2::printAddr(ipport))
+			{
+				ReplyMsg(it_session->second, MSG_TYPE_REFRESH_CONFIG, rc);
+			}
 		}
 	}
 }
@@ -191,18 +208,7 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 
 							writeConfig(rc.server_type(), rc.file(i).file_name(), rc.file(i).content());
 
-							//发给相关各服务
-
-							//TOMODIFY
-							rc.clear_server_type();
-							for (auto it_server = it_group->second->begin(); it_server != it_group->second->end(); ++it_server)
-							{
-								auto it_session = server2session.find(*it_server);
-								if (it_session != server2session.end())
-								{
-									ReplyMsg(it_session->second, MSG_TYPE_REFRESH_CONFIG, rc);
-								}
-							}
+							SendConfigToServerGroup(rc.server_type(), rc);
 						}
 						ReplyEmptyMsg(sessionptr, MSG_TYPE_REFRESH_CONFIG_RESPONSE);
 					}
@@ -235,7 +241,7 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 				control_server::Command cmd;
 				if (ParseMsg(data, cmd))
 				{
-					if (cmd.command_name() == "reload")
+					if (cmd.command_name() == "reload") //重新加载ControlServer的配置
 					{
 						LOGEVENTL("Info", "Reload config: " << config_file_path);
 						LoadConfig();
@@ -244,27 +250,21 @@ void ControlServerSessionDelegate::RecvFinishHandler(NetLib_ServerSession_ptr se
 						cmd_result.set_result("config reloaded.");
 						ReplyMsg(sessionptr, MSG_TYPE_CONTROL_SERVER_CMD_RESULT, cmd_result);
 					}
-					else if (cmd.command_name() == "refresh_config")
+					else if (cmd.command_name() == "refresh_config") //重新加载各服务存在ControlServer里的配置，并刷给各服务
 					{
 						LOGEVENTL("Info", "Refresh all the configs to these servers");
 						initializeConfigs();
 
-						common::RefreshConfig rc;
-						rc.set_server_type(init.server_type());
-
-						//TOMODIFY
-
-						for (auto kvp : configs)
+						for (auto kvp : configs) //每一个配置文件都发。对于一种服务有多个配置文件的，就发多个包。
 						{
-							if (kvp.first.first == init.server_type())
-							{
-								common::ConfigFile* file = rc.add_file();
-								file->set_file_name(kvp.first.second);
-								file->set_content(*kvp.second);
-							}
-						}
+							common::RefreshConfig rc;
+							common::ConfigFile* file = rc.add_file();
+							file->set_file_name(kvp.first.second);
+							file->set_content(*kvp.second);
 
-						ReplyMsg(sessionptr, MSG_TYPE_REFRESH_CONFIG, rc);
+							//protobuf填充好，将其发给该类型的所有服务
+							SendConfigToServerGroup(kvp.first.first, rc);
+						}
 
 						control_server::CommandResult cmd_result;
 						cmd_result.set_result("all the configs have been refreshed.");

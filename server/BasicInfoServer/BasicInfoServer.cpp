@@ -5,7 +5,7 @@
 #include "memory.h"
 #include "string.h"
 #include <google/protobuf/stubs/common.h>
-#include "../../LaluneCommon/include/Header.h"
+#include "MessageTypeDef.h"
 #include "ServerCommonLib/ServerCommon.h"
 #include "BasicInfoServerSessionDelegate.h"
 
@@ -13,14 +13,32 @@
 
 ioservice_thread thread;
 
-NetLib_Server_ptr server4user;
+NetLib_Server_ptr server;
 
 class BasicInfoServerCommonLibDelegate : public CommonLibDelegate
 {
 public:
 	void onConfigRefresh(const std::string& content)
 	{
+	}
 
+	void onConfigInitialized()
+	{
+		server = NetLib_NewServer<BasicInfoServerSessionDelegate>(&thread);
+
+		//可以不指定端口 TODO (主要是内部端口)
+		if (!server->StartTCP(BASIC_INFO_SERVER_PORT, 1, 120)) //端口，线程数，超时时间
+		{
+			LOGEVENTL("Error", "Server Start Failed !");
+
+			LogUnInitialize();
+
+			exit(0);
+		}
+
+		LOGEVENTL("Info", "Server Start Success");
+
+		ServerStarted(BASIC_INFO_SERVER_PORT);
 	}
 };
 
@@ -42,26 +60,8 @@ int main(int argc, char* argv[])
 
 	thread.start();
 
-	NetLib_Server_ptr server = NetLib_NewServer<GatewaySessionDelegate>(&thread);
-
-	//可以不指定端口 TODO (主要是内部端口)
-	if (!server->StartTCP(BASIC_INFO_SERVER_PORT, 1, 120)) //端口，线程数，超时时间
-	{
-		LOGEVENTL("Error", "Server Start Failed !");
-
-		NetLib_Servers_WaitForStop();
-
-		LogUnInitialize();
-
-		google_lalune::protobuf::ShutdownProtobufLibrary();
-
-		return 0;
-	}
-	
-	LOGEVENTL("Info", "Server Start Success");
-
 	BasicInfoServerCommonLibDelegate* cl_delegate = new BasicInfoServerCommonLibDelegate();
-	InitializeCommonLib(thread, cl_delegate, BASIC_INFO_SERVER_PORT, SERVER_TYPE_BASIC_INFO_SERVER, argc, argv);
+	InitializeCommonLib(thread, cl_delegate, SERVER_TYPE_BASIC_INFO_SERVER, argc, argv);
 	
 	for (;;)
 	{
