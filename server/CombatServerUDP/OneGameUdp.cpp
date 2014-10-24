@@ -19,7 +19,7 @@ void OneGameUdp::ConnectToGame(udp::socket &socket_server,udp::endpoint client_e
 	proto_connect_response.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)MSG_DATA(send_buf));
 	socket_server.async_send_to(boost::asio::buffer(send_buf, MSG_LENGTH(send_buf) + 1),
 		client_endpoint,
-		boost::bind(&OneGameUdp::SendFinished, this, send_buf, boost::asio::placeholders::error)
+		boost::bind(&OneGameUdp::SendFinished, this, send_buf, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred)
 		);
 
 	//¿ªÊ¼ÓÎÏ·
@@ -52,8 +52,9 @@ void OneGameUdp::ConnectToGame(udp::socket &socket_server,udp::endpoint client_e
 			//start_time = ptime2(boost::posix_time::microsec_clock::local_time()).get_u64();
 			socket_server.async_send_to(boost::asio::buffer(send_buf, MSG_LENGTH(send_buf) + 1),
 				player->first,
-				boost::bind(&OneGameUdp::SendFinished, this, send_buf, boost::asio::placeholders::error)
+				boost::bind(&OneGameUdp::SendFinished, this, send_buf, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred)
 				);
+			//cout << player->first.port() << endl;
 		}
 	}
 
@@ -90,7 +91,7 @@ void OneGameUdp::BattleGameAction(udp::socket &socket_server, udp::endpoint clie
 		proto_game_action.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)MSG_DATA(send_buf));
 		socket_server.async_send_to(boost::asio::buffer(send_buf, MSG_LENGTH(send_buf) + 1),
 			player->first,
-			boost::bind(&OneGameUdp::SendFinished, this, send_buf, boost::asio::placeholders::error)
+			boost::bind(&OneGameUdp::SendFinished, this, send_buf, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred)
 			);
 	}
 

@@ -1,0 +1,10 @@
+#pragma once
+#include <boost/asio.hpp>
+#include "include/ioservice_thread.h"
+#include "Log/Log.h"
+#include "NetLib/NetLib.h"
+#include "memory.h"
+#include "string.h"
+#include <google/protobuf/stubs/common.h>
+#include "../../LaluneCommon/include/MessageTypeDef.h"
+#include "ServerCommonLib/ServerCommon.h"
