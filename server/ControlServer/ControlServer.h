@@ -8,7 +8,7 @@
 #include <boost/asio.hpp>
 #include "ControlServerConfig.h"
 #include "include/utility1.h"
-#include "Log/Log.h"
+#include "include/utility2.h"
 
 extern ioservice_thread thread;
 
@@ -18,8 +18,6 @@ void LoadConfig();
 extern bool during_startup;
 
 extern AvailableIDs<uint32_t> available_ids;
-
-typedef std::pair<uint32_t, int> IPPort;
 
 void ServerTimeout(IPPort ip_port, const boost::system::error_code& error);
 

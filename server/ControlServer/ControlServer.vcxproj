@@ -91,6 +91,7 @@
     <ClCompile Include="ControlServerSessionDelegate.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\macros.h" />
     <ClInclude Include="..\include\utility1.h" />
     <ClInclude Include="..\include\utility2.h" />
     <ClInclude Include="..\protobuf\commonlib\CommonLib.pb.h" />
