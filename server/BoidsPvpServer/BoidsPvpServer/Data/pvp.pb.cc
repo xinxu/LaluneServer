@@ -245,16 +245,17 @@ void protobuf_AddDesc_pvp_2eproto() {
     "nType\022\r\n\tEnterGame\020\001\022\014\n\010QuitGame\020\002\022\010\n\004Mo"
     "ve\020\003\022\014\n\010UseSkill\020\004\"@\n\024UserOperationPacka"
     "ge\022(\n\noperations\030\001 \003(\0132\024.boids.UserOpera"
-    "tion\"\223\002\n\013GameMessage\022,\n\004type\030\001 \002(\0162\036.boi"
+    "tion\"\242\002\n\013GameMessage\022,\n\004type\030\001 \002(\0162\036.boi"
     "ds.GameMessage.MessageType\022+\n\016game_init_"
     "data\030\002 \001(\0132\023.boids.GameInitData\022%\n\007user_"
     "op\030\003 \001(\0132\024.boids.UserOperation\0224\n\017user_o"
     "p_package\030\004 \001(\0132\033.boids.UserOperationPac"
-    "kage\"L\n\013MessageType\022\020\n\014GameInitData\020\001\022\021\n"
-    "\rUserOperation\020\002\022\030\n\024UserOperationPackage"
-    "\020\003\"o\n\nPvpMessage\022\017\n\007version\030\001 \002(\r\022\020\n\010pro"
-    "to_id\030\002 \002(\r\022\016\n\006seq_no\030\003 \002(\r\022\016\n\006ack_no\030\004 "
-    "\002(\r\022\020\n\010ack_bits\030\005 \002(\r\022\014\n\004data\030\006 \001(\014", 915);
+    "kage\"[\n\013MessageType\022\r\n\tHeartBeat\020\001\022\020\n\014Ga"
+    "meInitData\020\002\022\021\n\rUserOperation\020\003\022\030\n\024UserO"
+    "perationPackage\020\004\"o\n\nPvpMessage\022\017\n\007versi"
+    "on\030\001 \002(\r\022\020\n\010proto_id\030\002 \002(\r\022\016\n\006seq_no\030\003 \002"
+    "(\r\022\016\n\006ack_no\030\004 \002(\r\022\020\n\010ack_bits\030\005 \002(\r\022\014\n\004"
+    "data\030\006 \001(\014", 930);
   ::google_lalune::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "pvp.proto", &protobuf_RegisterTypes);
   UnitData::default_instance_ = new UnitData();
@@ -1901,6 +1902,7 @@ bool GameMessage_MessageType_IsValid(int value) {
     case 1:
     case 2:
     case 3:
+    case 4:
       return true;
     default:
       return false;
@@ -1908,6 +1910,7 @@ bool GameMessage_MessageType_IsValid(int value) {
 }
 
 #ifndef _MSC_VER
+const GameMessage_MessageType GameMessage::HeartBeat;
 const GameMessage_MessageType GameMessage::GameInitData;
 const GameMessage_MessageType GameMessage::UserOperation;
 const GameMessage_MessageType GameMessage::UserOperationPackage;

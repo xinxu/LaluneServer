@@ -64,12 +64,13 @@ inline bool UserOperation_OperationType_Parse(
     UserOperation_OperationType_descriptor(), name, value);
 }
 enum GameMessage_MessageType {
-  GameMessage_MessageType_GameInitData = 1,
-  GameMessage_MessageType_UserOperation = 2,
-  GameMessage_MessageType_UserOperationPackage = 3
+  GameMessage_MessageType_HeartBeat = 1,
+  GameMessage_MessageType_GameInitData = 2,
+  GameMessage_MessageType_UserOperation = 3,
+  GameMessage_MessageType_UserOperationPackage = 4
 };
 bool GameMessage_MessageType_IsValid(int value);
-const GameMessage_MessageType GameMessage_MessageType_MessageType_MIN = GameMessage_MessageType_GameInitData;
+const GameMessage_MessageType GameMessage_MessageType_MessageType_MIN = GameMessage_MessageType_HeartBeat;
 const GameMessage_MessageType GameMessage_MessageType_MessageType_MAX = GameMessage_MessageType_UserOperationPackage;
 const int GameMessage_MessageType_MessageType_ARRAYSIZE = GameMessage_MessageType_MessageType_MAX + 1;
 
@@ -682,6 +683,7 @@ class GameMessage : public ::google_lalune::protobuf::Message {
   // nested types ----------------------------------------------------
 
   typedef GameMessage_MessageType MessageType;
+  static const MessageType HeartBeat = GameMessage_MessageType_HeartBeat;
   static const MessageType GameInitData = GameMessage_MessageType_GameInitData;
   static const MessageType UserOperation = GameMessage_MessageType_UserOperation;
   static const MessageType UserOperationPackage = GameMessage_MessageType_UserOperationPackage;
