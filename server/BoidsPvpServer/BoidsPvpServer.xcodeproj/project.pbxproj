@@ -284,8 +284,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../Development/Lib/Boost/lib\"",
 					"\"$(SRCROOT)/../../Development/Lib/Protobuf/lib\"",
-					/Users/yanjiech/Documents/Development/Lib/Boost/lib,
-					/Users/yanjiech/Documents/Development/Lib/Protobuf/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -303,8 +301,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../Development/Lib/Boost/lib\"",
 					"\"$(SRCROOT)/../../Development/Lib/Protobuf/lib\"",
-					/Users/yanjiech/Documents/Development/Lib/Boost/lib,
-					/Users/yanjiech/Documents/Development/Lib/Protobuf/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
