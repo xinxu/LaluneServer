@@ -10,7 +10,7 @@
 #include <boost/thread/locks.hpp>
 #include <string>
 #include <set>
-#include "Log/Log.h"
+#include "../Log/Log.h"
 #include "../include/ioservice_thread.h"
 
 int clients_running_threads_count = 0;
@@ -109,8 +109,9 @@ NetLib_Client_ptr NetLib_NewClient(std::shared_ptr<NetLib_Client_Delegate> d)
 
 		start_ioservice_ifnot(); //先启动线程，否则接下来的NetLib_Client_Imp可能会被意外放到上一个即将结束(work已经释放)的线程上
 	}
-
-	return NetLib_Client_ptr(new NetLib_Client_Imp(d, th->client_ioservice),
+    
+    return std::shared_ptr<NetLib_Client_Imp>( new NetLib_Client_Imp(d, th->client_ioservice ),
+//    return NetLib_Client_ptr(new NetLib_Client_Imp(d, th->client_ioservice),
 		[] (NetLib_Client_Imp* c_raw_ptr)
 		{
 			th->client_ioservice.post(					//这里要post一下是为了让client和delegate的析构彻底在锁外。
@@ -145,7 +146,7 @@ NetLib_Client_ptr NetLib_NewClient(std::shared_ptr<NetLib_Client_Delegate> d, io
 		clients_running_objs_count ++;
 	}
 
-	return NetLib_Client_ptr(new NetLib_Client_Imp(d, thread->get_ioservice()),
+	return std::shared_ptr<NetLib_Client_Imp>(new NetLib_Client_Imp(d, thread->get_ioservice()),
 		[=] (NetLib_Client_Imp* c_raw_ptr)
 		{
 			thread->get_ioservice().post([c_raw_ptr]()				//这里要post一下是为了让client和delegate的析构彻底在锁外。										
@@ -192,7 +193,7 @@ NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_Server_Delegate> d)
 	}
 
 	ioservice_thread* thread_for_server = new ioservice_thread();
-	return NetLib_Server_ptr(new NetLib_Server_Imp(d, *thread_for_server),
+    return std::shared_ptr<NetLib_Server_Imp>(new NetLib_Server_Imp(d, *thread_for_server),
 		[=](NetLib_Server_Imp* raw_svr_ptr) 
 		{
 			ioservice_thread* _thread_for_server = thread_for_server;
@@ -263,7 +264,7 @@ NetLib_Server_ptr NetLib_NewServer(std::shared_ptr<NetLib_Server_Delegate> d, io
 		servers_running_objs_count ++;
 	}
 
-	return NetLib_Server_ptr(new NetLib_Server_Imp(d, *thread), 
+	return std::shared_ptr<NetLib_Server_Imp>(new NetLib_Server_Imp(d, *thread), 
 		[=](NetLib_Server_Imp* raw_svr_ptr) 
 		{
 			thread->get_ioservice().post( [raw_svr_ptr] ()
@@ -313,6 +314,7 @@ bool NetLib_CheckVersion(const char* version)
 
 #ifndef _STATIC_NETLIB_
 
+#if defined( WIN32 )
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
@@ -330,5 +332,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	}
 	return TRUE;
 }
+#endif
 
 #endif

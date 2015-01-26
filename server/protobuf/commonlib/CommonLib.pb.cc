@@ -2,7 +2,7 @@
 // source: commonlib/CommonLib.proto
 
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
-#include "commonlib/CommonLib.pb.h"
+#include "CommonLib.pb.h"
 
 #include <algorithm>
 

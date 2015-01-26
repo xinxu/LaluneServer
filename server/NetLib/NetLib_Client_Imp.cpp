@@ -5,7 +5,7 @@
 #include <boost/array.hpp>
 #include "NetLib_Params.h"
 #include "../include/utility2.h"
-#include "Log/Log.h"
+#include "../Log/Log.h"
 
 NetLib_Client_Imp::NetLib_Client_Imp(std::shared_ptr<NetLib_Client_Delegate> d, boost::asio::io_service & ioservice) : theDelegate(d), boostioservice(ioservice), tcpsocket(ioservice), 
 	m_last_error(no_error), m_last_internal_error(0), 
@@ -43,8 +43,8 @@ void NetLib_Client_Imp::ResetFailedData()
 		}
 		else
 		{
-			boostioservice.post(boost::bind(&NetLib_Client_Delegate::FailedDataReleaseHandler, theDelegate.get(), shared_from_this(), failed_data_queue.front().data, failed_data_queue.front().pHint));
-			//ÕâÊ±ºò¿ÉÄÜÒÑ¾­ÔÚNetLib_Client_ImpµÄÎö¹¹º¯ÊıÀïÁË£¬²»ÓÃÒ²²»ÄÜshared_from_this()¡£
+			boostioservice.post(boost::bind(&NetLib_Client_Delegate::FailedDataReleaseHandler, theDelegate.get(), this->shared_from_this(), failed_data_queue.front().data, failed_data_queue.front().pHint));
+			//ÕâÊ±ºò¿ÉÄÜÒÑ¾­ÔÚNetLib_Client_ImpµÄÎö¹¹º¯ÊıÀïÁË£¬²»ÓÃÒ²²»ÄÜthis->shared_from_this()¡£
 			//Ê¹ÓÃÕßÔÚÕâ¸öHandlerÀïÃæ»ù±¾ÉÏÒ²¾ÍÊÇ×öÒ»ÏÂdelete[] dataÁË
 		}
 		failed_data_queue.pop();
@@ -129,7 +129,7 @@ void NetLib_Client_Imp::disconnected(std::shared_ptr<NetLib_Client_Imp> keep_ali
 
 	if (m_currently_retries == 0) //¸Õ¶ÏÏß£¬»¹Ã»ÓĞÖØÁ¬¹ı
 	{
-		theDelegate->DisconnectedHandler(shared_from_this(), m_last_error, m_last_internal_error, will_continue_reconnect); 
+		theDelegate->DisconnectedHandler(this->shared_from_this(), m_last_error, m_last_internal_error, will_continue_reconnect);
 
 		if (connected_session)
 		{
@@ -144,7 +144,7 @@ void NetLib_Client_Imp::disconnected(std::shared_ptr<NetLib_Client_Imp> keep_ali
 	{
 		//LOGEVENTL("_reconn_fail", log_::n("ptr") << hex((std::size_t)keep_alive.get()) << _ln("error") << m_last_error << _ln("internal_error") << m_last_internal_error);
 
-		theDelegate->ReconnectFailedHandler(shared_from_this(), will_continue_reconnect); //Õâ¸öHandler¿ÉÄÜ»áĞŞ¸Äwill_continue_reconnectµÄÖµ
+		theDelegate->ReconnectFailedHandler(this->shared_from_this(), will_continue_reconnect); //Õâ¸öHandler¿ÉÄÜ»áĞŞ¸Äwill_continue_reconnectµÄÖµ
 	}
 	
 	//LOGEVENTL("disconnected_half", log_::n("ptr") << hex((std::size_t)keep_alive.get()) << log_::n("connected_session") << hex((std::size_t)connected_session.get()));
@@ -160,7 +160,7 @@ void NetLib_Client_Imp::disconnected(std::shared_ptr<NetLib_Client_Imp> keep_ali
 			//LOGEVENTL("Info", "will reconnect later");
 			//·ÇÊ×´Î³¢ÊÔÖØÁ¬(¼´¸ÕÖØÊ§°Ü¹ı)£¬»òÕßµÚÒ»´ÎÁ¬¾ÍÊ§°ÜÈ»ºóĞèÒªÖØÁ¬£ºĞèÒªÑÓÊ±Ò»¶ÎÊ±¼äÔÙÖØÁ¬
 			reconnect_retry_timer.expires_from_now(boost::posix_time::milliseconds(m_reconnect_interval_ms));
-			reconnect_retry_timer.async_wait(boost::bind(&NetLib_Client_Imp::reconnect_timer_pulse, this, shared_from_this(), boost::asio::placeholders::error));
+			reconnect_retry_timer.async_wait(boost::bind(&NetLib_Client_Imp::reconnect_timer_pulse, this, this->shared_from_this(), boost::asio::placeholders::error));
 		}
 		else //¸Õ¶ÏÏß£¬»¹Ã»ÓĞÖØÁ¬¹ı£¬ÇÒ²»ÊÇÊ×´ÎÁ¬½Ó£¬Òò´ËÁ¢¼´ÖØÁ¬
 		{
@@ -195,7 +195,7 @@ void NetLib_Client_Imp::decrease_pending_ops_count() //±ØĞëÔÚÃ¿¸öpending_opµÄ×îº
 		//Ö»ÓĞ½ÓÏÂÀ´µÄdisconnected·½·¨µÄÄ©Î²»á½«m_in_disconnect_processÖÃÎªfalse. ±ÜÃâÖĞÍ¾±»ConnectAsync´òÈÅ¡£SendAsyncºÍDisconnectÓÉÓÚconnected_sessionÊÇ¶Ï¿ª×´Ì¬£¬ÊÇ²»»áÕæÕıÖ´ĞĞµÄ¡£
 		//Ö»ÒªÄÇ¼¸¸ö·½·¨²»½ø£¬m_pending_ops_count¾Í²»»áÔÙ¶ÈÔö¼Ó£¬Õâ¸öµØ·½Ò²²»»áÔÙ´Î½øÀ´¡£³ı·ÇÊÇ×Ô¶¯ÖØÁ¬µÄÊ§°Ü¿ÉÄÜ»áÔÙ½øÕâ¶ù
 		//Òò´ËÖ»Òª±£Ö¤ioserviceÖ»ÓĞÒ»¸öÏß³ÌÔÚÅÜ£¬disconnected·½·¨¾ÍÍ¬Ò»Ê±¼äÖ»»á½øÒ»´Î¡£
-		boostioservice.post(boost::bind(&NetLib_Client_Imp::disconnected, this, shared_from_this())); //postÊÇÎªÁË³¹µ×³öËø£¬²»¹Üµ÷ÓÃÕßÍâÃæ»¹ÓĞÃ»Ëø¡£
+		boostioservice.post(boost::bind(&NetLib_Client_Imp::disconnected, this, this->shared_from_this())); //postÊÇÎªÁË³¹µ×³öËø£¬²»¹Üµ÷ÓÃÕßÍâÃæ»¹ÓĞÃ»Ëø¡£
 	}
 }
 
@@ -236,7 +236,7 @@ void NetLib_Client_Imp::send_keep_alive_in_future()
 {
 	boost::system::error_code ignored_error;
 	keep_alive_timer.expires_from_now(boost::posix_time::seconds(m_keepalive_interval_seconds), ignored_error);
-	keep_alive_timer.async_wait(boost::bind(&NetLib_Client_Imp::send_keep_alive, this, shared_from_this(), boost::asio::placeholders::error));
+	keep_alive_timer.async_wait(boost::bind(&NetLib_Client_Imp::send_keep_alive, this, this->shared_from_this(), boost::asio::placeholders::error));
 }
 
 void NetLib_Client_Imp::connected_handler() //¸Ã·½·¨Ö»ÄÜÔÚËøÄÚµ÷ÓÃ
@@ -251,7 +251,7 @@ void NetLib_Client_Imp::connected_handler() //¸Ã·½·¨Ö»ÄÜÔÚËøÄÚµ÷ÓÃ
 		//LOGEVENTL("NetLib_Info", "(" << hex((std::size_t)this) << ") NetLib_Client connected.");
 
 		m_first_connect = false;
-		boostioservice.post(boost::bind(&NetLib_Client_Delegate::ConnectedHandler, theDelegate.get(), shared_from_this())); //ÍâÃæ»¹ÓĞËø£¬ËùÒÔÖ»ÄÜÍ¨¹ıpostÀ´³öËøÁË
+		boostioservice.post(boost::bind(&NetLib_Client_Delegate::ConnectedHandler, theDelegate.get(), this->shared_from_this())); //ÍâÃæ»¹ÓĞËø£¬ËùÒÔÖ»ÄÜÍ¨¹ıpostÀ´³öËøÁË
 	}
 	else //±íÊ¾×Ô¶¯ÖØÁ¬³É¹¦
 	{		
@@ -259,7 +259,7 @@ void NetLib_Client_Imp::connected_handler() //¸Ã·½·¨Ö»ÄÜÔÚËøÄÚµ÷ÓÃ
 
 		m_in_disconnect_process = false;
 		m_currently_retries = 0;
-		boostioservice.post(boost::bind(&NetLib_Client_Delegate::ReconnectedHandler, theDelegate.get(), shared_from_this())); //ÍâÃæ»¹ÓĞËø£¬ËùÒÔÖ»ÄÜÍ¨¹ıpostÀ´³öËøÁË
+		boostioservice.post(boost::bind(&NetLib_Client_Delegate::ReconnectedHandler, theDelegate.get(), this->shared_from_this())); //ÍâÃæ»¹ÓĞËø£¬ËùÒÔÖ»ÄÜÍ¨¹ıpostÀ´³öËøÁË
 	}
 
 	if (connected_session)
@@ -308,13 +308,13 @@ void NetLib_Client_Imp::tcp_connect_async()
 		increase_pending_ops_count();
 
 		tcpsocket.async_connect(endpoint, 
-			boost::bind(&NetLib_Client_Imp::tcp_connected_handler, this, shared_from_this(), boost::asio::placeholders::error));
+			boost::bind(&NetLib_Client_Imp::tcp_connected_handler, this, this->shared_from_this(), boost::asio::placeholders::error));
 	}
 	catch (std::exception e)
 	{		
 		LOGEVENTL("Debug", "tcpsocket.async_connect throws exception: " << e.what());
 
-		std::shared_ptr<NetLib_Client_Imp> keep_alive = shared_from_this(); //why this? 11.28
+		std::shared_ptr<NetLib_Client_Imp> keep_alive = this->shared_from_this(); //why this? 11.28
 		handle_error(client_connect_error_std_ex, 0);
 
 		decrease_pending_ops_count();
@@ -360,7 +360,7 @@ void NetLib_Client_Imp::tcp_connected_handler(std::shared_ptr<NetLib_Client_Imp>
 			}
 			else //ÉĞÎ´Á¬½Ó£¬»òÉÏÒ»¸öconnected_sessionÒÑ¶Ï¿ª
 			{
-				connected_session = std::shared_ptr<NetLib_Connected_TcpSession> (new NetLib_Connected_TcpSession(shared_from_this(), boostioservice, tcpsocket));
+				connected_session = std::shared_ptr<NetLib_Connected_TcpSession> (new NetLib_Connected_TcpSession(this->shared_from_this(), boostioservice, tcpsocket));
 				connected_session->start();
 
 				connected_handler();
@@ -392,7 +392,7 @@ void NetLib_Client_Imp::connect_async()
 
 void NetLib_Client_Imp::_connect_async(const char* ip_s, uint32_t ip_u, uint16_t port, uint64_t flags)
 {
-	std::shared_ptr<NetLib_Client_Imp> keep_alive = shared_from_this(); //±ÜÃâÔÚËøÍâµÄÊ±ºòthis»¹½¡ÔÚ£¬µÈÄÜ½øËøÁËthisÒÑ¾­ÊÍ·ÅÁË¡£
+	std::shared_ptr<NetLib_Client_Imp> keep_alive = this->shared_from_this(); //±ÜÃâÔÚËøÍâµÄÊ±ºòthis»¹½¡ÔÚ£¬µÈÄÜ½øËøÁËthisÒÑ¾­ÊÍ·ÅÁË¡£
 	boost::lock_guard<boost::recursive_mutex> lock(client_mutex);
 	if (m_pending_ops_count != 0 || m_in_disconnect_process)
 	{
@@ -468,7 +468,7 @@ void NetLib_Client_Imp::SendAsync(const char* data, void* pHint)
 	{
 		client_mutex.unlock();
 		//LOGEVENTL("Debug", "SendAsyncFailed");
-		SendAsyncFailed(shared_from_this(), data, pHint);
+		SendAsyncFailed(this->shared_from_this(), data, pHint);
 	}
 }
 
@@ -490,7 +490,7 @@ void NetLib_Client_Imp::SendCopyAsync(const char* data, void* pHint)
 	{
 		client_mutex.unlock();
 		//LOGEVENTL("Debug", "SendCopyAsyncFailed");
-		SendCopyAsyncFailed(shared_from_this(), data_copy, pHint);
+		SendCopyAsyncFailed(this->shared_from_this(), data_copy, pHint);
 	}
 }
 

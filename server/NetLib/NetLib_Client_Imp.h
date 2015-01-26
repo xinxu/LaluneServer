@@ -55,17 +55,17 @@ protected:
 public:
 	void SendFinishHandler(char* data, void* pHint) //as long as connected_sessions is connected, the session_container is kept alive
 	{
-		theDelegate->SendFinishHandler(shared_from_this(), data, pHint);		
+		theDelegate->SendFinishHandler(this->shared_from_this(), data, pHint);
 	}
 
 	void SendCopyFinishHandler(char* data, void* pHint)
 	{
-		theDelegate->SendCopyFinishHandler(shared_from_this(), data, pHint);
+		theDelegate->SendCopyFinishHandler(this->shared_from_this(), data, pHint);
 	}
 
 	void RecvFinishHandler(char* data)  //as long as connected_sessions is connected, the session_container is kept alive
 	{
-		theDelegate->RecvFinishHandler(shared_from_this(), data);
+		theDelegate->RecvFinishHandler(this->shared_from_this(), data);
 	}
 
 	void SendFailedHandler(const char* data, void* pHint);

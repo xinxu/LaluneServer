@@ -8,7 +8,7 @@
 #include <map>
 #include <vector>
 #include <memory>
-#include "ioservice_thread.h"
+#include "../include/ioservice_thread.h"
 
 extern std::string __LS_ServerTypeName;
 extern std::string __LS_ServerTypeNameForQuery;

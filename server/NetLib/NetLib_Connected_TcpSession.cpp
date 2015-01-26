@@ -2,7 +2,7 @@
 #include "NetLib_Params.h"
 #include <boost/bind.hpp>
 #include <boost/array.hpp>
-#include "Log/Log.h"
+#include "../Log/Log.h"
 
 NetLib_Connected_TcpSession::NetLib_Connected_TcpSession(boost::asio::io_service & ioservice) : boostioservice(ioservice), m_isconnected(true)
 {
@@ -255,7 +255,7 @@ void NetLib_Connected_TcpSession::send_async(const char* data, bool copy, void* 
 
 		_send_async_from_queue();
 
-		//boostioservice.post(boost::bind(&NetLib_Connected_TcpSession::send_async_from_queue, this, shared_from_this())); 
+		//boostioservice.post(boost::bind(&NetLib_Connected_TcpSession::send_async_from_queue, this, this->shared_from_this())); 
 		//why post: avoid RecvFinishHandler() (or other handler) indirectly calls send_async_from_queue() before the handler finish
 	}
 }

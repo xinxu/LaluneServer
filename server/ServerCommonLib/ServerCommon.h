@@ -27,8 +27,8 @@
 #define SERVER_MSG_DATA(d) ((d) + SERVER_MSG_HEADER_BASE_SIZE + SERVER_MSG_HEADER_EX_LEN(d))
 #define SERVER_MSG_DATA_LEN(d) (SERVER_MSG_LENGTH(d) - SERVER_MSG_HEADER_BASE_SIZE - SERVER_MSG_HEADER_EX_LEN(d))
 
-#include "MessageTypeDef.h"
-#include "commonlib/CommonLib.pb.h"
+#include "../../../LaluneCommon/include/MessageTypeDef.h"
+#include "../protobuf/commonlib/CommonLib.pb.h"
 
 class CommonLibDelegate
 {

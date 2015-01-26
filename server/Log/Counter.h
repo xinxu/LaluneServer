@@ -4,7 +4,7 @@
 #include <boost/asio/placeholders.hpp>
 #include <boost/bind.hpp>
 #include <stdint.h>
-#include "ptime2.h"
+#include "../include/ptime2.h"
 #include "internal.h"
 #include "Log.h"
 
@@ -22,7 +22,7 @@ public:
 		m_start_time = ptime2(boost::posix_time::microsec_clock::local_time()).get_u64();
 		boost::system::error_code error;
 		t.expires_from_now(boost::posix_time::seconds(m_interval_secs), error);
-		t.async_wait(boost::bind(&Counter::timer_expired, this, shared_from_this(), boost::asio::placeholders::error));
+		t.async_wait(boost::bind(&Counter::timer_expired, this, this->shared_from_this(), boost::asio::placeholders::error));
 	}
 
 protected:
@@ -55,7 +55,7 @@ public:
 		//但这和refresh_timer()还不一样，不能更新m_start_time
 		boost::system::error_code error;
 		t.expires_from_now(boost::posix_time::seconds(m_interval_secs), error);
-		t.async_wait(boost::bind(&Counter::timer_expired, this, shared_from_this(), boost::asio::placeholders::error));
+		t.async_wait(boost::bind(&Counter::timer_expired, this, this->shared_from_this(), boost::asio::placeholders::error));
 	}
 
 	void Cancel()

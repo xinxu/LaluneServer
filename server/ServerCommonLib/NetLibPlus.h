@@ -1,10 +1,10 @@
 #pragma once
 
-#include "NetLib/NetLib.h"
+#include "../NetLib/NetLib.h"
 #include <memory>
 #include <stdint.h>
 #include <string>
-#include "NetLib/NetLib_Error.h"
+#include "../NetLib/NetLib_Error.h"
 
 void _initialize_thread(class ioservice_thread* thread);
 

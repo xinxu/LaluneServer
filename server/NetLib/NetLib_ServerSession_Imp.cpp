@@ -1,6 +1,6 @@
 #include "NetLib_ServerSession_Imp.h"
 #include "NetLib_Server_Imp.h"
-#include "Log/Log.h"
+#include "../Log/Log.h"
 #include <boost/bind.hpp>
 
 NetLib_ServerSession_Imp::NetLib_ServerSession_Imp(NetLib_ServerSession_Delegate* d, std::shared_ptr<NetLib_Server_Delegate> sd, boost::asio::io_service& ioservice, int timeout_seconds): 
@@ -24,7 +24,7 @@ void NetLib_ServerSession_Imp::refresh_timeout_timer() //session½¨Á¢ºó£¬¸Ã·½·¨ÖÁ
 {
 	m_keep_alive_timer.expires_from_now(boost::posix_time::seconds(m_timeout_seconds));
 	//LOGEVENTL("NetLib_Trace", "ServerSession timeout_handler refreshed");
-	m_keep_alive_timer.async_wait(boost::bind(&NetLib_ServerSession_Imp::timeout_handler, this, shared_from_this(), boost::asio::placeholders::error));
+	m_keep_alive_timer.async_wait(boost::bind(&NetLib_ServerSession_Imp::timeout_handler, this, this->shared_from_this(), boost::asio::placeholders::error));
 
 	//Õâ¸ötimerºÍsession_detailÃ»ÓÐ¹ØÏµ£¬²»ÓÃincreasing_pending_ops_count¡£ËûÊÇServerSessionÀàµÄpending_op
 }
@@ -60,7 +60,7 @@ void NetLib_ServerSession_Imp::SendAsync(const char* data, void* pHint)
 	else
 	{
 		session_mutex.unlock();
-		boostioservice.post(boost::bind(&NetLib_ServerSession_Delegate::SendFailedHandler, theDelegate, shared_from_this(), data, pHint)); //Handler±ØÐëÖ±½Ó»ò¼ä½ÓµÄ¾­¹ýpost²ÅÄÜµ÷ÓÃ£¬·ñÔòÓÐ¿ÉÄÜµ¼ÖÂËÀËø
+		boostioservice.post(boost::bind(&NetLib_ServerSession_Delegate::SendFailedHandler, theDelegate, this->shared_from_this(), data, pHint)); //Handler±ØÐëÖ±½Ó»ò¼ä½ÓµÄ¾­¹ýpost²ÅÄÜµ÷ÓÃ£¬·ñÔòÓÐ¿ÉÄÜµ¼ÖÂËÀËø
 	}
 }
 
@@ -85,7 +85,7 @@ void NetLib_ServerSession_Imp::SendCopyAsync(const char* data, void* pHint)
 	else
 	{		
 		session_mutex.unlock();
-		boostioservice.post(boost::bind(&NetLib_ServerSession_Imp::SendCopyAsyncFailed, this, shared_from_this(), data_copy, pHint)); //Handler±ØÐëÖ±½Ó»ò¼ä½ÓµÄ¾­¹ýpost²ÅÄÜµ÷ÓÃ£¬·ñÔòÓÐ¿ÉÄÜµ¼ÖÂËÀËø
+		boostioservice.post(boost::bind(&NetLib_ServerSession_Imp::SendCopyAsyncFailed, this, this->shared_from_this(), data_copy, pHint)); //Handler±ØÐëÖ±½Ó»ò¼ä½ÓµÄ¾­¹ýpost²ÅÄÜµ÷ÓÃ£¬·ñÔòÓÐ¿ÉÄÜµ¼ÖÂËÀËø
 	}
 }
 
@@ -184,7 +184,7 @@ void NetLib_ServerSession_Imp::disconnected()
 		session_detail.reset(); //ÕâÀïËäÈ»ÇÐ¶ÏÁËsession_detailºÍserver_sessionµÄÁªÏµ£¬µ«²»»áµ¼ÖÂserver_sessionÊÍ·Å¡£server_sessionÔÚ½ÓÏÂÀ´µÄerase_sessionÀïÃæÉ¾µô×îºóÒ»·ÝÒýÓÃºó£¬²Å»á±»ÊÍ·Å
 	}
 	
-	server->erase_session(shared_from_this());
+	server->erase_session(this->shared_from_this());
 }
 
 //Ö»»á½øÒ»´Î
@@ -193,7 +193,7 @@ void NetLib_ServerSession_Imp::handle_error(NetLib_Error error, int error_code)
 	boost::system::error_code ignored_error;
 	m_keep_alive_timer.cancel(ignored_error); //ËäÈ»Îö¹¹º¯ÊýÀïÒ²»ácancel£¬µ«ÄÇ»áµ¼ÖÂServerSessionµÄÊÍ·ÅÊ±¼ä±Èsession_detail³ÙºÃ¾Ã£¬ÒòÎªÓÐÒ»¸öServerSessionµÄkeepaliveÔÚtimerÉÏ
 
-	boostioservice.post(boost::bind(&NetLib_ServerSession_Delegate::DisconnectedHandler, theDelegate, shared_from_this(), error, error_code));	
+	boostioservice.post(boost::bind(&NetLib_ServerSession_Delegate::DisconnectedHandler, theDelegate, this->shared_from_this(), error, error_code));	
 }
 
 void NetLib_ServerSession_Imp::decrease_pending_ops_count() //±ØÐëÔÚÃ¿¸öpending_opµÄ×îºóµ÷ÓÃ
@@ -212,12 +212,12 @@ void NetLib_ServerSession_Imp::decrease_pending_ops_count() //±ØÐëÔÚÃ¿¸öpending_
 
 void NetLib_ServerSession_Imp::SendFinishHandler(char* data, void* pHint)
 {
-	theDelegate->SendFinishHandler(shared_from_this(), data, pHint);
+	theDelegate->SendFinishHandler(this->shared_from_this(), data, pHint);
 }
 
 void NetLib_ServerSession_Imp::SendCopyFinishHandler(char* data, void* pHint)
 {
-	theDelegate->SendCopyFinishHandler(shared_from_this(), data, pHint);
+	theDelegate->SendCopyFinishHandler(this->shared_from_this(), data, pHint);
 }
 
 //'data' will be released just after RecvFinishHandler returns
@@ -229,23 +229,23 @@ void NetLib_ServerSession_Imp::RecvFinishHandler(char* data) //ÕâÐ©·½·¨µÄÉÏ²ã¶¼±
 	{
 		if (server->m_flags & NETLIB_SERVER_LISTEN_KEEP_ALIVE_EVENT)
 		{
-			theDelegate->RecvKeepAliveHandler(shared_from_this());
+			theDelegate->RecvKeepAliveHandler(this->shared_from_this());
 		}
 	}
 	else
 	{
-		theDelegate->RecvFinishHandler(shared_from_this(), data);
+		theDelegate->RecvFinishHandler(this->shared_from_this(), data);
 	}
 }
 
 void NetLib_ServerSession_Imp::SendFailedHandler(const char* data, void* pHint)
 {
-	theDelegate->SendFailedHandler(shared_from_this(), data, pHint);
+	theDelegate->SendFailedHandler(this->shared_from_this(), data, pHint);
 }
 
 bool NetLib_ServerSession_Imp::SendCopyFailedHandler(const char* data_copy, void* pHint)
 {
-	theDelegate->SendCopyFailedHandler(shared_from_this(), data_copy, pHint);
+	theDelegate->SendCopyFailedHandler(this->shared_from_this(), data_copy, pHint);
 	return false;
 }
 

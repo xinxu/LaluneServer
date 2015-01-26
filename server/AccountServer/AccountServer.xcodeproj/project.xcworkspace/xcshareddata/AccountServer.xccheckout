@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>9FCB2555-E059-46E1-A58F-E35C5334A99A</string>
+	<key>IDESourceControlProjectName</key>
+	<string>AccountServer</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>A802F3CD828F592652D85CE3DC7522FB23CE087F</key>
+		<string>https://github.com/xinxu/LaluneCommon.git</string>
+		<key>DE346E5EDCB5B939ED7C50950BD3A169DDA6A6EE</key>
+		<string>https://github.com/xinxu/LaluneServer.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>server/AccountServer/AccountServer.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>A802F3CD828F592652D85CE3DC7522FB23CE087F</key>
+		<string>../../../../../LaluneCommon</string>
+		<key>DE346E5EDCB5B939ED7C50950BD3A169DDA6A6EE</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/xinxu/LaluneServer.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>DE346E5EDCB5B939ED7C50950BD3A169DDA6A6EE</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>A802F3CD828F592652D85CE3DC7522FB23CE087F</string>
+			<key>IDESourceControlWCCName</key>
+			<string>LaluneCommon</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>DE346E5EDCB5B939ED7C50950BD3A169DDA6A6EE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>LaluneServer</string>
+		</dict>
+	</array>
+</dict>
+</plist>

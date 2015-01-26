@@ -1,7 +1,6 @@
-#include "NetLib.h"
 #include "NetLibPlus.h"
 #include <queue>
-#include "NetLib/NetLib_Packet.h"
+#include "../NetLib/NetLib_Packet.h"
 
 class NetLibPlus_Client_Imp : public NetLibPlus_Client, public NetLib_Client_Delegate, public std::enable_shared_from_this<NetLibPlus_Client_Imp>
 {

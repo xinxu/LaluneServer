@@ -1,13 +1,13 @@
 #include "NetLibPlus.h"
 #include "NetLibPlusClient.h"
 #include "../include/ioservice_thread.h"
-#include "include/utility2.h"
+#include "../include/utility2.h"
 #include <map>
 #include <set>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/shared_mutex.hpp>
 #include <boost/thread/locks.hpp>
-#include "Log/Log.h"
+#include "../Log/Log.h"
 
 ioservice_thread* _netlibplus_thread;
 

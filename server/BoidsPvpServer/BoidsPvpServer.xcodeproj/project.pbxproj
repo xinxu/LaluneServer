@@ -1,0 +1,337 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		98CBC0631A636C07003E7209 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98CBC0621A636C07003E7209 /* main.cpp */; };
+		98CBC0731A637D3E003E7209 /* PvpServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98CBC0701A637D3E003E7209 /* PvpServer.cpp */; };
+		98CBC0791A637DD7003E7209 /* PvpGameServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98CBC0771A637DD7003E7209 /* PvpGameServer.cpp */; };
+		98CBC0811A63BDDE003E7209 /* PvpTerminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98CBC0801A63BDDE003E7209 /* PvpTerminal.cpp */; };
+		98CBC0861A63C5FB003E7209 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CBC0851A63C5FB003E7209 /* libboost_system.a */; };
+		98CBC0891A63DAC4003E7209 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98CBC0871A63DAC4003E7209 /* MessageQueue.cpp */; };
+		98CBC08C1A63DE7B003E7209 /* pvp.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 98CBC08A1A63DE7B003E7209 /* pvp.pb.cc */; };
+		98CBC08E1A63E0C5003E7209 /* libprotobuf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CBC08D1A63E0C5003E7209 /* libprotobuf.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		98CBC05D1A636C07003E7209 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		98CBC05F1A636C07003E7209 /* BoidsPvpServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BoidsPvpServer; sourceTree = BUILT_PRODUCTS_DIR; };
+		98CBC0621A636C07003E7209 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		98CBC06D1A637A8D003E7209 /* SharedMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedMacro.h; sourceTree = "<group>"; };
+		98CBC0701A637D3E003E7209 /* PvpServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PvpServer.cpp; sourceTree = "<group>"; };
+		98CBC0711A637D3E003E7209 /* PvpServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PvpServer.h; sourceTree = "<group>"; };
+		98CBC0751A637D66003E7209 /* PvpTerminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PvpTerminal.h; sourceTree = "<group>"; };
+		98CBC0771A637DD7003E7209 /* PvpGameServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PvpGameServer.cpp; sourceTree = "<group>"; };
+		98CBC0781A637DD7003E7209 /* PvpGameServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PvpGameServer.h; sourceTree = "<group>"; };
+		98CBC0801A63BDDE003E7209 /* PvpTerminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 3; lastKnownFileType = sourcecode.cpp.cpp; path = PvpTerminal.cpp; sourceTree = "<group>"; };
+		98CBC0851A63C5FB003E7209 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = ../../Development/Lib/Boost/lib/libboost_system.a; sourceTree = "<group>"; };
+		98CBC0871A63DAC4003E7209 /* MessageQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MessageQueue.cpp; path = BoidsPvpServer/Data/MessageQueue.cpp; sourceTree = SOURCE_ROOT; };
+		98CBC0881A63DAC4003E7209 /* MessageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageQueue.h; path = BoidsPvpServer/Data/MessageQueue.h; sourceTree = SOURCE_ROOT; };
+		98CBC08A1A63DE7B003E7209 /* pvp.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pvp.pb.cc; path = BoidsPvpServer/Data/pvp.pb.cc; sourceTree = SOURCE_ROOT; };
+		98CBC08B1A63DE7B003E7209 /* pvp.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pvp.pb.h; path = BoidsPvpServer/Data/pvp.pb.h; sourceTree = SOURCE_ROOT; };
+		98CBC08D1A63E0C5003E7209 /* libprotobuf.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libprotobuf.a; path = ../../Development/Lib/Protobuf/lib/libprotobuf.a; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		98CBC05C1A636C07003E7209 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				98CBC08E1A63E0C5003E7209 /* libprotobuf.a in Frameworks */,
+				98CBC0861A63C5FB003E7209 /* libboost_system.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		98CBC0561A636C07003E7209 = {
+			isa = PBXGroup;
+			children = (
+				98CBC0841A63C5D7003E7209 /* Libs */,
+				98CBC0611A636C07003E7209 /* BoidsPvpServer */,
+				98CBC0601A636C07003E7209 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		98CBC0601A636C07003E7209 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				98CBC05F1A636C07003E7209 /* BoidsPvpServer */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		98CBC0611A636C07003E7209 /* BoidsPvpServer */ = {
+			isa = PBXGroup;
+			children = (
+				98CBC07A1A6380D5003E7209 /* Data */,
+				98CBC06F1A637D3E003E7209 /* Server */,
+				98CBC0721A637D3E003E7209 /* Terminal */,
+				98CBC0621A636C07003E7209 /* main.cpp */,
+				98CBC06D1A637A8D003E7209 /* SharedMacro.h */,
+			);
+			path = BoidsPvpServer;
+			sourceTree = "<group>";
+		};
+		98CBC06F1A637D3E003E7209 /* Server */ = {
+			isa = PBXGroup;
+			children = (
+				98CBC0701A637D3E003E7209 /* PvpServer.cpp */,
+				98CBC0711A637D3E003E7209 /* PvpServer.h */,
+				98CBC0771A637DD7003E7209 /* PvpGameServer.cpp */,
+				98CBC0781A637DD7003E7209 /* PvpGameServer.h */,
+			);
+			path = Server;
+			sourceTree = "<group>";
+		};
+		98CBC0721A637D3E003E7209 /* Terminal */ = {
+			isa = PBXGroup;
+			children = (
+				98CBC0801A63BDDE003E7209 /* PvpTerminal.cpp */,
+				98CBC0751A637D66003E7209 /* PvpTerminal.h */,
+			);
+			path = Terminal;
+			sourceTree = "<group>";
+		};
+		98CBC07A1A6380D5003E7209 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				98CBC08A1A63DE7B003E7209 /* pvp.pb.cc */,
+				98CBC08B1A63DE7B003E7209 /* pvp.pb.h */,
+				98CBC0871A63DAC4003E7209 /* MessageQueue.cpp */,
+				98CBC0881A63DAC4003E7209 /* MessageQueue.h */,
+			);
+			name = Data;
+			path = net;
+			sourceTree = "<group>";
+		};
+		98CBC0841A63C5D7003E7209 /* Libs */ = {
+			isa = PBXGroup;
+			children = (
+				98CBC08D1A63E0C5003E7209 /* libprotobuf.a */,
+				98CBC0851A63C5FB003E7209 /* libboost_system.a */,
+			);
+			name = Libs;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		98CBC05E1A636C07003E7209 /* BoidsPvpServer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 98CBC0661A636C07003E7209 /* Build configuration list for PBXNativeTarget "BoidsPvpServer" */;
+			buildPhases = (
+				98CBC05B1A636C07003E7209 /* Sources */,
+				98CBC05C1A636C07003E7209 /* Frameworks */,
+				98CBC05D1A636C07003E7209 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BoidsPvpServer;
+			productName = BoidsPvpServer;
+			productReference = 98CBC05F1A636C07003E7209 /* BoidsPvpServer */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		98CBC0571A636C07003E7209 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Shanghai Yuyu Network Technology Co. Ltd.";
+				TargetAttributes = {
+					98CBC05E1A636C07003E7209 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 98CBC05A1A636C07003E7209 /* Build configuration list for PBXProject "BoidsPvpServer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 98CBC0561A636C07003E7209;
+			productRefGroup = 98CBC0601A636C07003E7209 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				98CBC05E1A636C07003E7209 /* BoidsPvpServer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		98CBC05B1A636C07003E7209 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				98CBC0631A636C07003E7209 /* main.cpp in Sources */,
+				98CBC08C1A63DE7B003E7209 /* pvp.pb.cc in Sources */,
+				98CBC0791A637DD7003E7209 /* PvpGameServer.cpp in Sources */,
+				98CBC0891A63DAC4003E7209 /* MessageQueue.cpp in Sources */,
+				98CBC0811A63BDDE003E7209 /* PvpTerminal.cpp in Sources */,
+				98CBC0731A637D3E003E7209 /* PvpServer.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		98CBC0641A636C07003E7209 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		98CBC0651A636C07003E7209 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		98CBC0671A636C07003E7209 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"\"$(SRCROOT)/../../Development/Lib/Boost/include\"",
+					"\"$(SRCROOT)/../../Development/Lib/Protobuf/include\"",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../Development/Lib/Boost/lib\"",
+					"\"$(SRCROOT)/../../Development/Lib/Protobuf/lib\"",
+					/Users/yanjiech/Documents/Development/Lib/Boost/lib,
+					/Users/yanjiech/Documents/Development/Lib/Protobuf/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		98CBC0681A636C07003E7209 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"\"$(SRCROOT)/../../Development/Lib/Boost/include\"",
+					"\"$(SRCROOT)/../../Development/Lib/Protobuf/include\"",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../Development/Lib/Boost/lib\"",
+					"\"$(SRCROOT)/../../Development/Lib/Protobuf/lib\"",
+					/Users/yanjiech/Documents/Development/Lib/Boost/lib,
+					/Users/yanjiech/Documents/Development/Lib/Protobuf/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		98CBC05A1A636C07003E7209 /* Build configuration list for PBXProject "BoidsPvpServer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				98CBC0641A636C07003E7209 /* Debug */,
+				98CBC0651A636C07003E7209 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		98CBC0661A636C07003E7209 /* Build configuration list for PBXNativeTarget "BoidsPvpServer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				98CBC0671A636C07003E7209 /* Debug */,
+				98CBC0681A636C07003E7209 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 98CBC0571A636C07003E7209 /* Project object */;
+}

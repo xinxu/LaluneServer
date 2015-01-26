@@ -1,9 +1,9 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/locks.hpp>
 #include <boost/asio/placeholders.hpp>
-#include "ptime2.h"
+#include "../include/ptime2.h"
 #include "../protobuf/log/log.pb.h"
-#include "NetLib/NetLib.h"
+#include "../NetLib/NetLib.h"
 #include "internal.h"
 #include "BasicLogStream.h"
 #include "HeaderDefine.h"

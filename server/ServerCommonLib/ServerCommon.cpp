@@ -1,10 +1,10 @@
-#include "NetLib.h"
-#include "include/ToAbsolutePath.h"
+#include "../NetLib/NetLib.h"
+#include "../include/ToAbsolutePath.h"
 #include "ServerCommon.h"
-#include "include/SimpleIni.h"
-#include "include/utility1.h"
-#include "include/ioservice_thread.h"
-#include "Log/Log.h"
+#include "../include/SimpleIni.h"
+#include "../include/utility1.h"
+#include "../include/ioservice_thread.h"
+#include "../Log/Log.h"
 #include <map>
 #include <boost/asio.hpp>
 

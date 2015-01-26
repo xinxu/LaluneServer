@@ -10,7 +10,7 @@
 #include <boost/thread/locks.hpp>
 #include <memory>
 #include <queue>
-#include "Log/Log.h"
+#include "../Log/Log.h"
 
 using namespace boost::asio::ip;
 

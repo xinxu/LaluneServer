@@ -58,7 +58,7 @@ public:
 	virtual void handle_data(const std::string& index1, const std::string& index2, const std::string& index3, uint64_t time, const LogDataReader& reader) = 0;
 };
 
-#include "const_time.h"
+#include "../include/const_time.h"
 
 void Query123(std::shared_ptr<ResultHandler> rh, const std::string& index1, const std::string& index2, const std::string& index3, 
 	bool no_sort, uint64_t begin_time = TIME64_NEGATIVE_INFINITY, uint64_t end_time = TIME64_POSITIVE_INFINITY);

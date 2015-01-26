@@ -1,8 +1,8 @@
 #ifndef _LOG_DLL_
 
 #include "../protobuf/log/log.pb.h"
-#include "ptime2.h"
-#include "NetLib/NetLib.h"
+#include "../include/ptime2.h"
+#include "../NetLib/NetLib.h"
 #include "HeaderDefine.h"
 #include "to_LS_ClientDelegate.h"
 #include <boost/thread/mutex.hpp>

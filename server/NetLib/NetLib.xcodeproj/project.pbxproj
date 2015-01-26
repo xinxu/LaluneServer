@@ -1,0 +1,374 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		98C8D04B1A147FB800EDD908 /* NetLib_Client_Imp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98C8D03A1A147FB800EDD908 /* NetLib_Client_Imp.cpp */; };
+		98C8D04C1A147FB800EDD908 /* NetLib_Client_Imp.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C8D03B1A147FB800EDD908 /* NetLib_Client_Imp.h */; };
+		98C8D04D1A147FB800EDD908 /* NetLib_Connected_TcpSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98C8D03C1A147FB800EDD908 /* NetLib_Connected_TcpSession.cpp */; };
+		98C8D04E1A147FB800EDD908 /* NetLib_Connected_TcpSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C8D03D1A147FB800EDD908 /* NetLib_Connected_TcpSession.h */; };
+		98C8D04F1A147FB800EDD908 /* NetLib_Error.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C8D03E1A147FB800EDD908 /* NetLib_Error.h */; };
+		98C8D0501A147FB800EDD908 /* NetLib_Packet.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C8D03F1A147FB800EDD908 /* NetLib_Packet.h */; };
+		98C8D0511A147FB800EDD908 /* NetLib_Params.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98C8D0401A147FB800EDD908 /* NetLib_Params.cpp */; };
+		98C8D0521A147FB800EDD908 /* NetLib_Params.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C8D0411A147FB800EDD908 /* NetLib_Params.h */; };
+		98C8D0531A147FB800EDD908 /* NetLib_Server_Connected_TcpSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C8D0421A147FB800EDD908 /* NetLib_Server_Connected_TcpSession.h */; };
+		98C8D0541A147FB800EDD908 /* NetLib_Server_Imp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98C8D0431A147FB800EDD908 /* NetLib_Server_Imp.cpp */; };
+		98C8D0551A147FB800EDD908 /* NetLib_Server_Imp.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C8D0441A147FB800EDD908 /* NetLib_Server_Imp.h */; };
+		98C8D0561A147FB800EDD908 /* NetLib_ServerSession_Imp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98C8D0451A147FB800EDD908 /* NetLib_ServerSession_Imp.cpp */; };
+		98C8D0571A147FB800EDD908 /* NetLib_ServerSession_Imp.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C8D0461A147FB800EDD908 /* NetLib_ServerSession_Imp.h */; };
+		98C8D0581A147FB800EDD908 /* NetLib_Session_Owner.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C8D0471A147FB800EDD908 /* NetLib_Session_Owner.h */; };
+		98C8D0591A147FB800EDD908 /* NetLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98C8D0481A147FB800EDD908 /* NetLib.cpp */; };
+		98C8D05A1A147FB800EDD908 /* NetLib.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C8D0491A147FB800EDD908 /* NetLib.h */; };
+		98C8D05B1A147FB800EDD908 /* resource.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C8D04A1A147FB800EDD908 /* resource.h */; };
+		98C8D1021A14856B00EDD908 /* libLogService.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 98C8D0FF1A14855300EDD908 /* libLogService.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		98C8D0FE1A14855300EDD908 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 98C8D0FA1A14855300EDD908 /* LogService.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 98C8D09A1A1483CA00EDD908;
+			remoteInfo = LogService;
+		};
+		98C8D1001A14856200EDD908 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 98C8D0FA1A14855300EDD908 /* LogService.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 98C8D0991A1483CA00EDD908;
+			remoteInfo = LogService;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		98C8D02C1A147F7100EDD908 /* libNetLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNetLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		98C8D03A1A147FB800EDD908 /* NetLib_Client_Imp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetLib_Client_Imp.cpp; sourceTree = SOURCE_ROOT; };
+		98C8D03B1A147FB800EDD908 /* NetLib_Client_Imp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetLib_Client_Imp.h; sourceTree = SOURCE_ROOT; };
+		98C8D03C1A147FB800EDD908 /* NetLib_Connected_TcpSession.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetLib_Connected_TcpSession.cpp; sourceTree = SOURCE_ROOT; };
+		98C8D03D1A147FB800EDD908 /* NetLib_Connected_TcpSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetLib_Connected_TcpSession.h; sourceTree = SOURCE_ROOT; };
+		98C8D03E1A147FB800EDD908 /* NetLib_Error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetLib_Error.h; sourceTree = SOURCE_ROOT; };
+		98C8D03F1A147FB800EDD908 /* NetLib_Packet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetLib_Packet.h; sourceTree = SOURCE_ROOT; };
+		98C8D0401A147FB800EDD908 /* NetLib_Params.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetLib_Params.cpp; sourceTree = SOURCE_ROOT; };
+		98C8D0411A147FB800EDD908 /* NetLib_Params.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetLib_Params.h; sourceTree = SOURCE_ROOT; };
+		98C8D0421A147FB800EDD908 /* NetLib_Server_Connected_TcpSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetLib_Server_Connected_TcpSession.h; sourceTree = SOURCE_ROOT; };
+		98C8D0431A147FB800EDD908 /* NetLib_Server_Imp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetLib_Server_Imp.cpp; sourceTree = SOURCE_ROOT; };
+		98C8D0441A147FB800EDD908 /* NetLib_Server_Imp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetLib_Server_Imp.h; sourceTree = SOURCE_ROOT; };
+		98C8D0451A147FB800EDD908 /* NetLib_ServerSession_Imp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetLib_ServerSession_Imp.cpp; sourceTree = SOURCE_ROOT; };
+		98C8D0461A147FB800EDD908 /* NetLib_ServerSession_Imp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetLib_ServerSession_Imp.h; sourceTree = SOURCE_ROOT; };
+		98C8D0471A147FB800EDD908 /* NetLib_Session_Owner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetLib_Session_Owner.h; sourceTree = SOURCE_ROOT; };
+		98C8D0481A147FB800EDD908 /* NetLib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetLib.cpp; sourceTree = SOURCE_ROOT; };
+		98C8D0491A147FB800EDD908 /* NetLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetLib.h; sourceTree = SOURCE_ROOT; };
+		98C8D04A1A147FB800EDD908 /* resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resource.h; sourceTree = SOURCE_ROOT; };
+		98C8D0FA1A14855300EDD908 /* LogService.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LogService.xcodeproj; path = ../Log/LogService.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		98C8D0291A147F7100EDD908 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				98C8D1021A14856B00EDD908 /* libLogService.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		98C8D0231A147F7100EDD908 = {
+			isa = PBXGroup;
+			children = (
+				98C8D0FA1A14855300EDD908 /* LogService.xcodeproj */,
+				98C8D02E1A147F7100EDD908 /* NetLib */,
+				98C8D02D1A147F7100EDD908 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		98C8D02D1A147F7100EDD908 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				98C8D02C1A147F7100EDD908 /* libNetLib.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		98C8D02E1A147F7100EDD908 /* NetLib */ = {
+			isa = PBXGroup;
+			children = (
+				98C8D03A1A147FB800EDD908 /* NetLib_Client_Imp.cpp */,
+				98C8D03B1A147FB800EDD908 /* NetLib_Client_Imp.h */,
+				98C8D03C1A147FB800EDD908 /* NetLib_Connected_TcpSession.cpp */,
+				98C8D03D1A147FB800EDD908 /* NetLib_Connected_TcpSession.h */,
+				98C8D03E1A147FB800EDD908 /* NetLib_Error.h */,
+				98C8D03F1A147FB800EDD908 /* NetLib_Packet.h */,
+				98C8D0401A147FB800EDD908 /* NetLib_Params.cpp */,
+				98C8D0411A147FB800EDD908 /* NetLib_Params.h */,
+				98C8D0421A147FB800EDD908 /* NetLib_Server_Connected_TcpSession.h */,
+				98C8D0431A147FB800EDD908 /* NetLib_Server_Imp.cpp */,
+				98C8D0441A147FB800EDD908 /* NetLib_Server_Imp.h */,
+				98C8D0451A147FB800EDD908 /* NetLib_ServerSession_Imp.cpp */,
+				98C8D0461A147FB800EDD908 /* NetLib_ServerSession_Imp.h */,
+				98C8D0471A147FB800EDD908 /* NetLib_Session_Owner.h */,
+				98C8D0481A147FB800EDD908 /* NetLib.cpp */,
+				98C8D0491A147FB800EDD908 /* NetLib.h */,
+				98C8D04A1A147FB800EDD908 /* resource.h */,
+			);
+			path = NetLib;
+			sourceTree = "<group>";
+		};
+		98C8D0FB1A14855300EDD908 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				98C8D0FF1A14855300EDD908 /* libLogService.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		98C8D02A1A147F7100EDD908 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				98C8D05A1A147FB800EDD908 /* NetLib.h in Headers */,
+				98C8D05B1A147FB800EDD908 /* resource.h in Headers */,
+				98C8D0551A147FB800EDD908 /* NetLib_Server_Imp.h in Headers */,
+				98C8D0581A147FB800EDD908 /* NetLib_Session_Owner.h in Headers */,
+				98C8D04C1A147FB800EDD908 /* NetLib_Client_Imp.h in Headers */,
+				98C8D0521A147FB800EDD908 /* NetLib_Params.h in Headers */,
+				98C8D04E1A147FB800EDD908 /* NetLib_Connected_TcpSession.h in Headers */,
+				98C8D0501A147FB800EDD908 /* NetLib_Packet.h in Headers */,
+				98C8D0571A147FB800EDD908 /* NetLib_ServerSession_Imp.h in Headers */,
+				98C8D0531A147FB800EDD908 /* NetLib_Server_Connected_TcpSession.h in Headers */,
+				98C8D04F1A147FB800EDD908 /* NetLib_Error.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		98C8D02B1A147F7100EDD908 /* NetLib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 98C8D0371A147F7100EDD908 /* Build configuration list for PBXNativeTarget "NetLib" */;
+			buildPhases = (
+				98C8D0281A147F7100EDD908 /* Sources */,
+				98C8D0291A147F7100EDD908 /* Frameworks */,
+				98C8D02A1A147F7100EDD908 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				98C8D1011A14856200EDD908 /* PBXTargetDependency */,
+			);
+			name = NetLib;
+			productName = NetLib;
+			productReference = 98C8D02C1A147F7100EDD908 /* libNetLib.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		98C8D0241A147F7100EDD908 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Shanghai Ue2game Network Technology Co. Ltd.";
+				TargetAttributes = {
+					98C8D02B1A147F7100EDD908 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+				};
+			};
+			buildConfigurationList = 98C8D0271A147F7100EDD908 /* Build configuration list for PBXProject "NetLib" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 98C8D0231A147F7100EDD908;
+			productRefGroup = 98C8D02D1A147F7100EDD908 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 98C8D0FB1A14855300EDD908 /* Products */;
+					ProjectRef = 98C8D0FA1A14855300EDD908 /* LogService.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				98C8D02B1A147F7100EDD908 /* NetLib */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		98C8D0FF1A14855300EDD908 /* libLogService.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libLogService.a;
+			remoteRef = 98C8D0FE1A14855300EDD908 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		98C8D0281A147F7100EDD908 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				98C8D0511A147FB800EDD908 /* NetLib_Params.cpp in Sources */,
+				98C8D04D1A147FB800EDD908 /* NetLib_Connected_TcpSession.cpp in Sources */,
+				98C8D04B1A147FB800EDD908 /* NetLib_Client_Imp.cpp in Sources */,
+				98C8D0561A147FB800EDD908 /* NetLib_ServerSession_Imp.cpp in Sources */,
+				98C8D0541A147FB800EDD908 /* NetLib_Server_Imp.cpp in Sources */,
+				98C8D0591A147FB800EDD908 /* NetLib.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		98C8D1011A14856200EDD908 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = LogService;
+			targetProxy = 98C8D1001A14856200EDD908 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		98C8D0351A147F7100EDD908 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		98C8D0361A147F7100EDD908 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		98C8D0381A147F7100EDD908 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"\"$(SRCROOT)/../../../../Development/Lib/Boost/include\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		98C8D0391A147F7100EDD908 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"\"$(SRCROOT)/../../../../Development/Lib/Boost/include\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		98C8D0271A147F7100EDD908 /* Build configuration list for PBXProject "NetLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				98C8D0351A147F7100EDD908 /* Debug */,
+				98C8D0361A147F7100EDD908 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		98C8D0371A147F7100EDD908 /* Build configuration list for PBXNativeTarget "NetLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				98C8D0381A147F7100EDD908 /* Debug */,
+				98C8D0391A147F7100EDD908 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 98C8D0241A147F7100EDD908 /* Project object */;
+}

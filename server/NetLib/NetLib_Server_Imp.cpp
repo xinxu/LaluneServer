@@ -7,7 +7,7 @@
 #include <boost/array.hpp>
 #include "../include/ioservice_thread.h"
 #include "NetLib_Params.h"
-#include "Log/Log.h"
+#include "../Log/Log.h"
 
 NetLib_Server_Imp::NetLib_Server_Imp(std::shared_ptr<NetLib_Server_Delegate> d, ioservice_thread& _thread) :
 thread(_thread), m_ioservice(_thread.get_ioservice()),
@@ -33,7 +33,7 @@ void NetLib_Server_Imp::connected_handler(std::shared_ptr<NetLib_ServerSession_I
 	}
 	LOGEVENTL("NetLib_SessionsCount", "increase to " << sessions_count);
 
-	sessionptr->server = shared_from_this();
+	sessionptr->server = this->shared_from_this();
 	sessionptr->refresh_timeout_timer();
 	sessionptr->theDelegate->ConnectedHandler(sessionptr);
 }
@@ -45,7 +45,7 @@ void NetLib_Server_Imp::tcp_accept_async()
 	NetLib_Server_Connected_TcpSession* _session = new NetLib_Server_Connected_TcpSession(m_ioservice);
 	std::shared_ptr<NetLib_Connected_TcpSession> session = std::shared_ptr<NetLib_Connected_TcpSession>(_session);
 	m_tcpacceptor.async_accept(_session->get_socket(),
-			boost::bind(&NetLib_Server_Imp::tcp_accept_handler, this, shared_from_this(), session, boost::asio::placeholders::error));
+			boost::bind(&NetLib_Server_Imp::tcp_accept_handler, this, this->shared_from_this(), session, boost::asio::placeholders::error));
 }
 
 void NetLib_Server_Imp::tcp_accept_handler(std::shared_ptr<NetLib_Server_Imp> keep_alive, std::shared_ptr<NetLib_Connected_TcpSession> session_detail, const boost::system::error_code& error)

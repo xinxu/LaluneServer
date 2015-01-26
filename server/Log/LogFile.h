@@ -2,7 +2,7 @@
 
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/locks.hpp>
-#include "ptime2.h"
+#include "../include/ptime2.h"
 #include <string>
 #include <stdio.h>
 #include <boost/filesystem.hpp>

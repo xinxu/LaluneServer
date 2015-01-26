@@ -1,7 +1,7 @@
 #include "NetLibPlusClient.h"
 #include "../include/ioservice_thread.h"
 #include "../include/utility2.h"
-#include "Log/Log.h"
+#include "../Log/Log.h"
 
 //暂不开启，否则打Log的时候太烦了
 //#define NLP_LOGDETAIL
@@ -48,7 +48,7 @@ void NetLibPlus_Client_Imp::ResetClient(uint32_t ip, uint16_t tcp_port, ioservic
 		LOGEVENTL("NetLib_Trace", "NetLibPlus_Client_Imp::ResetClient, disconnect m_client: " << log_::h((std::size_t)(m_client.get())));
 	}
 
-	m_client = NetLib_NewClient(shared_from_this(), ioservice_th);
+	m_client = NetLib_NewClient(this->shared_from_this(), ioservice_th);
 
 	m_client->SetKeepAliveIntervalSeconds(KEEP_ALIVE_SEC);
 
@@ -79,7 +79,7 @@ void NetLibPlus_Client_Imp::SendFinishHandler(NetLib_Client_ptr clientptr, char*
 		std::pair<int, void*>* pp = (std::pair<int, void*>*)pHint;
 		if (pp->first == 0)
 		{
-			m_delegate->SendFinishHandler(shared_from_this(), data, pp->second);
+			m_delegate->SendFinishHandler(this->shared_from_this(), data, pp->second);
 		}
 		else
 		{
@@ -89,13 +89,13 @@ void NetLibPlus_Client_Imp::SendFinishHandler(NetLib_Client_ptr clientptr, char*
 	}
 	else //特例
 	{
-		m_delegate->SendFinishHandler(shared_from_this(), data, nullptr);
+		m_delegate->SendFinishHandler(this->shared_from_this(), data, nullptr);
 	}
 }
 
 void NetLibPlus_Client_Imp::RecvFinishHandler(NetLib_Client_ptr clientptr, char* data)
 {
-	m_delegate->RecvFinishHandler(shared_from_this(), data);
+	m_delegate->RecvFinishHandler(this->shared_from_this(), data);
 }
 
 void NetLibPlus_Client_Imp::ResendFailedData()
@@ -130,7 +130,7 @@ void NetLibPlus_Client_Imp::ConnectedHandler(NetLib_Client_ptr clientptr)
 	GetRemoteServerAddress(ip, port);
 	LOGEVENTL("NLP_Connected", ip << ":" << port);
 
-	m_delegate->ConnectedHandler(shared_from_this());
+	m_delegate->ConnectedHandler(this->shared_from_this());
 	ResendFailedData();
 }
 
@@ -141,7 +141,7 @@ void NetLibPlus_Client_Imp::ReconnectedHandler(NetLib_Client_ptr clientptr)
 	GetRemoteServerAddress(ip, port);
 	LOGEVENTL("NLP_Reconnected", ip << ":" << port);
 
-	m_delegate->ReconnectedHandler(shared_from_this());
+	m_delegate->ReconnectedHandler(this->shared_from_this());
 	ResendFailedData();
 }
 
@@ -161,7 +161,7 @@ void NetLibPlus_Client_Imp::DisconnectedHandler(NetLib_Client_ptr clientptr, Net
 	GetRemoteServerAddress(ip, port);
 	LOGEVENTL("NLP_Disconnected", ip << ":" << port << ", " << _ln("error") << error << _ln("inner_error") << inner_error_code << _ln("will_reconnect") << will_reconnect);
 
-	m_delegate->DisconnectedHandler(shared_from_this(), error, inner_error_code);
+	m_delegate->DisconnectedHandler(this->shared_from_this(), error, inner_error_code);
 }
 
 void NetLibPlus_Client_Imp::add_failed_data(const char* data, bool is_copy, void* pHint)
@@ -183,14 +183,14 @@ bool NetLibPlus_Client_Imp::SendFailedHandler(NetLib_Client_ptr clientptr, const
 		std::pair<int, void*>* pp = (std::pair<int, void*>*)pHint;
 		if (pp->first == 0)
 		{
-			if (m_delegate->SendFailedHandler(shared_from_this(), data, pp->second))
+			if (m_delegate->SendFailedHandler(this->shared_from_this(), data, pp->second))
 			{
 				add_failed_data(data, false, pp->second);
 			}
 		}
 		else
 		{
-			if (m_delegate->SendCopyFailedHandler(shared_from_this(), data))
+			if (m_delegate->SendCopyFailedHandler(this->shared_from_this(), data))
 			{
 				add_failed_data(data, true, pp->second);
 			}
@@ -203,7 +203,7 @@ bool NetLibPlus_Client_Imp::SendFailedHandler(NetLib_Client_ptr clientptr, const
 	}
 	else //特例
 	{
-		if (m_delegate->SendFailedHandler(shared_from_this(), data, nullptr))
+		if (m_delegate->SendFailedHandler(this->shared_from_this(), data, nullptr))
 		{
 			add_failed_data(data, false, nullptr);		
 		}
