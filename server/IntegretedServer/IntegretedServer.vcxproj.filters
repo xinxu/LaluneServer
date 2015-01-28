@@ -68,6 +68,9 @@
     <ClInclude Include="..\include\ServerHeaderDef.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Timer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\LaluneCommon\protobuf\protos\battle.proto">

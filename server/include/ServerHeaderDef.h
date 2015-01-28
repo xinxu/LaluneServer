@@ -5,6 +5,11 @@
 
 #include <cstdint>
 #include "boids.pb.h"
+#include "NetLib/NetLib.h"
+#include "Log/Log.h"
+
+#define SHOW_PACKET
+//#define SHOW_PACKET LOGEVENTL("DEBUG", "Receive: " << log_::bytes_display(data, MSG_LENGTH(data)));
 
 #define MSG_LENGTH(d) (*(uint32_t*)(d))
 #define MSG_DATA(d) ((uint32_t*)(d + 4))
@@ -23,35 +28,58 @@
 	} \
 }
 
+//假设了有个sessionptr变量
+#define PARSE_EXECUTE_SESSION(DATA, PROTO, FUNC) \
+{ \
+	PROTO __p; \
+	if (__p.ParseFromString(DATA)) { \
+		FUNC(sessionptr, __p); \
+	}\
+	else \
+	{ \
+		LOGEVENTL("Error", "Parse " << #PROTO << " failed"); \
+	} \
+}
+
 #define UNRECOGNIZE(title, t) LOGEVENTL("ERROR", title << ": unrecognized msg type: " << t);
 #define MSG_TOO_SHORT(title, len) LOGEVENTL("ERROR", title << ": msg too short, got: " << len << ", expect at least: " << MSG_HEADER_LEN);
 
 //这里假设了会有个data变量
-#define BEGIN_SWITCH \
-if (MSG_LENGTH(data) >= MSG_HEADER_LEN) \
-{ \
-	boids::BoidsMessageHeader __msg; \
-	if (__msg.ParseFromArray(MSG_DATA(data), MSG_DATA_LEN(data))) \
+#define BEGIN_HANDLER \
+void RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data) { \
+	SHOW_PACKET; \
+	if (MSG_LENGTH(data) >= MSG_HEADER_LEN) \
 	{ \
-	switch (__msg.type()) \
-		{
+		boids::BoidsMessageHeader __msg; \
+		if (__msg.ParseFromArray(MSG_DATA(data), MSG_DATA_LEN(data))) \
+		{ \
+			switch (__msg.type()) \
+			{
 
+//这里假设了会有个data变量
 #define HANDLE_MSG(T, PROTO, FUNC) \
-		case T: \
-			PARSE_EXECUTE(data, PROTO, FUNC); \
-			break;
+			case T: \
+				PARSE_EXECUTE(data, PROTO, FUNC); \
+				break;
+
+//这里假设了会有个data变量和sessionptr变量
+#define HANDLE_MSG_SESSION(T, PROTO, FUNC) \
+			case T: \
+				PARSE_EXECUTE_SESSION(data, PROTO, FUNC); \
+				break;
 
 //必须和BEGIN_SWITCH配套使用
-#define END_SWITCH(title) \
-		default: \
-			UNRECOGNIZE(title, __msg.type()); \
-			break; \
+#define END_HANDLER(classname) \
+			default: \
+				UNRECOGNIZE(#classname, __msg.type()); \
+				break; \
+			} \
 		} \
 	} \
-} \
-else \
-{ \
-	MSG_TOO_SHORT(title, MSG_LENGTH(data)); \
+	else \
+	{ \
+		MSG_TOO_SHORT(#classname, MSG_LENGTH(data)); \
+	} \
 }
 
 template<typename P>

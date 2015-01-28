@@ -2,6 +2,8 @@
 #define __USER_SESSION_DELEGATE_H_
 
 #include "NetLib/NetLib.h"
+#include "ServerHeaderDef.h"
+#include "AutoMatchServer.h"
 
 class UserSessionDelegate : public NetLib_ServerSession_Delegate
 {
@@ -10,7 +12,11 @@ public:
 
 	void DisconnectedHandler(NetLib_ServerSession_ptr sessionptr);
 
-	void RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data);
+	BEGIN_HANDLER
+
+	HANDLE_MSG_SESSION(boids::MessageType::AUTO_MATCH_REQUEST, boids::MatchRequest, ams.MatchRequest)
+
+	END_HANDLER(UserSessionDelegate)
 };
 
 #endif
