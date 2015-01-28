@@ -16,9 +16,6 @@
     <ClInclude Include="MatchAndCombatCommunicate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.h">
-      <Filter>protobuf</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -32,11 +29,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\LaluneCommon\protobuf\protos\Battle.proto">
-      <Filter>protobuf</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="MatchServer.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
@@ -45,9 +37,6 @@
     </ClCompile>
     <ClCompile Include="MatchAndCombatCommunicate.cpp">
       <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.cc">
-      <Filter>protobuf</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
