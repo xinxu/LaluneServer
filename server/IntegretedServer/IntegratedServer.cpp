@@ -5,7 +5,6 @@
 #include "memory.h"
 #include "string.h"
 #include <google/protobuf/stubs/common.h>
-#include "MessageTypeDef.h"
 #include "ServerHeaderDef.h"
 #include "InnerServerSessionDelegate.h"
 #include "UserSessionDelegate.h"

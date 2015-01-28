@@ -4,75 +4,69 @@
 //服务端包头定义
 
 #include <cstdint>
+#include "boids.pb.h"
 
-#define SERVER_MSG_LENGTH(d) (*(uint32_t*)(d))
-#define SERVER_MSG_TYPE(d) (*(uint32_t*)((d) + 4))
-#define SERVER_MSG_AFTER_TYPE_POS (8)
-#define SERVER_MSG_ERROR(d) (*(uint8_t*)((d) + SERVER_MSG_AFTER_TYPE_POS)) //后端服务给前端服务返回的错误。如果有错误，那么默认后面的Protobuf就没有了，除非另有约定
-#define SERVER_MSG_HEADER_EX_LEN(d) (*(uint8_t*)((d) + SERVER_MSG_AFTER_TYPE_POS + 1))
-#define SERVER_MSG_RESERVED(d) (*(uint16_t*)((d) + SERVER_MSG_AFTER_TYPE_POS + 2))
-#define SERVER_MSG_HEADER_BASE_SIZE (SERVER_MSG_AFTER_TYPE_POS + 4)
-#define SERVER_MSG_AFTER_HEADER_BASE(d) ((d) + SERVER_MSG_HEADER_BASE_SIZE)
-#define SERVER_MSG_DATA(d) ((d) + SERVER_MSG_HEADER_BASE_SIZE + SERVER_MSG_HEADER_EX_LEN(d))
-#define SERVER_MSG_DATA_LEN(d) (SERVER_MSG_LENGTH(d) - SERVER_MSG_HEADER_BASE_SIZE - SERVER_MSG_HEADER_EX_LEN(d))
-
-template<typename P>
-bool ParseMsg(char* data, P& proto) //包头无HeaderEx的版本
-{
-	return proto.ParseFromArray(SERVER_MSG_AFTER_HEADER_BASE(data), SERVER_MSG_LENGTH(data) - SERVER_MSG_HEADER_BASE_SIZE);
-}
+#define MSG_LENGTH(d) (*(uint32_t*)(d))
+#define MSG_DATA(d) ((uint32_t*)(d + 4))
+#define MSG_HEADER_LEN (4)
+#define MSG_DATA_LEN(d) (MSG_LENGTH(d) - MSG_HEADER_LEN)
 
 #define PARSE_EXECUTE(DATA, PROTO, FUNC) \
 { \
 	PROTO __p; \
-	if (ParseMsg(DATA, __p)) { \
+	if (__p.ParseFromString(DATA)) { \
 		FUNC(__p); \
 	}\
 	else \
-{ \
-	LOGEVENTL("Error", "Parse " << #PROTO << " failed"); \
-} \
+	{ \
+		LOGEVENTL("Error", "Parse " << #PROTO << " failed"); \
+	} \
 }
 
 #define UNRECOGNIZE(title, t) LOGEVENTL("ERROR", title << ": unrecognized msg type: " << t);
-#define MSG_TOO_SHORT(title, len) LOGEVENTL("ERROR", title << ": msg too short, got: " << len << ", expect: " << SERVER_MSG_HEADER_BASE_SIZE);
+#define MSG_TOO_SHORT(title, len) LOGEVENTL("ERROR", title << ": msg too short, got: " << len << ", expect at least: " << MSG_HEADER_LEN);
 
 //这里假设了会有个data变量
 #define BEGIN_SWITCH \
-if (SERVER_MSG_LENGTH(data) >= SERVER_MSG_HEADER_BASE_SIZE) \
+if (MSG_LENGTH(data) >= MSG_HEADER_LEN) \
 { \
-	switch (SERVER_MSG_TYPE(data)) \
-{
+	boids::BoidsMessageHeader __msg; \
+	if (__msg.ParseFromArray(MSG_DATA(data), MSG_DATA_LEN(data))) \
+	{ \
+	switch (__msg.type()) \
+		{
 
 #define HANDLE_MSG(T, PROTO, FUNC) \
-	case T: \
-	PARSE_EXECUTE(data, boids::CreateGameResponse, ams.CreateGameResponseGot); \
-	break;
+		case T: \
+			PARSE_EXECUTE(data, PROTO, FUNC); \
+			break;
 
+//必须和BEGIN_SWITCH配套使用
 #define END_SWITCH(title) \
-	default: \
-		UNRECOGNIZE(title, SERVER_MSG_TYPE(data)); \
-		break; \
+		default: \
+			UNRECOGNIZE(title, __msg.type()); \
+			break; \
+		} \
 	} \
 } \
 else \
 { \
-	MSG_TOO_SHORT(title, SERVER_MSG_LENGTH(data)); \
+	MSG_TOO_SHORT(title, MSG_LENGTH(data)); \
 }
 
 template<typename P>
-void ReplyMsg(NetLib_ServerSession_ptr sessionptr, uint32_t msg_type, P& proto) //包头无UserID的版本
+void ReplyMsg(NetLib_ServerSession_ptr sessionptr, boids::MessageType msg_type, P& proto) //包头无UserID的版本
 {
-	int proto_size = proto.ByteSize();
+	boids::BoidsMessageHeader proto_with_header;
+	proto_with_header.set_type(msg_type);
+	proto.SerializeToString(*proto_with_header.mutable_data());
 
-	char* send_buf = new char[SERVER_MSG_HEADER_BASE_SIZE + proto_size];
-	SERVER_MSG_LENGTH(send_buf) = SERVER_MSG_HEADER_BASE_SIZE + proto_size;		// 数据包的字节数（含msghead）
-	SERVER_MSG_TYPE(send_buf) = msg_type;
-	SERVER_MSG_ERROR(send_buf) = 0;
-	SERVER_MSG_HEADER_EX_LEN(send_buf) = 0;
-	SERVER_MSG_RESERVED(send_buf) = 0;
+	int proto_size = proto_with_header.ByteSize();
 
-	proto.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)SERVER_MSG_AFTER_HEADER_BASE(send_buf));
+	char* send_buf = new char[MSG_HEADER_LEN + proto_size];
+	MSG_LENGTH(send_buf) = MSG_HEADER_LEN + proto_size;
+
+	proto_with_header.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)MSG_DATA(send_buf));
 
 	sessionptr->SendAsync(send_buf);
 }

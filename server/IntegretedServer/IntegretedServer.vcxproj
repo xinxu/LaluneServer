@@ -52,7 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;$(ProjectDir)..\;..\..\3rdparty\boost\;$(ProjectDir)..\..\..\LaluneCommon\include;$(ProjectDir)..\..\..\LaluneCommon\protobuf\protos\out;$(ProjectDir)..\ServerCommonLib;$(ProjectDir)..\protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;$(ProjectDir)..\;..\..\3rdparty\boost\;$(ProjectDir)..\..\..\LaluneCommon\include;$(ProjectDir)..\..\..\LaluneCommon\protobuf\protos\out;$(ProjectDir)..\ServerCommonLib;$(ProjectDir)..\protobuf;$(ProjectDir)..\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -70,7 +70,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;$(ProjectDir)..\;..\..\3rdparty\boost\;$(ProjectDir)..\..\..\LaluneCommon\include;$(ProjectDir)..\..\..\LaluneCommon\protobuf\protos\out;$(ProjectDir)..\ServerCommonLib;$(ProjectDir)..\protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;$(ProjectDir)..\;..\..\3rdparty\boost\;$(ProjectDir)..\..\..\LaluneCommon\include;$(ProjectDir)..\..\..\LaluneCommon\protobuf\protos\out;$(ProjectDir)..\ServerCommonLib;$(ProjectDir)..\protobuf;$(ProjectDir)..\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -82,14 +82,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.cc" />
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.cc" />
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.cc" />
     <ClCompile Include="AutomatchServer.cpp" />
     <ClCompile Include="InnerServerSessionDelegate.cpp" />
     <ClCompile Include="IntegratedServer.cpp" />
     <ClCompile Include="UserSessionDelegate.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
-    <ClInclude Include="..\..\..\LaluneCommon\include\ServerHeaderDef.h" />
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.h" />
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h" />
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.h" />
+    <ClInclude Include="..\include\ioservice_thread.h" />
+    <ClInclude Include="..\include\ServerHeaderDef.h" />
     <ClInclude Include="AutoMatchServer.h" />
     <ClInclude Include="InnerServerSessionDelegate.h" />
     <ClInclude Include="IntegratedServer.h" />
@@ -97,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\LaluneCommon\protobuf\protos\battle.proto" />
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\boids.proto" />
     <None Include="..\..\..\LaluneCommon\protobuf\protos\pvp.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

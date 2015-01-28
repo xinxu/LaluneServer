@@ -30,12 +30,18 @@
     <ClCompile Include="AutomatchServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.cc">
+      <Filter>message</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.cc">
+      <Filter>message</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.cc">
+      <Filter>message</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IntegratedServer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\LaluneCommon\include\ServerHeaderDef.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="InnerServerSessionDelegate.h">
@@ -44,11 +50,23 @@
     <ClInclude Include="UserSessionDelegate.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="AutoMatchServer.h">
       <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ioservice_thread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ServerHeaderDef.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +74,9 @@
       <Filter>message</Filter>
     </None>
     <None Include="..\..\..\LaluneCommon\protobuf\protos\pvp.proto">
+      <Filter>message</Filter>
+    </None>
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\boids.proto">
       <Filter>message</Filter>
     </None>
   </ItemGroup>
