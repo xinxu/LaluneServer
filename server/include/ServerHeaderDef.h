@@ -8,8 +8,8 @@
 #include "NetLib/NetLib.h"
 #include "Log/Log.h"
 
-#define SHOW_PACKET
-//#define SHOW_PACKET LOGEVENTL("DEBUG", "Receive: " << log_::bytes_display(data, MSG_LENGTH(data)));
+#define SHOW_PACKET(title)
+//#define SHOW_PACKET(title) LOGEVENTL("DEBUG", title << " Receive: " << log_::bytes_display(data, MSG_LENGTH(data)));
 
 #define MSG_LENGTH(d) (*(uint32_t*)(d))
 #define MSG_DATA(d) ((uint32_t*)(d + 4))
@@ -45,9 +45,9 @@
 #define MSG_TOO_SHORT(title, len) LOGEVENTL("ERROR", title << ": msg too short, got: " << len << ", expect at least: " << MSG_HEADER_LEN);
 
 //这里假设了会有个data变量
-#define BEGIN_HANDLER(SESSION_T) \
+#define BEGIN_HANDLER(classname, SESSION_T) \
 void RecvFinishHandler(SESSION_T sessionptr, char* data) { \
-	SHOW_PACKET; \
+	SHOW_PACKET(#classname); \
 	if (MSG_LENGTH(data) >= MSG_HEADER_LEN) \
 	{ \
 		boids::BoidsMessageHeader __msg; \

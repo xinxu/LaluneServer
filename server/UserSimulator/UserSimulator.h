@@ -20,7 +20,7 @@ protected:
 
 	void ConnectedHandler(NetLib_Client_ptr clientptr);
 
-	BEGIN_HANDLER(NetLib_Client_ptr)
+	BEGIN_HANDLER(UserSimulator, NetLib_Client_ptr)
 		HANDLE_MSG(boids::AUTO_MATCH_RESPONSE, boids::MatchResponse, [](const boids::MatchResponse& res) {
 			LOGEVENTL("MATCH", _ln("ret_value") << res.ret_value() << _ln("ret_info") << res.ret_info()
 				<< _ln("Ip") << res.game_server_ip() << _ln("Port") << res.game_server_port() << _ln("game_id") << res.game_uuid());
