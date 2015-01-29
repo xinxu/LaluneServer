@@ -12,8 +12,9 @@
 using namespace boids;
 
 PvpServerContext::PvpServerContext() :
-game_port( GAME_PORT ),
-ctrl_port( CTRL_PORT )
+game_port( GAME_SERVICE_PORT ),
+ctrl_server_ip( CTRL_SERVER_IP ),
+ctrl_server_port( CTRL_SERVER_PORT )
 {
 }
 
@@ -24,8 +25,11 @@ PvpServerContext::~PvpServerContext() {
 PvpServer::PvpServer( PvpServerContextPtr context ) :
 _context( context ),
 _game_sock( _io_service, boost::asio::ip::udp::endpoint( boost::asio::ip::udp::v4(), context->game_port ) ),
-_ctrl_sock( _io_service, boost::asio::ip::tcp::endpoint( boost::asio::ip::tcp::v4(), context->ctrl_port ) )
-
+_ctrl_sock( _io_service ),
+_reconnect_timer( _io_service ),
+_reconnect_interval( 5000000.0 ),
+_heart_beat_interval( 60.0 ),
+_heart_beat_timer( _io_service )
 {
 }
 
@@ -33,20 +37,189 @@ PvpServer::~PvpServer() {
     
 }
 
+bool PvpServer::init() {
+    this->connect();
+    _io_service.run();
+    return true;
+}
+
 bool PvpServer::start() {
     std::cout << "server start" << std::endl;
-    //temp use
-    _test_game_server = PvpGameServerPtr( new PvpGameServer( _io_service, shared_from_this() ) );
     
+    //init heart beat message
+    std::string wrapped_data;
+    std::string heart_beat_data;
+    PvPServerHeartBeat heart_beat;
+    heart_beat.set_ip( GAME_SERVICE_IP );
+    heart_beat.set_port( GAME_SERVICE_PORT );
+    heart_beat.SerializeToString( &heart_beat_data );
+    BoidsMessageHeader header;
+    header.set_type( PVP_SERVER_HEART_BEAT );
+    header.set_data( heart_beat_data );
+    header.SerializeToString( &wrapped_data );
+    int heart_beat_data_size = (int)wrapped_data.size();
+    std::stringstream ss;
+    ss << heart_beat_data_size;
+    _heart_beat_data = ss.str();
+    _heart_beat_data.append( wrapped_data.c_str(), heart_beat_data_size );
+    
+    this->registerToControlServer();
+    
+    _is_reading_size = true;
     _is_sending = false;
+    
+    this->receivefrom();
     this->receive();
-    _io_service.run();
     return true;
 }
 
 void PvpServer::stop() {
     
 }
+
+//control service
+void PvpServer::connect() {
+    std::cout << "connecting to control server..." << std::endl;
+    boost::asio::ip::address addr;
+    addr.from_string( _context->ctrl_server_ip );
+    boost::asio::ip::tcp::endpoint ctrl_server( addr, _context->ctrl_server_port );
+    _ctrl_sock.async_connect( ctrl_server, boost::bind( &PvpServer::connectHandler , this, boost::asio::placeholders::error ) );
+}
+
+void PvpServer::reconnect() {
+    std::cout << "reconnecting to control server..." << std::endl;
+    _reconnect_timer.expires_from_now( _reconnect_interval );
+    _reconnect_timer.async_wait( boost::bind( &PvpServer::reconnectTrigger, this, boost::asio::placeholders::error ) );
+}
+
+void PvpServer::sendWithoutSize( const std::string& message ) {
+    int size = (int)message.size();
+    std::stringstream ss;
+    ss << size;
+    std::string send_string = ss.str();
+    send_string.append( message.c_str(), size );
+    this->send( send_string );
+}
+
+void PvpServer::send( const std::string& message ) {
+    _ctrl_sock.async_send( boost::asio::buffer( message.c_str(), message.size() ), boost::bind( &PvpServer::sendHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred ) );
+}
+
+void PvpServer::receive() {
+    if( _is_reading_size ) {
+        _ctrl_sock.async_receive( boost::asio::buffer( _size_bytes ), boost::bind( &PvpServer::receiveHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred ) );
+    }
+    else {
+        _ctrl_sock.async_receive( boost::asio::buffer( _data_bytes, _data_bytes.size() ), boost::bind( &PvpServer::receiveHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred ) );
+    }
+}
+
+void PvpServer::connectHandler( const boost::system::error_code& error ) {
+    if( !error ) {
+        std::cout << "connected to control server!" << std::endl;
+        this->start();
+    }
+    else {
+        std::cout << "connect to control server failed: " << error << std::endl;
+        this->reconnect();
+    }
+}
+
+void PvpServer::sendHandler( const boost::system::error_code& error, std::size_t size ) {
+    if( error ) {
+        std::cout << "send message error:" << error << std::endl;
+    }
+}
+
+void PvpServer::receiveHandler( const boost::system::error_code& error, std::size_t size ) {
+    if( !error ) {
+        if( _is_reading_size ) {
+            int size = *(int*)&_size_bytes[0];
+            _data_bytes.resize( size );
+        }
+        else {
+            std::string data_string;
+            data_string.assign( _data_bytes.begin(), _data_bytes.end() );
+            this->parseControlMessage( data_string );
+        }
+        _is_reading_size = !_is_reading_size;
+        this->receive();
+    }
+    else {
+        std::cout << "receive from ctrl server failed.." << std::endl;
+    }
+}
+
+void PvpServer::sendHeartbeat() {
+    this->send( _heart_beat_data );
+    _heart_beat_timer.expires_from_now( _heart_beat_interval );
+    _heart_beat_timer.async_wait( boost::bind( &PvpServer::heartBeatTrigger, this, boost::asio::placeholders::error ) );
+}
+
+void PvpServer::reconnectTrigger( const boost::system::error_code& error ) {
+    if( !error ) {
+        this->connect();
+    }
+}
+
+void PvpServer::parseControlMessage( const std::string& data ) {
+    boids::BoidsMessageHeader message;
+    message.ParseFromString( data );
+    switch( message.type() ) {
+        case PVP_SERVER_CREATE_GAME_REQUEST:
+            this->handleCreateGameRequest( message.data() );
+            break;
+        case PVP_SERVER_REGISTER_RESPONSE:
+            this->handleRegisterResponse( message.data() );
+            break;
+        default:
+            break;
+    }
+}
+
+void PvpServer::handleCreateGameRequest( const std::string& data ) {
+    boids::CreateGame request;
+    request.ParseFromString( data );
+    
+    PvpGameServerPtr server = this->addGame( request.game_id() );
+    if( server != nullptr ) {
+        server->setGameId( request.game_id() );
+        server->setGameInitData( request.game_init_data() );
+    }
+    int ret_value = server == nullptr ? 1 : 0;
+    //send response back
+    boids::CreateGameResponse response;
+    response.set_game_id( request.game_id() );
+    response.set_ret_value( ret_value );
+    std::string resp_string;
+    response.SerializeToString( &resp_string );
+    this->sendWithoutSize( resp_string );
+}
+
+void PvpServer::handleRegisterResponse( const std::string& data ) {
+    boids::PvPServerRegisterResponse response;
+    response.ParseFromString( data );
+    if( response.ret_value() != 0 ) {
+        std::cout << "register to control server failed!" << std::endl;
+    }
+}
+
+void PvpServer::registerToControlServer() {
+    boids::PvPServerRegister request;
+    request.set_ip( GAME_SERVICE_IP );
+    request.set_port( GAME_SERVICE_PORT );
+    std::string request_string;
+    request.SerializeToString( &request_string );
+    this->sendWithoutSize( request_string );
+}
+
+void PvpServer::heartBeatTrigger( const boost::system::error_code& error ) {
+    if( !error ) {
+        this->sendHeartbeat();
+    }
+}
+
+//game services
 
 void PvpServer::sendBoidsMessage( BoidsMessagePtr message ) {
 //    _tosend_queue.merge( message );
@@ -68,7 +241,8 @@ void PvpServer::sendBoidsMessages( MessageQueue<BoidsMessagePtr> message_queue )
 void PvpServer::sendto( const boost::asio::ip::udp::endpoint& endpoint, PvpMessagePtr msg ) {
     std::string message_string;
     msg->SerializeToString( &message_string );
-    _game_sock.async_send_to( boost::asio::buffer( message_string, message_string.size() ), endpoint, boost::bind( &PvpServer::sendHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred ) );
+//    _game_sock.async_send_to( boost::asio::buffer( message_string ), endpoint, boost::bind( &PvpServer::sendtoHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred ) );
+    _game_sock.async_send_to( boost::asio::buffer( message_string.c_str(), message_string.size() ), endpoint, boost::bind( &PvpServer::sendtoHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred ) );
 }
 
 void PvpServer::sendBoidsMessageInQueue() {
@@ -81,24 +255,24 @@ void PvpServer::sendBoidsMessageInQueue() {
     }
 }
 
-void PvpServer::receive() {
-    _game_sock.async_receive_from( boost::asio::buffer( _message_buffer ), _remote_endpoint, boost::bind( &PvpServer::receiveHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred ) );
+void PvpServer::receivefrom() {
+    _game_sock.async_receive_from( boost::asio::buffer( _message_buffer ), _remote_endpoint, boost::bind( &PvpServer::receivefromHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred ) );
 }
 
-void PvpServer::sendHandler( const boost::system::error_code& error, std::size_t size ) {
+void PvpServer::sendtoHandler( const boost::system::error_code& error, std::size_t size ) {
     if( error != 0 ) {
         std::cout << "send message error: " << error << std::endl;
     }
 }
 
-void PvpServer::receiveHandler( const boost::system::error_code& error, std::size_t size ) {
+void PvpServer::receivefromHandler( const boost::system::error_code& error, std::size_t size ) {
     if( !error || error == boost::asio::error::message_size ) {
         this->dispatchMessage( _remote_endpoint, _message_buffer, size );
     }
     else {
-        std::cout << "recive error" << error << std::endl;
+        std::cout << "receive error" << error << std::endl;
     }
-    this->receive();
+    this->receivefrom();
 }
 
 void PvpServer::dispatchMessage( const boost::asio::ip::udp::endpoint& endpoint, const MessageBuffer& buffer, std::size_t size ) {
@@ -120,12 +294,39 @@ void PvpServer::dispatchMessage( const boost::asio::ip::udp::endpoint& endpoint,
     }
 }
 
-bool PvpServer::addGame( int game_id ) {
-    return true;
+PvpGameServerPtr PvpServer::addGame( const std::string& game_id ) {
+    if( _games.find( game_id ) == _games.end() ) {
+        PvpGameServerPtr game_server = PvpGameServerPtr( new PvpGameServer( _io_service, shared_from_this() ) );
+        _games.insert( std::make_pair( game_id, game_server ) );
+        return game_server;
+    }
+    
+    return nullptr;
 }
 
-void PvpServer::deleteGame( int game_id ) {
-    
+void PvpServer::deleteGame( const std::string& game_id ) {
+    auto itr = _games.find( game_id );
+    if( itr != _games.end() ) {
+        _games.erase( itr );
+    }
+}
+
+PvpGameServerPtr PvpServer::findGameServer( const std::string& game_id ) {
+    auto itr = _games.find( game_id );
+    if( itr != _games.end() ) {
+        return itr->second;
+    }
+    return nullptr;
+}
+
+PvpGameServerPtr PvpServer::findGameServerByUserId( const std::string& user_id ) {
+    for( auto itr = _games.begin(); itr != _games.end(); ++itr ) {
+        PvpGameServerPtr game_server = itr->second;
+        if( game_server->containsUser( user_id ) ) {
+            return game_server;
+        }
+    }
+    return nullptr;
 }
 
 void PvpServer::addTerminal( const std::string& key, PvpTerminalPtr terminal ) {

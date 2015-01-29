@@ -488,6 +488,13 @@ class UserOperation : public ::google_lalune::protobuf::Message {
   inline ::google_lalune::protobuf::uint32 skill_id() const;
   inline void set_skill_id(::google_lalune::protobuf::uint32 value);
 
+  // optional uint32 skill_range = 9;
+  inline bool has_skill_range() const;
+  inline void clear_skill_range();
+  static const int kSkillRangeFieldNumber = 9;
+  inline ::google_lalune::protobuf::uint32 skill_range() const;
+  inline void set_skill_range(::google_lalune::protobuf::uint32 value);
+
   // optional int32 dir_x = 6;
   inline bool has_dir_x() const;
   inline void clear_dir_x();
@@ -521,6 +528,8 @@ class UserOperation : public ::google_lalune::protobuf::Message {
   inline void clear_has_unit_id();
   inline void set_has_skill_id();
   inline void clear_has_skill_id();
+  inline void set_has_skill_range();
+  inline void clear_has_skill_range();
   inline void set_has_dir_x();
   inline void clear_has_dir_x();
   inline void set_has_dir_y();
@@ -537,6 +546,7 @@ class UserOperation : public ::google_lalune::protobuf::Message {
   ::google_lalune::protobuf::uint32 game_id_;
   ::google_lalune::protobuf::uint32 unit_id_;
   ::google_lalune::protobuf::uint32 skill_id_;
+  ::google_lalune::protobuf::uint32 skill_range_;
   ::google_lalune::protobuf::int32 dir_x_;
   ::google_lalune::protobuf::int32 dir_y_;
   ::google_lalune::protobuf::uint32 timestamp_;
@@ -1356,15 +1366,39 @@ inline void UserOperation::set_skill_id(::google_lalune::protobuf::uint32 value)
   // @@protoc_insertion_point(field_set:boids.UserOperation.skill_id)
 }
 
-// optional int32 dir_x = 6;
-inline bool UserOperation::has_dir_x() const {
+// optional uint32 skill_range = 9;
+inline bool UserOperation::has_skill_range() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
-inline void UserOperation::set_has_dir_x() {
+inline void UserOperation::set_has_skill_range() {
   _has_bits_[0] |= 0x00000020u;
 }
-inline void UserOperation::clear_has_dir_x() {
+inline void UserOperation::clear_has_skill_range() {
   _has_bits_[0] &= ~0x00000020u;
+}
+inline void UserOperation::clear_skill_range() {
+  skill_range_ = 0u;
+  clear_has_skill_range();
+}
+inline ::google_lalune::protobuf::uint32 UserOperation::skill_range() const {
+  // @@protoc_insertion_point(field_get:boids.UserOperation.skill_range)
+  return skill_range_;
+}
+inline void UserOperation::set_skill_range(::google_lalune::protobuf::uint32 value) {
+  set_has_skill_range();
+  skill_range_ = value;
+  // @@protoc_insertion_point(field_set:boids.UserOperation.skill_range)
+}
+
+// optional int32 dir_x = 6;
+inline bool UserOperation::has_dir_x() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void UserOperation::set_has_dir_x() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void UserOperation::clear_has_dir_x() {
+  _has_bits_[0] &= ~0x00000040u;
 }
 inline void UserOperation::clear_dir_x() {
   dir_x_ = 0;
@@ -1382,13 +1416,13 @@ inline void UserOperation::set_dir_x(::google_lalune::protobuf::int32 value) {
 
 // optional int32 dir_y = 7;
 inline bool UserOperation::has_dir_y() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+  return (_has_bits_[0] & 0x00000080u) != 0;
 }
 inline void UserOperation::set_has_dir_y() {
-  _has_bits_[0] |= 0x00000040u;
+  _has_bits_[0] |= 0x00000080u;
 }
 inline void UserOperation::clear_has_dir_y() {
-  _has_bits_[0] &= ~0x00000040u;
+  _has_bits_[0] &= ~0x00000080u;
 }
 inline void UserOperation::clear_dir_y() {
   dir_y_ = 0;
@@ -1406,13 +1440,13 @@ inline void UserOperation::set_dir_y(::google_lalune::protobuf::int32 value) {
 
 // optional uint32 timestamp = 8;
 inline bool UserOperation::has_timestamp() const {
-  return (_has_bits_[0] & 0x00000080u) != 0;
+  return (_has_bits_[0] & 0x00000100u) != 0;
 }
 inline void UserOperation::set_has_timestamp() {
-  _has_bits_[0] |= 0x00000080u;
+  _has_bits_[0] |= 0x00000100u;
 }
 inline void UserOperation::clear_has_timestamp() {
-  _has_bits_[0] &= ~0x00000080u;
+  _has_bits_[0] &= ~0x00000100u;
 }
 inline void UserOperation::clear_timestamp() {
   timestamp_ = 0u;

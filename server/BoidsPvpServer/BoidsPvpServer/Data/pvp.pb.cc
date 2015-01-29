@@ -102,12 +102,13 @@ void protobuf_AssignDesc_pvp_2eproto() {
       ::google_lalune::protobuf::MessageFactory::generated_factory(),
       sizeof(GameInitData));
   UserOperation_descriptor_ = file->message_type(3);
-  static const int UserOperation_offsets_[8] = {
+  static const int UserOperation_offsets_[9] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserOperation, user_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserOperation, op_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserOperation, game_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserOperation, unit_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserOperation, skill_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserOperation, skill_range_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserOperation, dir_x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserOperation, dir_y_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserOperation, timestamp_),
@@ -237,25 +238,25 @@ void protobuf_AddDesc_pvp_2eproto() {
     "ta\022\017\n\007user_id\030\001 \002(\t\022\020\n\010force_id\030\002 \002(\r\022\036\n"
     "\005units\030\003 \003(\0132\017.boids.UnitData\"0\n\014GameIni"
     "tData\022 \n\006forces\030\001 \003(\0132\020.boids.ForceData\""
-    "\200\002\n\rUserOperation\022\017\n\007user_id\030\001 \002(\t\0223\n\007op"
+    "\225\002\n\rUserOperation\022\017\n\007user_id\030\001 \002(\t\0223\n\007op"
     "_type\030\002 \001(\0162\".boids.UserOperation.Operat"
     "ionType\022\017\n\007game_id\030\003 \001(\r\022\017\n\007unit_id\030\004 \001("
-    "\r\022\020\n\010skill_id\030\005 \001(\r\022\r\n\005dir_x\030\006 \001(\005\022\r\n\005di"
-    "r_y\030\007 \001(\005\022\021\n\ttimestamp\030\010 \001(\r\"D\n\rOperatio"
-    "nType\022\r\n\tEnterGame\020\001\022\014\n\010QuitGame\020\002\022\010\n\004Mo"
-    "ve\020\003\022\014\n\010UseSkill\020\004\"@\n\024UserOperationPacka"
-    "ge\022(\n\noperations\030\001 \003(\0132\024.boids.UserOpera"
-    "tion\"\242\002\n\013GameMessage\022,\n\004type\030\001 \002(\0162\036.boi"
-    "ds.GameMessage.MessageType\022+\n\016game_init_"
-    "data\030\002 \001(\0132\023.boids.GameInitData\022%\n\007user_"
-    "op\030\003 \001(\0132\024.boids.UserOperation\0224\n\017user_o"
-    "p_package\030\004 \001(\0132\033.boids.UserOperationPac"
-    "kage\"[\n\013MessageType\022\r\n\tHeartBeat\020\001\022\020\n\014Ga"
-    "meInitData\020\002\022\021\n\rUserOperation\020\003\022\030\n\024UserO"
-    "perationPackage\020\004\"o\n\nPvpMessage\022\017\n\007versi"
-    "on\030\001 \002(\r\022\020\n\010proto_id\030\002 \002(\r\022\016\n\006seq_no\030\003 \002"
-    "(\r\022\016\n\006ack_no\030\004 \002(\r\022\020\n\010ack_bits\030\005 \002(\r\022\014\n\004"
-    "data\030\006 \001(\014", 930);
+    "\r\022\020\n\010skill_id\030\005 \001(\r\022\023\n\013skill_range\030\t \001(\r"
+    "\022\r\n\005dir_x\030\006 \001(\005\022\r\n\005dir_y\030\007 \001(\005\022\021\n\ttimest"
+    "amp\030\010 \001(\r\"D\n\rOperationType\022\r\n\tEnterGame\020"
+    "\001\022\014\n\010QuitGame\020\002\022\010\n\004Move\020\003\022\014\n\010UseSkill\020\004\""
+    "@\n\024UserOperationPackage\022(\n\noperations\030\001 "
+    "\003(\0132\024.boids.UserOperation\"\242\002\n\013GameMessag"
+    "e\022,\n\004type\030\001 \002(\0162\036.boids.GameMessage.Mess"
+    "ageType\022+\n\016game_init_data\030\002 \001(\0132\023.boids."
+    "GameInitData\022%\n\007user_op\030\003 \001(\0132\024.boids.Us"
+    "erOperation\0224\n\017user_op_package\030\004 \001(\0132\033.b"
+    "oids.UserOperationPackage\"[\n\013MessageType"
+    "\022\r\n\tHeartBeat\020\001\022\020\n\014GameInitData\020\002\022\021\n\rUse"
+    "rOperation\020\003\022\030\n\024UserOperationPackage\020\004\"o"
+    "\n\nPvpMessage\022\017\n\007version\030\001 \002(\r\022\020\n\010proto_i"
+    "d\030\002 \002(\r\022\016\n\006seq_no\030\003 \002(\r\022\016\n\006ack_no\030\004 \002(\r\022"
+    "\020\n\010ack_bits\030\005 \002(\r\022\014\n\004data\030\006 \001(\014", 951);
   ::google_lalune::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "pvp.proto", &protobuf_RegisterTypes);
   UnitData::default_instance_ = new UnitData();
@@ -1145,6 +1146,7 @@ const int UserOperation::kOpTypeFieldNumber;
 const int UserOperation::kGameIdFieldNumber;
 const int UserOperation::kUnitIdFieldNumber;
 const int UserOperation::kSkillIdFieldNumber;
+const int UserOperation::kSkillRangeFieldNumber;
 const int UserOperation::kDirXFieldNumber;
 const int UserOperation::kDirYFieldNumber;
 const int UserOperation::kTimestampFieldNumber;
@@ -1174,6 +1176,7 @@ void UserOperation::SharedCtor() {
   game_id_ = 0u;
   unit_id_ = 0u;
   skill_id_ = 0u;
+  skill_range_ = 0u;
   dir_x_ = 0;
   dir_y_ = 0;
   timestamp_ = 0u;
@@ -1226,7 +1229,7 @@ void UserOperation::Clear() {
   } while (0)
 
   if (_has_bits_[0 / 32] & 255) {
-    ZR_(game_id_, timestamp_);
+    ZR_(game_id_, dir_y_);
     if (has_user_id()) {
       if (user_id_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
         user_id_->clear();
@@ -1234,6 +1237,7 @@ void UserOperation::Clear() {
     }
     op_type_ = 1;
   }
+  timestamp_ = 0u;
 
 #undef OFFSET_OF_FIELD_
 #undef ZR_
@@ -1374,6 +1378,21 @@ bool UserOperation::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(72)) goto parse_skill_range;
+        break;
+      }
+
+      // optional uint32 skill_range = 9;
+      case 9: {
+        if (tag == 72) {
+         parse_skill_range:
+          DO_((::google_lalune::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google_lalune::protobuf::uint32, ::google_lalune::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &skill_range_)));
+          set_has_skill_range();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -1449,6 +1468,11 @@ void UserOperation::SerializeWithCachedSizes(
     ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(8, this->timestamp(), output);
   }
 
+  // optional uint32 skill_range = 9;
+  if (has_skill_range()) {
+    ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32(9, this->skill_range(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google_lalune::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1506,6 +1530,11 @@ void UserOperation::SerializeWithCachedSizes(
     target = ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32ToArray(8, this->timestamp(), target);
   }
 
+  // optional uint32 skill_range = 9;
+  if (has_skill_range()) {
+    target = ::google_lalune::protobuf::internal::WireFormatLite::WriteUInt32ToArray(9, this->skill_range(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google_lalune::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -1552,6 +1581,13 @@ int UserOperation::ByteSize() const {
           this->skill_id());
     }
 
+    // optional uint32 skill_range = 9;
+    if (has_skill_range()) {
+      total_size += 1 +
+        ::google_lalune::protobuf::internal::WireFormatLite::UInt32Size(
+          this->skill_range());
+    }
+
     // optional int32 dir_x = 6;
     if (has_dir_x()) {
       total_size += 1 +
@@ -1566,6 +1602,8 @@ int UserOperation::ByteSize() const {
           this->dir_y());
     }
 
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     // optional uint32 timestamp = 8;
     if (has_timestamp()) {
       total_size += 1 +
@@ -1615,12 +1653,17 @@ void UserOperation::MergeFrom(const UserOperation& from) {
     if (from.has_skill_id()) {
       set_skill_id(from.skill_id());
     }
+    if (from.has_skill_range()) {
+      set_skill_range(from.skill_range());
+    }
     if (from.has_dir_x()) {
       set_dir_x(from.dir_x());
     }
     if (from.has_dir_y()) {
       set_dir_y(from.dir_y());
     }
+  }
+  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_timestamp()) {
       set_timestamp(from.timestamp());
     }
@@ -1653,6 +1696,7 @@ void UserOperation::Swap(UserOperation* other) {
     std::swap(game_id_, other->game_id_);
     std::swap(unit_id_, other->unit_id_);
     std::swap(skill_id_, other->skill_id_);
+    std::swap(skill_range_, other->skill_range_);
     std::swap(dir_x_, other->dir_x_);
     std::swap(dir_y_, other->dir_y_);
     std::swap(timestamp_, other->timestamp_);

@@ -7,14 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		982593AE1A7896A8006B3A40 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 982593AD1A7896A8006B3A40 /* libboost_system.a */; };
+		982593B01A789902006B3A40 /* libprotobuf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 982593AF1A789902006B3A40 /* libprotobuf.a */; };
+		982593B61A78C043006B3A40 /* Battle.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 982593B21A78C043006B3A40 /* Battle.pb.cc */; };
+		982593B71A78C043006B3A40 /* boids.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 982593B41A78C043006B3A40 /* boids.pb.cc */; };
 		98CBC0631A636C07003E7209 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98CBC0621A636C07003E7209 /* main.cpp */; };
 		98CBC0731A637D3E003E7209 /* PvpServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98CBC0701A637D3E003E7209 /* PvpServer.cpp */; };
 		98CBC0791A637DD7003E7209 /* PvpGameServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98CBC0771A637DD7003E7209 /* PvpGameServer.cpp */; };
 		98CBC0811A63BDDE003E7209 /* PvpTerminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98CBC0801A63BDDE003E7209 /* PvpTerminal.cpp */; };
-		98CBC0861A63C5FB003E7209 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CBC0851A63C5FB003E7209 /* libboost_system.a */; };
 		98CBC0891A63DAC4003E7209 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98CBC0871A63DAC4003E7209 /* MessageQueue.cpp */; };
 		98CBC08C1A63DE7B003E7209 /* pvp.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 98CBC08A1A63DE7B003E7209 /* pvp.pb.cc */; };
-		98CBC08E1A63E0C5003E7209 /* libprotobuf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CBC08D1A63E0C5003E7209 /* libprotobuf.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,6 +32,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		982593AD1A7896A8006B3A40 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = ../../../../Development/Lib/Boost/lib/libboost_system.a; sourceTree = "<group>"; };
+		982593AF1A789902006B3A40 /* libprotobuf.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libprotobuf.a; path = ../../../../Development/Lib/Protobuf/lib/libprotobuf.a; sourceTree = "<group>"; };
+		982593B11A789A27006B3A40 /* Config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
+		982593B21A78C043006B3A40 /* Battle.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Battle.pb.cc; path = BoidsPvpServer/Data/Battle.pb.cc; sourceTree = SOURCE_ROOT; };
+		982593B31A78C043006B3A40 /* Battle.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Battle.pb.h; path = BoidsPvpServer/Data/Battle.pb.h; sourceTree = SOURCE_ROOT; };
+		982593B41A78C043006B3A40 /* boids.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = boids.pb.cc; path = BoidsPvpServer/Data/boids.pb.cc; sourceTree = SOURCE_ROOT; };
+		982593B51A78C043006B3A40 /* boids.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = boids.pb.h; path = BoidsPvpServer/Data/boids.pb.h; sourceTree = SOURCE_ROOT; };
 		98CBC05F1A636C07003E7209 /* BoidsPvpServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BoidsPvpServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		98CBC0621A636C07003E7209 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		98CBC06D1A637A8D003E7209 /* SharedMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedMacro.h; sourceTree = "<group>"; };
@@ -38,13 +47,11 @@
 		98CBC0751A637D66003E7209 /* PvpTerminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PvpTerminal.h; sourceTree = "<group>"; };
 		98CBC0771A637DD7003E7209 /* PvpGameServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PvpGameServer.cpp; sourceTree = "<group>"; };
 		98CBC0781A637DD7003E7209 /* PvpGameServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PvpGameServer.h; sourceTree = "<group>"; };
-		98CBC0801A63BDDE003E7209 /* PvpTerminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 3; lastKnownFileType = sourcecode.cpp.cpp; path = PvpTerminal.cpp; sourceTree = "<group>"; };
-		98CBC0851A63C5FB003E7209 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = ../../Development/Lib/Boost/lib/libboost_system.a; sourceTree = "<group>"; };
+		98CBC0801A63BDDE003E7209 /* PvpTerminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PvpTerminal.cpp; sourceTree = "<group>"; };
 		98CBC0871A63DAC4003E7209 /* MessageQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MessageQueue.cpp; path = BoidsPvpServer/Data/MessageQueue.cpp; sourceTree = SOURCE_ROOT; };
 		98CBC0881A63DAC4003E7209 /* MessageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageQueue.h; path = BoidsPvpServer/Data/MessageQueue.h; sourceTree = SOURCE_ROOT; };
 		98CBC08A1A63DE7B003E7209 /* pvp.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pvp.pb.cc; path = BoidsPvpServer/Data/pvp.pb.cc; sourceTree = SOURCE_ROOT; };
 		98CBC08B1A63DE7B003E7209 /* pvp.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pvp.pb.h; path = BoidsPvpServer/Data/pvp.pb.h; sourceTree = SOURCE_ROOT; };
-		98CBC08D1A63E0C5003E7209 /* libprotobuf.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libprotobuf.a; path = ../../Development/Lib/Protobuf/lib/libprotobuf.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,8 +59,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98CBC08E1A63E0C5003E7209 /* libprotobuf.a in Frameworks */,
-				98CBC0861A63C5FB003E7209 /* libboost_system.a in Frameworks */,
+				982593B01A789902006B3A40 /* libprotobuf.a in Frameworks */,
+				982593AE1A7896A8006B3A40 /* libboost_system.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +103,7 @@
 				98CBC0711A637D3E003E7209 /* PvpServer.h */,
 				98CBC0771A637DD7003E7209 /* PvpGameServer.cpp */,
 				98CBC0781A637DD7003E7209 /* PvpGameServer.h */,
+				982593B11A789A27006B3A40 /* Config.h */,
 			);
 			path = Server;
 			sourceTree = "<group>";
@@ -112,6 +120,10 @@
 		98CBC07A1A6380D5003E7209 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				982593B21A78C043006B3A40 /* Battle.pb.cc */,
+				982593B31A78C043006B3A40 /* Battle.pb.h */,
+				982593B41A78C043006B3A40 /* boids.pb.cc */,
+				982593B51A78C043006B3A40 /* boids.pb.h */,
 				98CBC08A1A63DE7B003E7209 /* pvp.pb.cc */,
 				98CBC08B1A63DE7B003E7209 /* pvp.pb.h */,
 				98CBC0871A63DAC4003E7209 /* MessageQueue.cpp */,
@@ -124,8 +136,8 @@
 		98CBC0841A63C5D7003E7209 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
-				98CBC08D1A63E0C5003E7209 /* libprotobuf.a */,
-				98CBC0851A63C5FB003E7209 /* libboost_system.a */,
+				982593AF1A789902006B3A40 /* libprotobuf.a */,
+				982593AD1A7896A8006B3A40 /* libboost_system.a */,
 			);
 			name = Libs;
 			sourceTree = "<group>";
@@ -186,8 +198,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				982593B71A78C043006B3A40 /* boids.pb.cc in Sources */,
 				98CBC0631A636C07003E7209 /* main.cpp in Sources */,
 				98CBC08C1A63DE7B003E7209 /* pvp.pb.cc in Sources */,
+				982593B61A78C043006B3A40 /* Battle.pb.cc in Sources */,
 				98CBC0791A637DD7003E7209 /* PvpGameServer.cpp in Sources */,
 				98CBC0891A63DAC4003E7209 /* MessageQueue.cpp in Sources */,
 				98CBC0811A63BDDE003E7209 /* PvpTerminal.cpp in Sources */,
@@ -231,6 +245,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/BoidsPvpServer/Protobuf",
+					/Users/yanjiech/Documents/Development/Lib/Boost/include,
+				);
+				LIBRARY_SEARCH_PATHS = /Users/yanjiech/Documents/Development/Lib/Boost/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -266,6 +287,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/BoidsPvpServer/Protobuf",
+					/Users/yanjiech/Documents/Development/Lib/Boost/include,
+				);
+				LIBRARY_SEARCH_PATHS = /Users/yanjiech/Documents/Development/Lib/Boost/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
@@ -278,12 +306,12 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(SRCROOT)/../../Development/Lib/Boost/include\"",
-					"\"$(SRCROOT)/../../Development/Lib/Protobuf/include\"",
+					/Users/yanjiech/Documents/Development/Lib/Boost/include,
+					/Users/yanjiech/Documents/Development/Lib/Protobuf/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../Development/Lib/Boost/lib\"",
-					"\"$(SRCROOT)/../../Development/Lib/Protobuf/lib\"",
+					/Users/yanjiech/Documents/Development/Lib/Boost/lib,
+					/Users/yanjiech/Documents/Development/Lib/Protobuf/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -295,12 +323,12 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(SRCROOT)/../../Development/Lib/Boost/include\"",
-					"\"$(SRCROOT)/../../Development/Lib/Protobuf/include\"",
+					/Users/yanjiech/Documents/Development/Lib/Boost/include,
+					/Users/yanjiech/Documents/Development/Lib/Protobuf/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../Development/Lib/Boost/lib\"",
-					"\"$(SRCROOT)/../../Development/Lib/Protobuf/lib\"",
+					/Users/yanjiech/Documents/Development/Lib/Boost/lib,
+					/Users/yanjiech/Documents/Development/Lib/Protobuf/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

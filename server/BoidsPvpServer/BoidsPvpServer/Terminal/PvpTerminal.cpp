@@ -118,10 +118,19 @@ bool PvpTerminal::receiveMessage( PvpMessagePtr message ) {
 
 void PvpTerminal::parseMessage( PvpMessagePtr message ) {
    if( _game_server.lock() == nullptr ) {
-      //temp use
-      this->enterGame( _server.lock()->getTestGameServer() );
+       GameMessage game_message;
+       if( game_message.ParseFromString( message->data() ) ) {
+           if( game_message.type() == GameMessage_MessageType_UserOperation ) {
+               if( game_message.user_op().op_type() == UserOperation_OperationType_EnterGame ) {
+                   PvpGameServerPtr game_server = _server.lock()->findGameServerByUserId( game_message.user_op().user_id() );
+                   if( game_server != nullptr ) {
+                       this->enterGame( game_server );
+                   }
+               }
+           }
+       }
    }
-     //accept message
+   //accept message
    PvpGameServerPtr game_server = _game_server.lock();
    if( game_server != nullptr ) {
       game_server->handleMessage( message, shared_from_this() );
