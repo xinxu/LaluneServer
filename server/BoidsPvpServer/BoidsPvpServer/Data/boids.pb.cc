@@ -84,7 +84,7 @@ void protobuf_AddDesc_boids_2eproto() {
   ::google_lalune::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\013boids.proto\022\005boids\"V\n\022BoidsMessageHead"
     "er\022 \n\004type\030\001 \002(\0162\022.boids.MessageType\022\020\n\005"
-    "error\030\002 \002(\005:\0010\022\014\n\004data\030\003 \001(\014*\345\001\n\013Message"
+    "error\030\002 \001(\005:\0010\022\014\n\004data\030\003 \001(\014*\345\001\n\013Message"
     "Type\022\026\n\022AUTO_MATCH_REQUEST\020\002\022\027\n\023AUTO_MAT"
     "CH_RESPONSE\020\003\022\"\n\036PVP_SERVER_CREATE_GAME_"
     "REQUEST\020\004\022#\n\037PVP_SERVER_CREATE_GAME_RESP"
@@ -234,7 +234,7 @@ bool BoidsMessageHeader::MergePartialFromCodedStream(
         break;
       }
 
-      // required int32 error = 2 [default = 0];
+      // optional int32 error = 2 [default = 0];
       case 2: {
         if (tag == 16) {
          parse_error:
@@ -293,7 +293,7 @@ void BoidsMessageHeader::SerializeWithCachedSizes(
       1, this->type(), output);
   }
 
-  // required int32 error = 2 [default = 0];
+  // optional int32 error = 2 [default = 0];
   if (has_error()) {
     ::google_lalune::protobuf::internal::WireFormatLite::WriteInt32(2, this->error(), output);
   }
@@ -320,7 +320,7 @@ void BoidsMessageHeader::SerializeWithCachedSizes(
       1, this->type(), target);
   }
 
-  // required int32 error = 2 [default = 0];
+  // optional int32 error = 2 [default = 0];
   if (has_error()) {
     target = ::google_lalune::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->error(), target);
   }
@@ -350,7 +350,7 @@ int BoidsMessageHeader::ByteSize() const {
         ::google_lalune::protobuf::internal::WireFormatLite::EnumSize(this->type());
     }
 
-    // required int32 error = 2 [default = 0];
+    // optional int32 error = 2 [default = 0];
     if (has_error()) {
       total_size += 1 +
         ::google_lalune::protobuf::internal::WireFormatLite::Int32Size(
@@ -417,7 +417,7 @@ void BoidsMessageHeader::CopyFrom(const BoidsMessageHeader& from) {
 }
 
 bool BoidsMessageHeader::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
   return true;
 }

@@ -9,8 +9,11 @@
 #ifndef BoidsPvpServer_Config_h
 #define BoidsPvpServer_Config_h
 
-#define CTRL_SERVER_IP "192.168.1.43"
-#define CTRL_SERVER_PORT 20438
+#define CTRL_SERVER_IP "192.168.1.16"
+#define CTRL_SERVER_PORT 39432
+
+//#define CTRL_SERVER_IP "192.168.1.3"
+//#define CTRL_SERVER_PORT 22222
 
 #define GAME_SERVICE_IP "192.168.1.3"
 #define GAME_SERVICE_PORT 20437

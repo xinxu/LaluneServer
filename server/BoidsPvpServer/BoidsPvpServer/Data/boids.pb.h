@@ -122,7 +122,7 @@ class BoidsMessageHeader : public ::google_lalune::protobuf::Message {
   inline ::boids::MessageType type() const;
   inline void set_type(::boids::MessageType value);
 
-  // required int32 error = 2 [default = 0];
+  // optional int32 error = 2 [default = 0];
   inline bool has_error() const;
   inline void clear_error();
   static const int kErrorFieldNumber = 2;
@@ -196,7 +196,7 @@ inline void BoidsMessageHeader::set_type(::boids::MessageType value) {
   // @@protoc_insertion_point(field_set:boids.BoidsMessageHeader.type)
 }
 
-// required int32 error = 2 [default = 0];
+// optional int32 error = 2 [default = 0];
 inline bool BoidsMessageHeader::has_error() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
