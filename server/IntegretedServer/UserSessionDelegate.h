@@ -12,7 +12,7 @@ public:
 
 	void DisconnectedHandler(NetLib_ServerSession_ptr sessionptr);
 
-	BEGIN_HANDLER
+	BEGIN_HANDLER(NetLib_ServerSession_ptr)
 
 	HANDLE_MSG_SESSION(boids::AUTO_MATCH_REQUEST, boids::MatchRequest, ams.MatchRequest)
 

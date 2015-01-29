@@ -52,23 +52,23 @@ typedef std::pair<NetLib_ServerSession_ptr, std::string> WaitingUser; //session,
 struct GameInfo
 {
 	IpPort server;
-	NetLib_ServerSession_ptr sessions[2]; //ÏÖÔÚ×î¶à2ÈË¾Ö£¬ÈË¶àÔÙÊı×é¿ª´óµã¾ÍºÃ
+	NetLib_ServerSession_ptr sessions[2]; //ç°åœ¨æœ€å¤š2äººå±€ï¼Œäººå¤šå†æ•°ç»„å¼€å¤§ç‚¹å°±å¥½
 };
 
 class AutoMatchServer
 {
 protected:
-	std::map<int, ServerList*> servers_by_region; //ÓÃÓÚÕÒ·şÎñÆ÷
-	std::map<MatchKey, WaitingUser> waiting_users; //ÓÃÓÚÆ¥Åä¡£ÒÔºóÈç¹ûÓĞ°´»ı·ÖÆ¥ÅäÁË£¬ÕâÀï¾ÍÒª¸Ä£¬ÏÖÔÚËãÊÇÁÙÊ±·½°¸
-	std::map<std::string, GameInfo> games; //ÓÃÓÚ´´½¨ÓÎÏ·³É¹¦ºó²éÓÎÏ·Ïà¹ØĞÅÏ¢
+	std::map<int, ServerList*> servers_by_region; //ç”¨äºæ‰¾æœåŠ¡å™¨
+	std::map<MatchKey, WaitingUser> waiting_users; //ç”¨äºåŒ¹é…ã€‚ä»¥åå¦‚æœæœ‰æŒ‰ç§¯åˆ†åŒ¹é…äº†ï¼Œè¿™é‡Œå°±è¦æ”¹ï¼Œç°åœ¨ç®—æ˜¯ä¸´æ—¶æ–¹æ¡ˆ
+	std::map<std::string, GameInfo> games; //ç”¨äºåˆ›å»ºæ¸¸æˆæˆåŠŸåæŸ¥æ¸¸æˆç›¸å…³ä¿¡æ¯
 
 public:
 	~AutoMatchServer();
 
-	//À´×ÔÓÃ»§
+	//æ¥è‡ªç”¨æˆ·
 	void MatchRequest(NetLib_ServerSession_ptr sessionptr, const boids::MatchRequest& user_req);
 
-	//À´×ÔÕ½¶··şÎñ
+	//æ¥è‡ªæˆ˜æ–—æœåŠ¡
 	void CreateGameResponseGot(const boids::CreateGameResponse& res);
 	void ServerRegister(NetLib_ServerSession_ptr sessionptr, const boids::PvPServerRegister& reg);
 	void ServerHeartBeat(NetLib_ServerSession_ptr sessionptr, const boids::PvPServerHeartBeat& beat);

@@ -82,22 +82,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.h" />
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.h" />
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h" />
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.h" />
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.h" />
+    <ClInclude Include="..\include\ServerHeaderDef.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
     <ClInclude Include="UserSimulator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.cc" />
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.cc" />
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.cc" />
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.cc" />
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.cc" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="UserSimulator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\LaluneCommon\protobuf\protos\Account.proto" />
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\battle.proto" />
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\boids.proto" />
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\pvp.proto" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Log\Log.vcxproj">

@@ -13,8 +13,8 @@
 
 
 
-#define _OUTER_PORT (6677) //·şÎñÓÚÓÃ»§µÄ
-#define _INNER_PORT (9432) //ÄÚ²¿Í¨ĞÅÓÃµÄ£¬Ä¿Ç°Ö÷ÒªÊÇPvPÕ½¶··ş»áÁ¬ÉÏÀ´
+#define _OUTER_PORT (6677) //æœåŠ¡äºç”¨æˆ·çš„
+#define _INNER_PORT (9432) //å†…éƒ¨é€šä¿¡ç”¨çš„ï¼Œç›®å‰ä¸»è¦æ˜¯PvPæˆ˜æ–—æœä¼šè¿ä¸Šæ¥
 
 ioservice_thread thread;
 
@@ -38,8 +38,8 @@ int main(int argc, char* argv[])
 
 	server = NetLib_NewServer<InnerServerSessionDelegate>(&thread);
 
-	//¿ÉÒÔ²»Ö¸¶¨¶Ë¿Ú TODO (Ö÷ÒªÊÇÄÚ²¿¶Ë¿Ú)
-	if (!server->StartTCP(_INNER_PORT, 1, 120)) //¶Ë¿Ú£¬Ïß³ÌÊı£¬³¬Ê±Ê±¼ä
+	//å¯ä»¥ä¸æŒ‡å®šç«¯å£ TODO (ä¸»è¦æ˜¯å†…éƒ¨ç«¯å£)
+	if (!server->StartTCP(_INNER_PORT, 1, 120)) //ç«¯å£ï¼Œçº¿ç¨‹æ•°ï¼Œè¶…æ—¶æ—¶é—´
 	{
 		LOGEVENTL("Error", "Server Start Failed !");
 
@@ -56,8 +56,8 @@ int main(int argc, char* argv[])
 
 	server4user = NetLib_NewServer<UserSessionDelegate>(&thread);
 
-	//³¬Ê±Ê±¼äµÃ¿ÉÒÔÖĞÍ¾ÖØÉè TODO
-	if (!server4user->StartTCP(_OUTER_PORT, 1, 25)) //¶Ë¿Ú£¬Ïß³ÌÊı£¬³¬Ê±Ê±¼ä  £¨¿Í»§¶ËÏÖÔÚÊÇ15Ãë·¢¸öĞÄÌø°ü£©
+	//è¶…æ—¶æ—¶é—´å¾—å¯ä»¥ä¸­é€”é‡è®¾ TODO
+	if (!server4user->StartTCP(_OUTER_PORT, 1, 25)) //ç«¯å£ï¼Œçº¿ç¨‹æ•°ï¼Œè¶…æ—¶æ—¶é—´  ï¼ˆå®¢æˆ·ç«¯ç°åœ¨æ˜¯15ç§’å‘ä¸ªå¿ƒè·³åŒ…ï¼‰
 	{
 		LOGEVENTL("Error", "Server4User Start Failed !");
 

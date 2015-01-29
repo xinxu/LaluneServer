@@ -8,10 +8,10 @@ class InnerServerSessionDelegate : public NetLib_ServerSession_Delegate
 {
 public:
 
-	BEGIN_HANDLER
+	BEGIN_HANDLER(NetLib_ServerSession_ptr)
 
-	HANDLE_MSG(boids::PVP_SERVER_CREATE_GAME_REQUEST, boids::CreateGameResponse, ams.CreateGameResponseGot) //Õ½¶··ş·´À¡³É¹¦»òÊ§°Ü¸øÆ¥Åä·ş
-	HANDLE_MSG_SESSION(boids::PVP_SERVER_REGISTER_REQUEST, boids::PvPServerRegister, ams.ServerRegister) //ÏòÆ¥Åä·ş×¢²áÕ½¶··ş
+	HANDLE_MSG(boids::PVP_SERVER_CREATE_GAME_REQUEST, boids::CreateGameResponse, ams.CreateGameResponseGot) //æˆ˜æ–—æœåé¦ˆæˆåŠŸæˆ–å¤±è´¥ç»™åŒ¹é…æœ
+	HANDLE_MSG_SESSION(boids::PVP_SERVER_REGISTER_REQUEST, boids::PvPServerRegister, ams.ServerRegister) //å‘åŒ¹é…æœæ³¨å†Œæˆ˜æ–—æœ
 	HANDLE_MSG_SESSION(boids::PVP_SERVER_HEART_BEAT, boids::PvPServerHeartBeat, ams.ServerHeartBeat)
 
 	END_HANDLER(InnerServerSessionDelegate)

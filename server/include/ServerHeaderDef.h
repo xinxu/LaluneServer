@@ -1,7 +1,7 @@
 #ifndef __Boids_Server_Header_def_h_
 #define __Boids_Server_Header_def_h_
 
-//·şÎñ¶Ë°üÍ·¶¨Òå
+//æœåŠ¡ç«¯åŒ…å¤´å®šä¹‰
 
 #include <cstdint>
 #include "boids.pb.h"
@@ -28,7 +28,7 @@
 	} \
 }
 
-//¼ÙÉèÁËÓĞ¸ösessionptr±äÁ¿
+//å‡è®¾äº†æœ‰ä¸ªsessionptrå˜é‡
 #define PARSE_EXECUTE_SESSION(DATA, PROTO, FUNC) \
 { \
 	PROTO __p; \
@@ -44,9 +44,9 @@
 #define UNRECOGNIZE(title, t) LOGEVENTL("ERROR", title << ": unrecognized msg type: " << t);
 #define MSG_TOO_SHORT(title, len) LOGEVENTL("ERROR", title << ": msg too short, got: " << len << ", expect at least: " << MSG_HEADER_LEN);
 
-//ÕâÀï¼ÙÉèÁË»áÓĞ¸ödata±äÁ¿
-#define BEGIN_HANDLER \
-void RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data) { \
+//è¿™é‡Œå‡è®¾äº†ä¼šæœ‰ä¸ªdataå˜é‡
+#define BEGIN_HANDLER(SESSION_T) \
+void RecvFinishHandler(SESSION_T sessionptr, char* data) { \
 	SHOW_PACKET; \
 	if (MSG_LENGTH(data) >= MSG_HEADER_LEN) \
 	{ \
@@ -56,24 +56,28 @@ void RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data) { \
 			switch (__msg.type()) \
 			{
 
-//ÕâÀï¼ÙÉèÁË»áÓĞ¸ödata±äÁ¿
+//è¿™é‡Œå‡è®¾äº†ä¼šæœ‰ä¸ª__msgå˜é‡
 #define HANDLE_MSG(T, PROTO, FUNC) \
 			case T: \
-				PARSE_EXECUTE(data, PROTO, FUNC); \
+				PARSE_EXECUTE(__msg.data(), PROTO, FUNC); \
 				break;
 
-//ÕâÀï¼ÙÉèÁË»áÓĞ¸ödata±äÁ¿ºÍsessionptr±äÁ¿
+//è¿™é‡Œå‡è®¾äº†ä¼šæœ‰ä¸ª__msgå˜é‡å’Œsessionptrå˜é‡
 #define HANDLE_MSG_SESSION(T, PROTO, FUNC) \
 			case T: \
-				PARSE_EXECUTE_SESSION(data, PROTO, FUNC); \
+				PARSE_EXECUTE_SESSION(__msg.data(), PROTO, FUNC); \
 				break;
 
-//±ØĞëºÍBEGIN_SWITCHÅäÌ×Ê¹ÓÃ
+//å¿…é¡»å’ŒBEGIN_SWITCHé…å¥—ä½¿ç”¨
 #define END_HANDLER(classname) \
 			default: \
 				UNRECOGNIZE(#classname, __msg.type()); \
 				break; \
 			} \
+		} \
+		else \
+		{ \
+			LOGEVENTL("Error", #classname << ": not a BoidsMessageHeader. len: " << MSG_LENGTH(data)); \
 		} \
 	} \
 	else \
@@ -83,7 +87,7 @@ void RecvFinishHandler(NetLib_ServerSession_ptr sessionptr, char* data) { \
 }
 
 template<typename P>
-void ReplyMsg(NetLib_ServerSession_ptr sessionptr, boids::MessageType msg_type, P& proto) //°üÍ·ÎŞUserIDµÄ°æ±¾
+void ReplyMsg(NetLib_ServerSession_ptr sessionptr, boids::MessageType msg_type, P& proto) //åŒ…å¤´æ— UserIDçš„ç‰ˆæœ¬
 {
 	boids::BoidsMessageHeader proto_with_header;
 	proto_with_header.set_type(msg_type);

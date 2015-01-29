@@ -16,13 +16,13 @@ AutoMatchServer::~AutoMatchServer()
 	}
 }
 
-void addForce(boids::GameInitData* init_data, const std::string& user_id) //Õâ¸ö·½·¨¾ßÌåÒ²ÊÇÁÙÊ±·½°¸£¬Ã¿¸öÈËÉÏ³¡ÄÄĞ©Ó¢ĞÛÔÚÊı¾İ¿âÀïÓĞÁËÖ®ºóÒª¸Ä
+void addForce(boids::GameInitData* init_data, const std::string& user_id) //è¿™ä¸ªæ–¹æ³•å…·ä½“ä¹Ÿæ˜¯ä¸´æ—¶æ–¹æ¡ˆï¼Œæ¯ä¸ªäººä¸Šåœºå“ªäº›è‹±é›„åœ¨æ•°æ®åº“é‡Œæœ‰äº†ä¹‹åè¦æ”¹
 {
 	boids::ForceData* force_data = init_data->add_forces();
 	force_data->set_user_id(user_id);
 	force_data->set_force_id(init_data->forces_size());
 
-	//´ÓÏÖÓĞÓ¢ĞÛÀïËæ»úÈ¡HERO_PICK_COUNT(3)¸ö
+	//ä»ç°æœ‰è‹±é›„é‡Œéšæœºå–HERO_PICK_COUNT(3)ä¸ª
 #define HERO_PICK_COUNT (3)
 
 	std::vector<std::string> all_heros;
@@ -41,28 +41,28 @@ void addForce(boids::GameInitData* init_data, const std::string& user_id) //Õâ¸ö
 	}
 }
 
-//À´×ÔÓÃ»§
+//æ¥è‡ªç”¨æˆ·
 void AutoMatchServer::MatchRequest(NetLib_ServerSession_ptr sessionptr, const boids::MatchRequest& user_req)
 {
-	MatchKey key(0, user_req.map_name()); //ÏÈ¼ÙÉè¶¼ÊÇregion0£¬ÒÔºóÔÙ¸Ä
+	MatchKey key(0, user_req.map_name()); //å…ˆå‡è®¾éƒ½æ˜¯region0ï¼Œä»¥åå†æ”¹
 	auto it = waiting_users.find(key);
 	if (it == waiting_users.end())
 	{
 		waiting_users.emplace(key, WaitingUser(sessionptr, user_req.user_id()));
 	}
-	else //ÒÑ¾­ÓĞÒ»¸öÈËÁË£¬ÄÇÃ´¾Í¿ÉÒÔ´Õ³ÉÒ»¾ÖÁË
+	else //å·²ç»æœ‰ä¸€ä¸ªäººäº†ï¼Œé‚£ä¹ˆå°±å¯ä»¥å‡‘æˆä¸€å±€äº†
 	{
 		const WaitingUser& opponent = it->second;
-		std::string game_id = time_utility::ptime_to_string4(boost::posix_time::microsec_clock::local_time()); //Ö±½ÓÄÃ¾«È·µ½Î¢ÃëµÄÊ±¼äµ±gameidÓÃ£»±ãÓÚµ÷ÊÔ¡£ÒÔºó¿ÉÄÜÒª¸Ä³Éuuid£¬»òÕßÔö¼ÓÒ»¶Î
+		std::string game_id = time_utility::ptime_to_string4(boost::posix_time::microsec_clock::local_time()); //ç›´æ¥æ‹¿ç²¾ç¡®åˆ°å¾®ç§’çš„æ—¶é—´å½“gameidç”¨ï¼›ä¾¿äºè°ƒè¯•ã€‚ä»¥åå¯èƒ½è¦æ”¹æˆuuidï¼Œæˆ–è€…å¢åŠ ä¸€æ®µ
 
-		//²úÉúÒ»¾ÖµÄGameInitData£¬·¢¸øÕ½¶··şÎñ
+		//äº§ç”Ÿä¸€å±€çš„GameInitDataï¼Œå‘ç»™æˆ˜æ–—æœåŠ¡
 		boids::CreateGame cg;
 		cg.set_game_id(game_id);
 		boids::GameInitData* init_data = cg.mutable_game_init_data();
 		addForce(init_data, opponent.second);
 		addForce(init_data, user_req.user_id());
 
-		//ÕÒÒ»Ì¨¿ÉÓÃµÄÕ½¶··şÎñ·¢¹ıÈ¥
+		//æ‰¾ä¸€å°å¯ç”¨çš„æˆ˜æ–—æœåŠ¡å‘è¿‡å»
 		bool found = false;
 		auto it_list = servers_by_region.find(key.first);
 		if (it_list != servers_by_region.end())
@@ -80,7 +80,7 @@ void AutoMatchServer::MatchRequest(NetLib_ServerSession_ptr sessionptr, const bo
 					ReplyMsg(it_server->session, boids::PVP_SERVER_CREATE_GAME_REQUEST, cg);
 					found = true;
 
-					//TODO: ×îºÃ»¹ÒªÒ»¸ötimer£¬¿¼ÂÇÊ±¼äµ½ÁËÃ»Æ¥µ½µÄÇé¿ö
+					//TODO: æœ€å¥½è¿˜è¦ä¸€ä¸ªtimerï¼Œè€ƒè™‘æ—¶é—´åˆ°äº†æ²¡åŒ¹åˆ°çš„æƒ…å†µ
 				}
 			}
 		}
@@ -89,15 +89,17 @@ void AutoMatchServer::MatchRequest(NetLib_ServerSession_ptr sessionptr, const bo
 		{
 			boids::MatchResponse response4user;
 			response4user.set_ret_value(boids::MatchResponse_Value_No_Server);
-			response4user.set_ret_info("Ã»ÓĞÕÒµ½¿ÉÓÃµÄ·şÎñÆ÷");
+			response4user.set_ret_info("æ²¡æœ‰æ‰¾åˆ°å¯ç”¨çš„æœåŠ¡å™¨");
 
 			ReplyMsg(opponent.first, boids::AUTO_MATCH_RESPONSE, response4user);
 			ReplyMsg(sessionptr, boids::AUTO_MATCH_RESPONSE, response4user);
 		}
+
+		waiting_users.erase(it);
 	}
 }
 
-//À´×ÔÕ½¶··şÎñ
+//æ¥è‡ªæˆ˜æ–—æœåŠ¡
 void AutoMatchServer::CreateGameResponseGot(const boids::CreateGameResponse& res)
 {
 	auto it_game = games.find(res.game_id());
@@ -107,6 +109,7 @@ void AutoMatchServer::CreateGameResponseGot(const boids::CreateGameResponse& res
 		boids::MatchResponse res4user;
 		if (res.ret_value() == 0)
 		{
+			res4user.set_ret_value(boids::MatchResponse_Value_Success);
 			res4user.set_game_uuid(res.game_id());
 			res4user.set_game_server_ip(game.server.Ip);
 			res4user.set_game_server_port(game.server.port);
@@ -114,12 +117,14 @@ void AutoMatchServer::CreateGameResponseGot(const boids::CreateGameResponse& res
 		else
 		{
 			res4user.set_ret_value(boids::MatchResponse_Value_CreateFail);
-			res4user.set_ret_info("´´½¨´íÎó¡£´íÎó´úÂë£º" + utility1::int2str(res.ret_value()));
+			res4user.set_ret_info("åˆ›å»ºé”™è¯¯ã€‚é”™è¯¯ä»£ç ï¼š" + utility1::int2str(res.ret_value()));
 		}
 		for (unsigned i = 0; i != 2; ++i)
 		{
 			ReplyMsg(game.sessions[i], boids::AUTO_MATCH_RESPONSE, res4user);
 		}
+
+		games.erase(it_game);
 	}
 	else
 	{
