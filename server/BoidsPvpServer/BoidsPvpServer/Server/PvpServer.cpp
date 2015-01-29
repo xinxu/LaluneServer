@@ -47,7 +47,6 @@ bool PvpServer::start() {
     std::cout << "server start" << std::endl;
     
     //init heart beat message
-    std::string wrapped_data;
     std::string heart_beat_data;
     PvPServerHeartBeat heart_beat;
     heart_beat.set_ip( GAME_SERVICE_IP );
@@ -55,15 +54,11 @@ bool PvpServer::start() {
     heart_beat.SerializeToString( &heart_beat_data );
     BoidsMessageHeader header;
     header.set_type( PVP_SERVER_HEART_BEAT );
-    header.set_data( heart_beat_data );
-    header.SerializeToString( &wrapped_data );
-    int heart_beat_data_size = (int)wrapped_data.size();
-    std::stringstream ss;
-    ss << heart_beat_data_size;
-    _heart_beat_data = ss.str();
-    _heart_beat_data.append( wrapped_data.c_str(), heart_beat_data_size );
+    header.set_data( heart_beat_data.c_str(), heart_beat_data.size() );
+    header.SerializeToString( &_heart_beat_data );
     
     this->registerToControlServer();
+    this->sendHeartbeat();
     
     _is_reading_size = true;
     _is_sending = false;
@@ -91,11 +86,16 @@ void PvpServer::reconnect() {
 }
 
 void PvpServer::sendWithoutSize( const std::string& message ) {
-    int size = (int)message.size();
-    std::stringstream ss;
-    ss << size;
-    std::string send_string = ss.str();
-    send_string.append( message.c_str(), size );
+    int size = (int)message.size() + 4;
+    char* num = (char*)&size;
+    std::string send_string = std::string( num, 4 );
+    send_string.append( message.c_str(), size - 4 );
+//    std::cout << std::hex << send_string.size() << " " << std::hex << size << std::endl;
+//    std::cout << "send message:" << std::endl;
+//    for( int i = 0; i < send_string.size(); i++ ) {
+//        std::cout << std::hex << (int)send_string[i] << " ";
+//    }
+//    std::cout << std::endl;
     this->send( send_string );
 }
 
@@ -119,7 +119,7 @@ void PvpServer::connectHandler( const boost::system::error_code& error ) {
     }
     else {
         std::cout << "connect to control server failed: " << error << std::endl;
-        this->reconnect();
+//        this->reconnect();
     }
 }
 
@@ -132,7 +132,7 @@ void PvpServer::sendHandler( const boost::system::error_code& error, std::size_t
 void PvpServer::receiveHandler( const boost::system::error_code& error, std::size_t size ) {
     if( !error ) {
         if( _is_reading_size ) {
-            int size = *(int*)&_size_bytes[0];
+            int size = *(int*)&_size_bytes[0] - 4;
             _data_bytes.resize( size );
         }
         else {
@@ -144,12 +144,13 @@ void PvpServer::receiveHandler( const boost::system::error_code& error, std::siz
         this->receive();
     }
     else {
-        std::cout << "receive from ctrl server failed.." << std::endl;
+        std::cout << "receive from ctrl server failed.. error: " << error << std::endl;
+        this->reconnect();
     }
 }
 
 void PvpServer::sendHeartbeat() {
-    this->send( _heart_beat_data );
+    this->sendWithoutSize( _heart_beat_data );
     _heart_beat_timer.expires_from_now( _heart_beat_interval );
     _heart_beat_timer.async_wait( boost::bind( &PvpServer::heartBeatTrigger, this, boost::asio::placeholders::error ) );
 }
@@ -191,7 +192,12 @@ void PvpServer::handleCreateGameRequest( const std::string& data ) {
     response.set_ret_value( ret_value );
     std::string resp_string;
     response.SerializeToString( &resp_string );
-    this->sendWithoutSize( resp_string );
+    boids::BoidsMessageHeader header;
+    std::string header_string;
+    header.set_type( PVP_SERVER_CREATE_GAME_RESPONSE );
+    header.set_data( resp_string.c_str(), resp_string.size() );
+    header.SerializeToString( &header_string );
+    this->sendWithoutSize( header_string );
 }
 
 void PvpServer::handleRegisterResponse( const std::string& data ) {
@@ -203,12 +209,17 @@ void PvpServer::handleRegisterResponse( const std::string& data ) {
 }
 
 void PvpServer::registerToControlServer() {
+    boids::BoidsMessageHeader header;
+    header.set_type( boids::PVP_SERVER_REGISTER_REQUEST );
     boids::PvPServerRegister request;
     request.set_ip( GAME_SERVICE_IP );
     request.set_port( GAME_SERVICE_PORT );
     std::string request_string;
     request.SerializeToString( &request_string );
-    this->sendWithoutSize( request_string );
+    header.set_data( request_string.c_str(), request_string.size() );
+    std::string data_string;
+    header.SerializeToString( &data_string );
+    this->sendWithoutSize( data_string );
 }
 
 void PvpServer::heartBeatTrigger( const boost::system::error_code& error ) {
