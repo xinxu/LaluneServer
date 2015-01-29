@@ -95,8 +95,10 @@
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h" />
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.h" />
     <ClInclude Include="..\include\ioservice_thread.h" />
+    <ClInclude Include="..\include\ptime2.h" />
     <ClInclude Include="..\include\ServerHeaderDef.h" />
     <ClInclude Include="..\include\Timer.h" />
+    <ClInclude Include="..\include\utility1.h" />
     <ClInclude Include="AutoMatchServer.h" />
     <ClInclude Include="InnerServerSessionDelegate.h" />
     <ClInclude Include="IntegratedServer.h" />

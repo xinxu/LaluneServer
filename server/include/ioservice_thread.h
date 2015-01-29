@@ -35,12 +35,14 @@ public:
 
 	std::shared_ptr<Timer> create_timer(int interval_secs, std::function<void()> handler)
 	{
-		return std::make_shared<Timer>(boostioservice, interval_secs, handler);
+		Timer* t = new Timer(boostioservice, interval_secs, handler);
+		return std::shared_ptr<Timer>(t);
 	}
 
-	std::shared_ptr<OneOffTimer> create_one_off_timer(int interval_secs, std::function<void()> handler)
+	std::shared_ptr<OneOffTimer> create_one_off_timer(int timeout_secs, std::function<void()> handler)
 	{
-		return std::make_shared<OneOffTimer>(boostioservice, interval_secs, handler);
+		OneOffTimer* t = new OneOffTimer(boostioservice, timeout_secs, handler);
+		return std::shared_ptr<OneOffTimer>(t);
 	}
 
 	//返回false表示已启动，不能重复启动

@@ -87,7 +87,7 @@ void ReplyMsg(NetLib_ServerSession_ptr sessionptr, boids::MessageType msg_type, 
 {
 	boids::BoidsMessageHeader proto_with_header;
 	proto_with_header.set_type(msg_type);
-	proto.SerializeToString(*proto_with_header.mutable_data());
+	proto.SerializeToString(proto_with_header.mutable_data());
 
 	int proto_size = proto_with_header.ByteSize();
 
