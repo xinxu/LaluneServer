@@ -96,6 +96,7 @@
     <ClInclude Include="..\..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h" />
     <ClInclude Include="Data\MessageQueue.h" />
     <ClInclude Include="Data\pvp.pb.h" />
+    <ClInclude Include="Server\Config.h" />
     <ClInclude Include="Server\PvpGameServer.h" />
     <ClInclude Include="Server\PvpServer.h" />
     <ClInclude Include="SharedMacro.h" />

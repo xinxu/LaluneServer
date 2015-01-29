@@ -73,6 +73,9 @@
     <ClInclude Include="..\..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h">
       <Filter>message</Filter>
     </ClInclude>
+    <ClInclude Include="Server\Config.h">
+      <Filter>Server</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\LaluneCommon\protobuf\protos\battle.proto">

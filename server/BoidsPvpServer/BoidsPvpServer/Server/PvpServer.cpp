@@ -80,9 +80,7 @@ void PvpServer::stop() {
 //control service
 void PvpServer::connect() {
     std::cout << "connecting to control server..." << std::endl;
-    boost::asio::ip::address addr;
-    addr.from_string( _context->ctrl_server_ip );
-    boost::asio::ip::tcp::endpoint ctrl_server( addr, _context->ctrl_server_port );
+	boost::asio::ip::tcp::endpoint ctrl_server(boost::asio::ip::address::from_string(_context->ctrl_server_ip), _context->ctrl_server_port);
     _ctrl_sock.async_connect( ctrl_server, boost::bind( &PvpServer::connectHandler , this, boost::asio::placeholders::error ) );
 }
 
