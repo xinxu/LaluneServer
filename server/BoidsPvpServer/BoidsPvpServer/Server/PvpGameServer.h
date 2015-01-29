@@ -30,8 +30,8 @@ namespace boids {
         PvpGameServer( boost::asio::io_service& io_service, const boost::shared_ptr<PvpServer>& pvp_server );
         ~PvpGameServer();
         
-        inline int getGameId() { return _game_id; }
-        inline void setGameId( int game_id ) { _game_id = game_id; }
+        inline std::string getGameId() { return _game_id; }
+        void setGameId( const std::string& game_id );
         
         void start();
         void stop();
@@ -45,12 +45,17 @@ namespace boids {
         
         bool containsTerminal( PvpTerminalPtr terminal );
         
+        bool containsUser( const std::string& user_id );
+        
+        void setGameInitData( const boids::GameInitData& init_data );
+        
     private:
+        boids::GameInitData _game_init_data;
         UserOperationPackagePtr _wrapped_operations;
         
         GameState _state;
         
-        int _game_id;
+        std::string _game_id;
         
         boost::weak_ptr<PvpServer> _pvp_server;
         

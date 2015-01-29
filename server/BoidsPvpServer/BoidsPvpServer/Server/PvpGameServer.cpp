@@ -11,7 +11,7 @@
 
 using namespace  boids;
 
-GameInitData init_data;
+/*GameInitData init_data;
 
 void init_force_data() {
     boids::ForceData* force1 = init_data.add_forces();
@@ -39,7 +39,7 @@ void init_force_data() {
     boids::UnitData* u23 = force2->add_units();
     u23->set_unit_name( "vanhelsing" );
     u23->set_unit_level( 1 );
-}
+}*/
 
 PvpGameServer::PvpGameServer( boost::asio::io_service& io_service, const boost::shared_ptr<PvpServer>& pvp_server ) :
 _pvp_server( pvp_server ),
@@ -47,10 +47,14 @@ _frame_rate( DEFAULT_FRAME_RATE ),
 _timer( io_service ),
 _state( GameState::WAITING ) {
     _wrapped_operations = UserOperationPackagePtr( new UserOperationPackage() );
-    init_force_data();
+//    init_force_data();
 }
 
 PvpGameServer::~PvpGameServer() {
+}
+
+void PvpGameServer::setGameId( const std::string& game_id ) {
+    _game_id = std::string( game_id.c_str(), game_id.size() );
 }
 
 void PvpGameServer::start() {
@@ -102,7 +106,7 @@ void PvpGameServer::handleMessage( PvpMessagePtr message, PvpTerminalPtr termina
                         std::string data_string;
                         GameMessage game_message;
                         game_message.set_type( GameMessage_MessageType_GameInitData );
-                        game_message.mutable_game_init_data()->CopyFrom( init_data );
+                        game_message.mutable_game_init_data()->CopyFrom( _game_init_data );
                         game_message.SerializeToString( &data_string );
                         
                         PvpMessagePtr wrapped_message = PvpMessagePtr( new PvpMessage() );
@@ -123,6 +127,13 @@ void PvpGameServer::handleMessage( PvpMessagePtr message, PvpTerminalPtr termina
                     user_op.set_timestamp( _game_time );
                     _wrapped_operations->add_operations()->CopyFrom( user_op );
                     break;
+            }
+        }
+        else if( game_message.type() == GameMessage_MessageType_HeartBeat ) {
+            if( _state == GameState::WAITING ) {
+                PvpMessagePtr wrapped_message = PvpMessagePtr( new PvpMessage() );
+                wrapped_message->set_data( message->data().c_str(), message->data().size() );
+                terminal->sendMessage( wrapped_message );
             }
         }
     }
@@ -150,4 +161,17 @@ bool PvpGameServer::containsTerminal( PvpTerminalPtr terminal ) {
         }
     }
     return false;
+}
+
+bool PvpGameServer::containsUser( const std::string& user_id ) {
+    for( auto force : _game_init_data.forces() ) {
+        if( force.user_id() == user_id ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void PvpGameServer::setGameInitData( const boids::GameInitData& init_data ) {
+    _game_init_data.CopyFrom( init_data );
 }

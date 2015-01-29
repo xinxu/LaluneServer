@@ -14,7 +14,7 @@ int main(int argc, const char * argv[]) {
     // insert code here...
     boids::PvpServerContextPtr context = boids::PvpServerContextPtr( new boids::PvpServerContext() );
     boids::PvpServerPtr server = boids::PvpServerPtr( new boids::PvpServer( context ) );
-    if( server->start() ) {
+    if( server->init() ) {
     }
     else {
         std::cout << "server start failed" << std::endl;
