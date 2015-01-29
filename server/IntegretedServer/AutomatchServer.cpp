@@ -169,12 +169,30 @@ void AutoMatchServer::ServerRegister(NetLib_ServerSession_ptr sessionptr, const 
 		it_list = servers_by_region.emplace(info.region, new ServerList()).first;
 	}
 	auto& list = *it_list->second;
-	list.push_back(info);
+
+	//检查有没有重复的，有重复的话更新
+	bool duplicate = false;
+	for (auto& server_info : list)
+	{
+		if (server_info.id == info.id)
+		{
+			server_info = info;
+			duplicate = true;
+			break;
+		}
+	}
+	if (!duplicate)
+	{
+		list.push_back(info);
+	}
 	std::sort(list.begin(), list.end(), [](const PvPServerInfo& server_a, const PvPServerInfo& server_b) {
 		return server_a.priority < server_b.priority;
 	});
 
+	LOGEVENTL("INFO", "a pvp_server registered. " << _ln("IP") << info.id.Ip << _ln("Port") << info.id.port);
+
 	boids::PvPServerRegisterResponse response;
+	response.set_ret_value(0); //表示成功
 	ReplyMsg(sessionptr, boids::PVP_SERVER_REGISTER_RESPONSE, response);
 }
 
