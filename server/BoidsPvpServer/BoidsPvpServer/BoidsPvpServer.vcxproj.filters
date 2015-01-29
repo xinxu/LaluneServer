@@ -18,15 +18,15 @@
     <Filter Include="Terminal">
       <UniqueIdentifier>{09c2e8f6-3812-4bb5-87ad-9f7b9b000115}</UniqueIdentifier>
     </Filter>
+    <Filter Include="message">
+      <UniqueIdentifier>{d70e4954-b01c-4bd7-b37b-adef3d13e5e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Data\MessageQueue.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
-    <ClCompile Include="Data\pvp.pb.cc">
       <Filter>Data</Filter>
     </ClCompile>
     <ClCompile Include="Terminal\PvpTerminal.cpp">
@@ -38,15 +38,21 @@
     <ClCompile Include="Server\PvpServer.cpp">
       <Filter>Server</Filter>
     </ClCompile>
+    <ClCompile Include="Data\pvp.pb.cc">
+      <Filter>message</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.cc">
+      <Filter>message</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.cc">
+      <Filter>message</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SharedMacro.h">
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="Data\MessageQueue.h">
-      <Filter>Data</Filter>
-    </ClInclude>
-    <ClInclude Include="Data\pvp.pb.h">
       <Filter>Data</Filter>
     </ClInclude>
     <ClInclude Include="Terminal\PvpTerminal.h">
@@ -58,5 +64,25 @@
     <ClInclude Include="Server\PvpServer.h">
       <Filter>Server</Filter>
     </ClInclude>
+    <ClInclude Include="Data\pvp.pb.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h">
+      <Filter>message</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\LaluneCommon\protobuf\protos\battle.proto">
+      <Filter>message</Filter>
+    </None>
+    <None Include="..\..\..\..\LaluneCommon\protobuf\protos\boids.proto">
+      <Filter>message</Filter>
+    </None>
+    <None Include="..\..\..\..\LaluneCommon\protobuf\protos\pvp.proto">
+      <Filter>message</Filter>
+    </None>
   </ItemGroup>
 </Project>

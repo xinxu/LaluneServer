@@ -82,6 +82,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.cc" />
+    <ClCompile Include="..\..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.cc" />
     <ClCompile Include="Data\MessageQueue.cpp" />
     <ClCompile Include="Data\pvp.pb.cc" />
     <ClCompile Include="main.cpp" />
@@ -90,12 +92,19 @@
     <ClCompile Include="Terminal\PvpTerminal.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.h" />
+    <ClInclude Include="..\..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h" />
     <ClInclude Include="Data\MessageQueue.h" />
     <ClInclude Include="Data\pvp.pb.h" />
     <ClInclude Include="Server\PvpGameServer.h" />
     <ClInclude Include="Server\PvpServer.h" />
     <ClInclude Include="SharedMacro.h" />
     <ClInclude Include="Terminal\PvpTerminal.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\LaluneCommon\protobuf\protos\battle.proto" />
+    <None Include="..\..\..\..\LaluneCommon\protobuf\protos\boids.proto" />
+    <None Include="..\..\..\..\LaluneCommon\protobuf\protos\pvp.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
