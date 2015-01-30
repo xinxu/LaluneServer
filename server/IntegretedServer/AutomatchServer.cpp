@@ -59,6 +59,19 @@ void AutoMatchServer::MatchRequest(NetLib_ServerSession_ptr sessionptr, const bo
 		const WaitingUser& opponent = it->second;
 		std::string game_id = time_utility::ptime_to_string4(boost::posix_time::microsec_clock::local_time()); //直接拿精确到微秒的时间当gameid用；便于调试。以后可能要改成uuid，或者增加一段
 
+		if (opponent.second == user_req.user_id())
+		{
+			boids::MatchResponse response4user;
+			response4user.set_ret_value(boids::MatchResponse_Value_IllegalRequest);
+
+			LOGEVENTL("INFO", "illegal request. same user_id. " << _ln("user_id") << user_req.user_id() << _ln("game_id") << game_id);
+
+			ReplyMsg(opponent.first, boids::AUTO_MATCH_RESPONSE, response4user);
+			ReplyMsg(sessionptr, boids::AUTO_MATCH_RESPONSE, response4user);
+
+			return;
+		}
+
 		//产生一局的GameInitData，发给战斗服务
 		boids::CreateGame cg;
 		cg.set_game_id(game_id);
