@@ -49,6 +49,10 @@ void AutoMatchServer::MatchRequest(NetLib_ServerSession_ptr sessionptr, const bo
 	if (it == waiting_users.end())
 	{
 		waiting_users.emplace(key, WaitingUser(sessionptr, user_req.user_id()));
+		session2matchkey.emplace(sessionptr, key);
+		LOGEVENTL("INFO", user_req.user_id() << " start waiting. map_name: " << user_req.map_name());
+
+		//TODO: 最好还要一个timer，考虑时间到了没匹到的情况
 	}
 	else //已经有一个人了，那么就可以凑成一局了
 	{
@@ -61,6 +65,8 @@ void AutoMatchServer::MatchRequest(NetLib_ServerSession_ptr sessionptr, const bo
 		boids::GameInitData* init_data = cg.mutable_game_init_data();
 		addForce(init_data, opponent.second);
 		addForce(init_data, user_req.user_id());
+
+		LOGEVENTL("INFO", "match almost success. " << _ln("game_id") << game_id << _ln("player1") << opponent.second << _ln("player2") << user_req.user_id());
 
 		//找一台可用的战斗服务发过去
 		bool found = false;
@@ -80,7 +86,7 @@ void AutoMatchServer::MatchRequest(NetLib_ServerSession_ptr sessionptr, const bo
 					ReplyMsg(it_server->session, boids::PVP_SERVER_CREATE_GAME_REQUEST, cg);
 					found = true;
 
-					//TODO: 最好还要一个timer，考虑时间到了没匹到的情况
+					LOGEVENTL("INFO", "find a server. " << _ln("game_id") << game_id << _ln("server_ip") << it_server->id.Ip);
 				}
 			}
 		}
@@ -91,11 +97,29 @@ void AutoMatchServer::MatchRequest(NetLib_ServerSession_ptr sessionptr, const bo
 			response4user.set_ret_value(boids::MatchResponse_Value_No_Server);
 			response4user.set_ret_info("没有找到可用的服务器");
 
+			LOGEVENTL("INFO", "no server available. " << _ln("game_id") << game_id);
+
 			ReplyMsg(opponent.first, boids::AUTO_MATCH_RESPONSE, response4user);
 			ReplyMsg(sessionptr, boids::AUTO_MATCH_RESPONSE, response4user);
 		}
 
+		session2matchkey.erase(opponent.first);
 		waiting_users.erase(it);
+	}
+}
+
+void AutoMatchServer::MatchCancel(NetLib_ServerSession_ptr sessionptr)
+{
+	//只处理了匹一半掉线的，没有处理已经在询问战斗服务才掉线的情况(太少见了)
+	auto it_matchkey = session2matchkey.find(sessionptr);
+	if (it_matchkey != session2matchkey.end())
+	{
+		LOGEVENTL("INFO", "some user disconnected, so cancel match.");
+		waiting_users.erase(it_matchkey->second);		
+	}
+	else
+	{
+		LOGEVENTL("ERROR", "some user disconnected, but not found corresponding session in AutoMatchServer");
 	}
 }
 
@@ -113,11 +137,15 @@ void AutoMatchServer::CreateGameResponseGot(const boids::CreateGameResponse& res
 			res4user.set_game_uuid(res.game_id());
 			res4user.set_game_server_ip(game.server.Ip);
 			res4user.set_game_server_port(game.server.port);
+
+			LOGEVENTL("INFO", "match success. " << _ln("game_id") << res.game_id() << _ln("server_ip") << game.server.Ip);
 		}
 		else
 		{
 			res4user.set_ret_value(boids::MatchResponse_Value_CreateFail);
 			res4user.set_ret_info("创建错误。错误代码：" + utility1::int2str(res.ret_value()));
+
+			LOGEVENTL("INFO", "create game failed. " << _ln("game_id") << res.game_id() << _ln("ret_value") << res.ret_value());
 		}
 		for (unsigned i = 0; i != 2; ++i)
 		{
