@@ -7,6 +7,7 @@
 //
 
 #include "PvpGameServer.h"
+#include "PvpServer.h"
 #include <iostream>
 
 using namespace  boids;
@@ -91,6 +92,10 @@ void PvpGameServer::update( int millisec ) {
         term->sendMessage( wrapped_message );
     }
     _wrapped_operations->clear_operations();
+    if( _terminals.size() == 0 ) {
+        this->stop();
+        _pvp_server.lock()->deleteGame( _game_id );
+    }
 }
 
 void PvpGameServer::handleMessage( PvpMessagePtr message, PvpTerminalPtr terminal ) {

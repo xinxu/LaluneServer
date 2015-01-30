@@ -18,6 +18,7 @@ using namespace boids;
 #define SEQ_NO_BITS 16
 
 #define DEFAULT_RESEND_INTERVAL 200000 //mirco sec
+#define DEFAULT_DISCONNECT_TIMOUT 10000000
 
 PvpTerminal::PvpTerminal( boost::asio::io_service& io_service, boost::shared_ptr<PvpServer> server, const boost::asio::ip::udp::endpoint& ep ) :
 _server( server ),
@@ -32,6 +33,7 @@ _state( PvpTerminalState::Disconnected )
     
     _ack_no = 0;
     _ack_bits = 0;
+    _total_time_no_message = 0;
     this->startTimer( _resend_interval );
 }
 
@@ -50,70 +52,72 @@ void PvpTerminal::quitGame() {
 }
 
 bool PvpTerminal::receiveMessage( PvpMessagePtr message ) {
-   do {
-      unsigned short proto_id = message->proto_id();
-      unsigned short ack_no = (unsigned short)message->ack_no();
-      unsigned short seq_no = (unsigned short)message->seq_no();
-      unsigned int ack_bits = message->ack_bits();
+    do {
+        _total_time_no_message = 0;
+       
+        unsigned short proto_id = message->proto_id();
+        unsigned short ack_no = (unsigned short)message->ack_no();
+        unsigned short seq_no = (unsigned short)message->seq_no();
+        unsigned int ack_bits = message->ack_bits();
       
-      if( proto_id == SYNC_PROTO_ID ) {
+        if( proto_id == SYNC_PROTO_ID ) {
          //connect request
-         if( _state != PvpTerminalState::Disconnected ) {
-            break;
-         }
-         _ack_no = seq_no;
-         _ack_bits = 0x1;
-         _remote_ack_bits = 0xffffffff;
-         _max_resent_bit = 32;
-         _sent_message.clear();
+            if( _state != PvpTerminalState::Disconnected ) {
+                break;
+            }
+            _ack_no = seq_no;
+            _ack_bits = 0x1;
+            _remote_ack_bits = 0xffffffff;
+            _max_resent_bit = 32;
+            _sent_message.clear();
          
-         PvpMessagePtr resp_message = PvpMessagePtr( new PvpMessage() );
-         _state = PvpTerminalState::Sync;
-         this->sendMessage( resp_message, SYNC_PROTO_ID );
-      }
-      else {
-         if( _state == PvpTerminalState::Sync ) {
-            _state = PvpTerminalState::Connected;
-         }
-         if( _state == PvpTerminalState::Connected ) {
-            int shift = this->diffBetweenSequenceNumbers( seq_no, _ack_no );
-            //update ack info
-            if( shift == 0 ) {
-               break;  //duplicated packet
+            PvpMessagePtr resp_message = PvpMessagePtr( new PvpMessage() );
+            _state = PvpTerminalState::Sync;
+            this->sendMessage( resp_message, SYNC_PROTO_ID );
+        }
+        else {
+            if( _state == PvpTerminalState::Sync ) {
+                _state = PvpTerminalState::Connected;
             }
-            else if( shift < 0 ) { //received ealier packet
-               unsigned int bit = 0x1 << (-shift);
-               if( ( _ack_bits & bit ) == 0 ) {
-                  _ack_bits |= bit;
-               }
-               else {
-                  break;  //duplicated packet
-               }
-            }
-            else {  //latest packet
-               _ack_no = seq_no;
-               _ack_bits = ( _ack_bits << shift ) | 0x1;
-            }
+            if( _state == PvpTerminalState::Connected ) {
+                int shift = this->diffBetweenSequenceNumbers( seq_no, _ack_no );
+                //update ack info
+                if( shift == 0 ) {
+                    break;  //duplicated packet
+                }
+                else if( shift < 0 ) { //received ealier packet
+                    unsigned int bit = 0x1 << (-shift);
+                    if( ( _ack_bits & bit ) == 0 ) {
+                        _ack_bits |= bit;
+                    }
+                    else {
+                        break;  //duplicated packet
+                    }
+                }
+                else {  //latest packet
+                    _ack_no = seq_no;
+                    _ack_bits = ( _ack_bits << shift ) | 0x1;
+                }
             
-            //udpate remote_ack_bits
-            int diff = this->diffBetweenSequenceNumbers( _seq_no, ack_no );
-            if( diff >= 0 ) {
-               for( int i = 0; i < 32 - diff; i++ ) {
-                  unsigned int in_local_ack_bit = 1 << ( i + diff );
-                  unsigned int in_msg_ack_bit = 1 << i;
-                  if( ( _remote_ack_bits & in_local_ack_bit ) == 0 && ( ack_bits & in_msg_ack_bit ) != 0 ) {
-                     _remote_ack_bits |= in_local_ack_bit;
-                     this->dropMessage( this->prevSeqNo( ack_no, i ) );
-                  }
-               }
-            }
+                //udpate remote_ack_bits
+                int diff = this->diffBetweenSequenceNumbers( _seq_no, ack_no );
+                if( diff >= 0 ) {
+                    for( int i = 0; i < 32 - diff; i++ ) {
+                        unsigned int in_local_ack_bit = 1 << ( i + diff );
+                        unsigned int in_msg_ack_bit = 1 << i;
+                        if( ( _remote_ack_bits & in_local_ack_bit ) == 0 && ( ack_bits & in_msg_ack_bit ) != 0 ) {
+                            _remote_ack_bits |= in_local_ack_bit;
+                            this->dropMessage( this->prevSeqNo( ack_no, i ) );
+                        }
+                    }
+                }
             
-            this->parseMessage( message );
-         }
-      }
-   }while( 0 );
+                this->parseMessage( message );
+            }
+        }
+    }while( 0 );
    
-   return true;
+    return true;
 }
 
 void PvpTerminal::parseMessage( PvpMessagePtr message ) {
@@ -166,42 +170,43 @@ bool PvpTerminal::sendMessages( std::list<PvpMessagePtr> message_list ) {
 }
 
 bool PvpTerminal::directSendMessage( PvpMessagePtr message ) {
-   if( _state == PvpTerminalState::Disconnected ) {
-      return false;
-   }
-   if( _state == PvpTerminalState::Sync && message->proto_id() != SYNC_PROTO_ID ) {
-      return false;
-   }
+    if( _state == PvpTerminalState::Disconnected ) {
+        return false;
+    }
+    if( _state == PvpTerminalState::Sync && message->proto_id() != SYNC_PROTO_ID ) {
+        return false;
+    }
 
-   PvpServerPtr server = _server.lock();
-   BoidsMessagePtr boids_message = BoidsMessagePtr( new BoidsMessage( message, _endpoint ) );
-   server->sendBoidsMessage( boids_message );
-   if( _max_resent_bit > 0 ) {
-      _max_resent_bit--;
-   }
-   return true;
+    PvpServerPtr server = _server.lock();
+    BoidsMessagePtr boids_message = BoidsMessagePtr( new BoidsMessage( message, _endpoint ) );
+    server->sendBoidsMessage( boids_message );
+    if( _max_resent_bit > 0 ) {
+        _max_resent_bit--;
+    }
+    return true;
 }
 
 void PvpTerminal::resendMessages() {
-   if( _remote_ack_bits != 0xffffffff ) {
-      unsigned int bit_mask = 0x80000000;
-      for( int i = 1; i <= _max_resent_bit; i++ ) {
-         if( ( _remote_ack_bits & bit_mask ) == 0 ) {
-            //packet is thought to be lost, resend it
-            unsigned short no =  this->prevSeqNo( _seq_no, 32 - i );
-            PvpMessagePtr message = this->getSentMessage( no );
-            if( message ) {
-               std::cout << "resend message:" << message->seq_no() << std::endl;
-               message->set_ack_no( _ack_no );
-               message->set_ack_bits( _ack_bits );
-               this->directSendMessage( message );
+    if( _remote_ack_bits != 0xffffffff ) {
+        unsigned int bit_mask = 0x80000000;
+        for( int i = 1; i <= _max_resent_bit; i++ ) {
+            if( ( _remote_ack_bits & bit_mask ) == 0 ) {
+                //packet is thought to be lost, resend it
+                unsigned short no =  this->prevSeqNo( _seq_no, 32 - i );
+
+                PvpMessagePtr message = this->getSentMessage( no );
+                if( message ) {
+                    std::cout << "resend message:" << message->seq_no() << std::endl;
+                    message->set_ack_no( _ack_no );
+                    message->set_ack_bits( _ack_bits );
+                    this->directSendMessage( message );
+                }
+                break;
             }
-            break;
-         }
-         bit_mask >>= 1;
-      }
-   }
-   _max_resent_bit = 32;
+            bit_mask >>= 1;
+        }
+    }
+    _max_resent_bit = 32;
 }
 
 void PvpTerminal::startTimer( long interval ) {
@@ -210,10 +215,16 @@ void PvpTerminal::startTimer( long interval ) {
 }
 
 void PvpTerminal::triggerUpdate( const boost::system::error_code& error ) {
-   if( !error ) {
-      this->startTimer( _resend_interval );
-      this->resendMessages();
-   }
+    if( !error ) {
+        this->startTimer( _resend_interval );
+        this->resendMessages();
+        _total_time_no_message += _resend_interval;
+        if( _total_time_no_message > DEFAULT_DISCONNECT_TIMOUT ) {
+            _timer.cancel();
+            this->quitGame();
+            _server.lock()->deleteTerminal( shared_from_this() );
+        }
+    }
 }
 
 //private methods

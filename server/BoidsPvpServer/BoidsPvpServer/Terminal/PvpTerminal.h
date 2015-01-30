@@ -86,6 +86,8 @@ namespace boids {
         unsigned int _max_resent_bit;
         
         MessageQueue<PvpMessagePtr> _sent_message;
+    
+        long _total_time_no_message;
     };
     
     typedef boost::shared_ptr<PvpTerminal> PvpTerminalPtr;

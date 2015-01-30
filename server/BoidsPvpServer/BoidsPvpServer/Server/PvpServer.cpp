@@ -75,6 +75,7 @@ void PvpServer::stop() {
 //control service
 void PvpServer::connect() {
     std::cout << "connecting to control server..." << std::endl;
+    _ctrl_sock.close();
     boost::asio::ip::address addr = boost::asio::ip::address::from_string( _context->ctrl_server_ip );
     boost::asio::ip::tcp::endpoint ctrl_server( addr, _context->ctrl_server_port );
     _ctrl_sock.async_connect( ctrl_server, boost::bind( &PvpServer::connectHandler , this, boost::asio::placeholders::error ) );
@@ -120,7 +121,7 @@ void PvpServer::connectHandler( const boost::system::error_code& error ) {
     }
     else {
         std::cout << "connect to control server failed: " << error << std::endl;
-//        this->reconnect();
+        this->reconnect();
     }
 }
 
@@ -342,6 +343,15 @@ PvpGameServerPtr PvpServer::findGameServerByUserId( const std::string& user_id )
 void PvpServer::addTerminal( const std::string& key, PvpTerminalPtr terminal ) {
     if( _terminals.find( key ) == _terminals.end() ) {
         _terminals.insert( std::make_pair( key, terminal ) );
+    }
+}
+
+void PvpServer::deleteTerminal( PvpTerminalPtr terminal ) {
+    for( auto itr = _terminals.begin(); itr != _terminals.end(); ++itr ) {
+        if( itr->second == terminal ) {
+            _terminals.erase( itr );
+            break;
+        }
     }
 }
 

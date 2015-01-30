@@ -78,6 +78,7 @@ namespace boids {
         PvpGameServerPtr findGameServerByUserId( const std::string& user_id );
         
         void addTerminal( const std::string& key, PvpTerminalPtr terminal );
+        void deleteTerminal( PvpTerminalPtr terminal );
     private:
         void sendto( const boost::asio::ip::udp::endpoint& endpoint, boost::shared_ptr<PvpMessage> msg );
         void sendBoidsMessageInQueue();
