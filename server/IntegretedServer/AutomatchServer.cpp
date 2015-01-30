@@ -36,7 +36,7 @@ void addForce(boids::GameInitData* init_data, const std::string& user_id) //è¿™ä
 	for (unsigned i = 0; i < HERO_PICK_COUNT; ++i)
 	{
 		boids::UnitData* unit = force_data->add_units();
-		unit->set_unit_name(all_heros[rand() % (all_heros.size() - HERO_PICK_COUNT) + i]);
+		unit->set_unit_name(all_heros[rand() % (all_heros.size() - HERO_PICK_COUNT + 1) + i]);
 		unit->set_unit_level(1);
 	}
 }
