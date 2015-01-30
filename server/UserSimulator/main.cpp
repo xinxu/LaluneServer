@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 		{
 			char ip[30];
 			int port;
-			sscanf(tmp.substr(8).c_str(), "%s %d", ip, port);
+			sscanf(tmp.substr(8).c_str(), "%s%d", ip, &port);
 			thread.get_ioservice().post(boost::bind(&UserSimulator::Connect, us, ip, port));
 		}
 		else if (tmp == "register")
