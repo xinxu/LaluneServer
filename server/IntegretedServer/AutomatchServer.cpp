@@ -132,7 +132,8 @@ void AutoMatchServer::MatchCancel(NetLib_ServerSession_ptr sessionptr)
 	}
 	else
 	{
-		LOGEVENTL("ERROR", "some user disconnected, but not found corresponding session in AutoMatchServer");
+		//找不到很正常，因为用户还没有匹配就断线了
+		//LOGEVENTL("ERROR", "some user disconnected, but not found corresponding session in AutoMatchServer");
 	}
 }
 

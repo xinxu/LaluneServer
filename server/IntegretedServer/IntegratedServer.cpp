@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 	server4user = NetLib_NewServer<UserSessionDelegate>(&thread);
 
 	//超时时间得可以中途重设 TODO
-	if (!server4user->StartTCP(_OUTER_PORT, 1, 25)) //端口，线程数，超时时间  （客户端现在是15秒发个心跳包）
+	if (!server4user->StartTCP(_OUTER_PORT, 1, 120)) //端口，线程数，超时时间
 	{
 		LOGEVENTL("Error", "Server4User Start Failed !");
 
