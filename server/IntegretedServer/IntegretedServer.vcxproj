@@ -11,23 +11,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{22AA5AF2-58C2-4512-8834-18AFA09A9BF0}</ProjectGuid>
+    <ProjectGuid>{DE425429-11A6-4086-92F4-DD1129A23E59}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>tNetLib</RootNamespace>
+    <RootNamespace>IntegretedServer</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -51,14 +51,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_STATIC_NETLIB_;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;../;../include/;..\..\3rdparty\boost\;$(ProjectDir)..\..\..\LaluneCommon\protobuf\protos\out;$(ProjectDir)..\..\..\LaluneCommon\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;$(ProjectDir)..\;..\..\3rdparty\boost\;$(ProjectDir)..\..\..\LaluneCommon\include;$(ProjectDir)..\..\..\LaluneCommon\protobuf\protos\out;$(ProjectDir)..\ServerCommonLib;$(ProjectDir)..\protobuf;$(ProjectDir)..\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>..\..\..\LaluneCommon\3rdparty\protobuf\vsprojects\Debug\libprotobuf.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(TargetDir);..\lib\;..\..\3rdparty\boost\stage\lib\;$(ProjectDir)../../server/lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)../lib/;$(ProjectDir)../../3rdparty/boost/stage/lib/;..\..\..\LaluneCommon\3rdparty\protobuf\vsprojects\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Debug/libprotobuf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -69,50 +69,45 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;_STATIC_NETLIB_;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;../;../include/;..\..\3rdparty\boost\;$(ProjectDir)..\..\..\LaluneCommon\protobuf\protos\out;$(ProjectDir)..\..\..\LaluneCommon\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\LaluneCommon\3rdparty\protobuf\src\;$(ProjectDir)..\;..\..\3rdparty\boost\;$(ProjectDir)..\..\..\LaluneCommon\include;$(ProjectDir)..\..\..\LaluneCommon\protobuf\protos\out;$(ProjectDir)..\ServerCommonLib;$(ProjectDir)..\protobuf;$(ProjectDir)..\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>..\..\..\LaluneCommon\3rdparty\protobuf\vsprojects\Release\libprotobuf.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\lib\;..\..\3rdparty\boost\stage\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)../lib/;$(ProjectDir)../../3rdparty/boost/stage/lib/;..\..\..\LaluneCommon\3rdparty\protobuf\vsprojects\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Release/libprotobuf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.h" />
-    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.h" />
-    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h" />
-    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.h" />
-    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.h" />
-    <ClInclude Include="..\include\ServerHeaderDef.h" />
-    <ClInclude Include="..\NetLib\NetLib.h" />
-    <ClInclude Include="UserSimulator.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.cc" />
-    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.cc" />
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.cc" />
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.cc" />
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.cc" />
-    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.cc" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="UserSimulator.cpp" />
+    <ClCompile Include="AutomatchServer.cpp" />
+    <ClCompile Include="InnerServerSessionDelegate.cpp" />
+    <ClCompile Include="IntegratedServer.cpp" />
+    <ClCompile Include="UserSessionDelegate.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\LaluneCommon\protobuf\protos\Account.proto" />
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.h" />
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h" />
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.h" />
+    <ClInclude Include="..\include\ioservice_thread.h" />
+    <ClInclude Include="..\include\ptime2.h" />
+    <ClInclude Include="..\include\ServerHeaderDef.h" />
+    <ClInclude Include="..\include\Timer.h" />
+    <ClInclude Include="..\include\utility1.h" />
+    <ClInclude Include="AutoMatchServer.h" />
+    <ClInclude Include="InnerServerSessionDelegate.h" />
+    <ClInclude Include="IntegratedServer.h" />
+    <ClInclude Include="UserSessionDelegate.h" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\..\..\LaluneCommon\protobuf\protos\battle.proto" />
     <None Include="..\..\..\LaluneCommon\protobuf\protos\boids.proto" />
     <None Include="..\..\..\LaluneCommon\protobuf\protos\pvp.proto" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Log\Log.vcxproj">
-      <Project>{df0ccb1f-deb3-4c01-b909-77a25c6a7a5d}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\NetLib\NetLib.vcxproj">
-      <Project>{38aaa34f-5fc1-4d42-a385-1ef6b380a5b5}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

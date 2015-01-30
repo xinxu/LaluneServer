@@ -88,7 +88,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h" />
-    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.h" />
     <ClInclude Include="..\NetLib\NetLib.h" />
     <ClInclude Include="MatchAndCombatCommunicate.h" />
     <ClInclude Include="MatchServer.h" />
@@ -106,10 +105,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\LaluneCommon\protobuf\protos\Battle.proto" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.cc" />
     <ClCompile Include="MatchAndCombatCommunicate.cpp" />
     <ClCompile Include="MatchServer.cpp" />
     <ClCompile Include="MatchAndUserCommunicate.cpp" />

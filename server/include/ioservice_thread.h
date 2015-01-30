@@ -4,6 +4,7 @@
 #include <boost/asio/io_service.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/locks.hpp>
+#include "Timer.h"
 
 class ioservice_thread
 {
@@ -30,6 +31,18 @@ public:
 	boost::asio::io_service & get_ioservice()
 	{
 		return boostioservice;
+	}
+
+	std::shared_ptr<Timer> create_timer(int interval_secs, std::function<void()> handler)
+	{
+		Timer* t = new Timer(boostioservice, interval_secs, handler);
+		return std::shared_ptr<Timer>(t);
+	}
+
+	std::shared_ptr<OneOffTimer> create_one_off_timer(int timeout_secs, std::function<void()> handler)
+	{
+		OneOffTimer* t = new OneOffTimer(boostioservice, timeout_secs, handler);
+		return std::shared_ptr<OneOffTimer>(t);
 	}
 
 	//返回false表示已启动，不能重复启动

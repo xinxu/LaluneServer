@@ -252,8 +252,7 @@ void PvpServer::sendBoidsMessages( MessageQueue<BoidsMessagePtr> message_queue )
 void PvpServer::sendto( const boost::asio::ip::udp::endpoint& endpoint, PvpMessagePtr msg ) {
     std::string message_string;
     msg->SerializeToString( &message_string );
-//    _game_sock.async_send_to( boost::asio::buffer( message_string ), endpoint, boost::bind( &PvpServer::sendtoHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred ) );
-    _game_sock.async_send_to( boost::asio::buffer( message_string.c_str(), message_string.size() ), endpoint, boost::bind( &PvpServer::sendtoHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred ) );
+    _game_sock.async_send_to( boost::asio::buffer( message_string.c_str(), message_string.size() ), endpoint, boost::bind( &PvpServer::sendHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred ) );
 }
 
 void PvpServer::sendBoidsMessageInQueue() {

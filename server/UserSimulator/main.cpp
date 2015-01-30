@@ -21,17 +21,18 @@ std::shared_ptr<UserSimulator> us;
 
 #define COMBATE_SERVER_DEFAULT_IP ("192.168.1.42")//("180.150.178.148")
 #define COMBATE_SERVER_DEFAULT_PORT (5000)
+
 void initialize()
 {
 	us = std::make_shared<UserSimulator>();
 	us->Connect(GATEWAY_SERVER_DEFAULT_IP, GATEWAY_SERVER_DEFAULT_PORT);
 }
-//void initialize()
-//{
-//	us = std::make_shared<UserSimulator>();
-//	us->Connect(GATEWAY_SERVER_DEFAULT_IP, GATEWAY_SERVER_DEFAULT_PORT);
-//	
-//}
+
+bool startwith(const std::string& s, const std::string& s2)
+{
+	return s.compare(0, s2.size(), s2) == 0;
+}
+
 int main(int argc, char* argv[])
 {
 	//Check Memory Leaks
@@ -63,17 +64,28 @@ int main(int argc, char* argv[])
 			boost::this_thread::sleep(boost::posix_time::hours(1));
 			continue;
 		}
+		else if (startwith(tmp, "connect"))
+		{
+			char ip[30];
+			int port;
+			sscanf(tmp.substr(8).c_str(), "%s%d", ip, &port);
+			thread.get_ioservice().post(boost::bind(&UserSimulator::Connect, us, ip, port));
+		}
 		else if (tmp == "register")
 		{
 			//thread.get_ioservice().post(boost::bind(&UserSimulator::Register, us));
 		}
-		else if (tmp.compare(0, 7, "version") == 0)
+		else if (startwith(tmp, "version"))
 		{
 			//thread.get_ioservice().post(boost::bind(&UserSimulator::Version, us, tmp.substr(8)));
 		}
 		else if (tmp == "match")
 		{
 			thread.get_ioservice().post(boost::bind(&UserSimulator::Match, us));
+		}
+		else if (startwith(tmp, "reg pvp server"))
+		{
+
 		}
 //		else if (tmp == "combat")
 //		{

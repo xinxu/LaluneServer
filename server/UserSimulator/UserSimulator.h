@@ -1,10 +1,9 @@
 #pragma once
 
 #include "NetLib/NetLib.h"
-#include "MessageTypeDef.h"
 #include "NetLib/NetLib.h"
 #include "include/ioservice_thread.h"
-#include "MessageTypeDef.h"
+#include "ServerHeaderDef.h"
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 #include "Log/Log.h"
@@ -21,26 +20,26 @@ protected:
 
 	void ConnectedHandler(NetLib_Client_ptr clientptr);
 
-	void RecvFinishHandler(NetLib_Client_ptr clientptr, char* data);
-	
-	template<typename P>
-	bool ParseMsg(char* data, P& proto) //包头无UserID的版本
-	{
-		return proto.ParseFromArray(MSG_DATA(data), MSG_DATA_LEN(data));
-	}
+	BEGIN_HANDLER(UserSimulator, NetLib_Client_ptr)
+		HANDLE_MSG(boids::AUTO_MATCH_RESPONSE, boids::MatchResponse, [](const boids::MatchResponse& res) {
+			LOGEVENTL("MATCH", _ln("ret_value") << res.ret_value() << _ln("ret_info") << res.ret_info()
+				<< _ln("Ip") << res.game_server_ip() << _ln("Port") << res.game_server_port() << _ln("game_id") << res.game_uuid());
+		});
+	END_HANDLER(UserSimulator)
 
 	template<typename P>
-	void SendMsg(uint32_t msg_type, P& proto)
+	void SendMsg(boids::MessageType msg_type, P& proto)
 	{
-		int proto_size = proto.ByteSize();
+		boids::BoidsMessageHeader proto_with_header;
+		proto_with_header.set_type(msg_type);
+		proto.SerializeToString(proto_with_header.mutable_data());
 
-		char* send_buf = new char[MSG_HEADER_BASE_SIZE + proto_size];
-		MSG_LENGTH(send_buf) = MSG_HEADER_BASE_SIZE + proto_size;		// 数据包的字节数（含msghead）
-		MSG_TYPE(send_buf) = msg_type;
-		memset(send_buf + MSG_AFTER_TYPE_POS, 0, MSG_HEADER_BASE_SIZE - MSG_AFTER_TYPE_POS);
+		int proto_size = proto_with_header.ByteSize();
 
-		proto.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)MSG_DATA(send_buf));
+		char* send_buf = new char[MSG_HEADER_LEN + proto_size];
+		MSG_LENGTH(send_buf) = MSG_HEADER_LEN + proto_size;
 
+		proto_with_header.SerializeWithCachedSizesToArray((google_lalune::protobuf::uint8*)MSG_DATA(send_buf));
 		_client->SendAsync(send_buf);
 	}
 

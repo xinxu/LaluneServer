@@ -35,7 +35,7 @@ void init_force_data() {
     u21->set_unit_name( "saber" );
     u21->set_unit_level( 1 );
     boids::UnitData* u22 = force2->add_units();
-    u22->set_unit_name( "zeus" );
+    u22->set_unit_name( "dracula" );
     u22->set_unit_level( 1 );
     boids::UnitData* u23 = force2->add_units();
     u23->set_unit_name( "vanhelsing" );

@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="message">
+      <UniqueIdentifier>{b50c08d3-f278-4c61-b206-42c18d0b39ae}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="IntegratedServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="InnerServerSessionDelegate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionDelegate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AutomatchServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.cc">
+      <Filter>message</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.cc">
+      <Filter>message</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.cc">
+      <Filter>message</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IntegratedServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="InnerServerSessionDelegate.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UserSessionDelegate.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoMatchServer.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ioservice_thread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ServerHeaderDef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Timer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ptime2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\utility1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\battle.proto">
+      <Filter>message</Filter>
+    </None>
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\pvp.proto">
+      <Filter>message</Filter>
+    </None>
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\boids.proto">
+      <Filter>message</Filter>
+    </None>
+  </ItemGroup>
+</Project>

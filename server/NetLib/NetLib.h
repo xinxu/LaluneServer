@@ -141,6 +141,8 @@ void NetLib_Clients_WaitForStop(); //不得在Handler中调用，调用则死锁。
 class NetLib_ServerSession_Interface
 {	
 public:	
+	virtual bool IsConnected() = 0; //不建议编写逻辑时过于依赖该方法的返回值，因为判断前后连接状态可能发生改变。
+
 	//'data' must be retained until SendFinishHandler has been called
 	virtual void SendAsync(const char* data, void* pHint = nullptr) = 0;
 	virtual void SendCopyAsync(const char* data, void* pHint = nullptr) = 0; //7.19修改: 也增加了pHint参数，且发送结束会触发SendCopyFinishHandler

@@ -47,6 +47,11 @@ protected:
 public:	
 	virtual ~NetLib_ServerSession_Imp(); //don't directly delete
 
+	bool IsConnected() //这个方法没考虑锁
+	{
+		return (session_detail && session_detail->is_connected());
+	}
+
 	//'data' must be retained until SendFinishHandler has been called
 	void SendAsync(const char* data, void* pHint = nullptr);
 

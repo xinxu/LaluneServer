@@ -27,13 +27,19 @@
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Account.pb.h">
       <Filter>protobuf</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\LaluneCommon\include\MessageTypeDef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Version.pb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ServerHeaderDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.h">
       <Filter>protobuf</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,9 +59,24 @@
     <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\Battle.pb.cc">
       <Filter>protobuf</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\LaluneCommon\protobuf\protos\out\pvp.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\LaluneCommon\protobuf\protos\Account.proto">
+      <Filter>protobuf</Filter>
+    </None>
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\battle.proto">
+      <Filter>protobuf</Filter>
+    </None>
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\boids.proto">
+      <Filter>protobuf</Filter>
+    </None>
+    <None Include="..\..\..\LaluneCommon\protobuf\protos\pvp.proto">
       <Filter>protobuf</Filter>
     </None>
   </ItemGroup>
