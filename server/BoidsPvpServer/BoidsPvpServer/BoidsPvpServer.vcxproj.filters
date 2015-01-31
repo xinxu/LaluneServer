@@ -38,13 +38,13 @@
     <ClCompile Include="Server\PvpServer.cpp">
       <Filter>Server</Filter>
     </ClCompile>
+    <ClCompile Include="Data\Battle.pb.cc">
+      <Filter>message</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\boids.pb.cc">
+      <Filter>message</Filter>
+    </ClCompile>
     <ClCompile Include="Data\pvp.pb.cc">
-      <Filter>message</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.cc">
-      <Filter>message</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.cc">
       <Filter>message</Filter>
     </ClCompile>
   </ItemGroup>
@@ -64,17 +64,17 @@
     <ClInclude Include="Server\PvpServer.h">
       <Filter>Server</Filter>
     </ClInclude>
-    <ClInclude Include="Data\pvp.pb.h">
-      <Filter>message</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.h">
-      <Filter>message</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h">
-      <Filter>message</Filter>
-    </ClInclude>
     <ClInclude Include="Server\Config.h">
       <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\Battle.pb.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\boids.pb.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\pvp.pb.h">
+      <Filter>message</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

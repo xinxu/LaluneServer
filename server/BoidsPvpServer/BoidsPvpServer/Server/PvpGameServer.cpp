@@ -71,8 +71,9 @@ void PvpGameServer::stop() {
 }
 
 void PvpGameServer::triggerUpdate( const boost::system::error_code& error ) {
-    if( !error ) {
-        this->start();
+	if (!error) {
+		_timer.expires_from_now(boost::posix_time::microseconds(1000000.0 / _frame_rate));
+		_timer.async_wait(boost::bind(&PvpGameServer::triggerUpdate, this, boost::asio::placeholders::error));
         this->update( int( 1000.0 / _frame_rate ) );
     }
 }

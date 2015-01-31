@@ -82,8 +82,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.cc" />
-    <ClCompile Include="..\..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.cc" />
+    <ClCompile Include="Data\Battle.pb.cc" />
+    <ClCompile Include="Data\boids.pb.cc" />
     <ClCompile Include="Data\MessageQueue.cpp" />
     <ClCompile Include="Data\pvp.pb.cc" />
     <ClCompile Include="main.cpp" />
@@ -92,8 +92,8 @@
     <ClCompile Include="Terminal\PvpTerminal.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\LaluneCommon\protobuf\protos\out\battle.pb.h" />
-    <ClInclude Include="..\..\..\..\LaluneCommon\protobuf\protos\out\boids.pb.h" />
+    <ClInclude Include="Data\Battle.pb.h" />
+    <ClInclude Include="Data\boids.pb.h" />
     <ClInclude Include="Data\MessageQueue.h" />
     <ClInclude Include="Data\pvp.pb.h" />
     <ClInclude Include="Server\Config.h" />
