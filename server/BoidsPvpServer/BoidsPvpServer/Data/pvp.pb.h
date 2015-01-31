@@ -624,14 +624,24 @@ class UserOperationPackage : public ::google_lalune::protobuf::Message {
   inline ::google_lalune::protobuf::RepeatedPtrField< ::boids::UserOperation >*
       mutable_operations();
 
+  // optional uint32 timestamp = 2;
+  inline bool has_timestamp() const;
+  inline void clear_timestamp();
+  static const int kTimestampFieldNumber = 2;
+  inline ::google_lalune::protobuf::uint32 timestamp() const;
+  inline void set_timestamp(::google_lalune::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:boids.UserOperationPackage)
  private:
+  inline void set_has_timestamp();
+  inline void clear_has_timestamp();
 
   ::google_lalune::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google_lalune::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
   ::google_lalune::protobuf::RepeatedPtrField< ::boids::UserOperation > operations_;
+  ::google_lalune::protobuf::uint32 timestamp_;
   friend void  protobuf_AddDesc_pvp_2eproto();
   friend void protobuf_AssignDesc_pvp_2eproto();
   friend void protobuf_ShutdownFile_pvp_2eproto();
@@ -1494,6 +1504,30 @@ inline ::google_lalune::protobuf::RepeatedPtrField< ::boids::UserOperation >*
 UserOperationPackage::mutable_operations() {
   // @@protoc_insertion_point(field_mutable_list:boids.UserOperationPackage.operations)
   return &operations_;
+}
+
+// optional uint32 timestamp = 2;
+inline bool UserOperationPackage::has_timestamp() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void UserOperationPackage::set_has_timestamp() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void UserOperationPackage::clear_has_timestamp() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void UserOperationPackage::clear_timestamp() {
+  timestamp_ = 0u;
+  clear_has_timestamp();
+}
+inline ::google_lalune::protobuf::uint32 UserOperationPackage::timestamp() const {
+  // @@protoc_insertion_point(field_get:boids.UserOperationPackage.timestamp)
+  return timestamp_;
+}
+inline void UserOperationPackage::set_timestamp(::google_lalune::protobuf::uint32 value) {
+  set_has_timestamp();
+  timestamp_ = value;
+  // @@protoc_insertion_point(field_set:boids.UserOperationPackage.timestamp)
 }
 
 // -------------------------------------------------------------------

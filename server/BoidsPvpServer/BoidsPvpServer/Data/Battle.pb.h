@@ -23,6 +23,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>
 #include <google/protobuf/extension_set.h>
+#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 #include "pvp.pb.h"
 // @@protoc_insertion_point(includes)
@@ -42,6 +43,28 @@ class PvPServerRegister;
 class PvPServerRegisterResponse;
 class PvPServerHeartBeat;
 
+enum MatchResponse_Value {
+  MatchResponse_Value_Success = 0,
+  MatchResponse_Value_No_Server = 1,
+  MatchResponse_Value_MatchTimeout = 2,
+  MatchResponse_Value_CreateFail = 3,
+  MatchResponse_Value_IllegalRequest = 4
+};
+bool MatchResponse_Value_IsValid(int value);
+const MatchResponse_Value MatchResponse_Value_Value_MIN = MatchResponse_Value_Success;
+const MatchResponse_Value MatchResponse_Value_Value_MAX = MatchResponse_Value_IllegalRequest;
+const int MatchResponse_Value_Value_ARRAYSIZE = MatchResponse_Value_Value_MAX + 1;
+
+const ::google_lalune::protobuf::EnumDescriptor* MatchResponse_Value_descriptor();
+inline const ::std::string& MatchResponse_Value_Name(MatchResponse_Value value) {
+  return ::google_lalune::protobuf::internal::NameOfEnum(
+    MatchResponse_Value_descriptor(), value);
+}
+inline bool MatchResponse_Value_Parse(
+    const ::std::string& name, MatchResponse_Value* value) {
+  return ::google_lalune::protobuf::internal::ParseNamedEnum<MatchResponse_Value>(
+    MatchResponse_Value_descriptor(), name, value);
+}
 // ===================================================================
 
 class MatchRequest : public ::google_lalune::protobuf::Message {
@@ -97,23 +120,43 @@ class MatchRequest : public ::google_lalune::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required uint32 player_id = 1;
-  inline bool has_player_id() const;
-  inline void clear_player_id();
-  static const int kPlayerIdFieldNumber = 1;
-  inline ::google_lalune::protobuf::uint32 player_id() const;
-  inline void set_player_id(::google_lalune::protobuf::uint32 value);
+  // required string user_id = 1;
+  inline bool has_user_id() const;
+  inline void clear_user_id();
+  static const int kUserIdFieldNumber = 1;
+  inline const ::std::string& user_id() const;
+  inline void set_user_id(const ::std::string& value);
+  inline void set_user_id(const char* value);
+  inline void set_user_id(const char* value, size_t size);
+  inline ::std::string* mutable_user_id();
+  inline ::std::string* release_user_id();
+  inline void set_allocated_user_id(::std::string* user_id);
+
+  // required string map_name = 2;
+  inline bool has_map_name() const;
+  inline void clear_map_name();
+  static const int kMapNameFieldNumber = 2;
+  inline const ::std::string& map_name() const;
+  inline void set_map_name(const ::std::string& value);
+  inline void set_map_name(const char* value);
+  inline void set_map_name(const char* value, size_t size);
+  inline ::std::string* mutable_map_name();
+  inline ::std::string* release_map_name();
+  inline void set_allocated_map_name(::std::string* map_name);
 
   // @@protoc_insertion_point(class_scope:boids.MatchRequest)
  private:
-  inline void set_has_player_id();
-  inline void clear_has_player_id();
+  inline void set_has_user_id();
+  inline void clear_has_user_id();
+  inline void set_has_map_name();
+  inline void clear_has_map_name();
 
   ::google_lalune::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google_lalune::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google_lalune::protobuf::uint32 player_id_;
+  ::std::string* user_id_;
+  ::std::string* map_name_;
   friend void  protobuf_AddDesc_battle_2eproto();
   friend void protobuf_AssignDesc_battle_2eproto();
   friend void protobuf_ShutdownFile_battle_2eproto();
@@ -174,9 +217,36 @@ class MatchResponse : public ::google_lalune::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
+  typedef MatchResponse_Value Value;
+  static const Value Success = MatchResponse_Value_Success;
+  static const Value No_Server = MatchResponse_Value_No_Server;
+  static const Value MatchTimeout = MatchResponse_Value_MatchTimeout;
+  static const Value CreateFail = MatchResponse_Value_CreateFail;
+  static const Value IllegalRequest = MatchResponse_Value_IllegalRequest;
+  static inline bool Value_IsValid(int value) {
+    return MatchResponse_Value_IsValid(value);
+  }
+  static const Value Value_MIN =
+    MatchResponse_Value_Value_MIN;
+  static const Value Value_MAX =
+    MatchResponse_Value_Value_MAX;
+  static const int Value_ARRAYSIZE =
+    MatchResponse_Value_Value_ARRAYSIZE;
+  static inline const ::google_lalune::protobuf::EnumDescriptor*
+  Value_descriptor() {
+    return MatchResponse_Value_descriptor();
+  }
+  static inline const ::std::string& Value_Name(Value value) {
+    return MatchResponse_Value_Name(value);
+  }
+  static inline bool Value_Parse(const ::std::string& name,
+      Value* value) {
+    return MatchResponse_Value_Parse(name, value);
+  }
+
   // accessors -------------------------------------------------------
 
-  // required bytes game_uuid = 1;
+  // optional bytes game_uuid = 1;
   inline bool has_game_uuid() const;
   inline void clear_game_uuid();
   static const int kGameUuidFieldNumber = 1;
@@ -188,7 +258,7 @@ class MatchResponse : public ::google_lalune::protobuf::Message {
   inline ::std::string* release_game_uuid();
   inline void set_allocated_game_uuid(::std::string* game_uuid);
 
-  // required string game_server_ip = 3;
+  // optional string game_server_ip = 3;
   inline bool has_game_server_ip() const;
   inline void clear_game_server_ip();
   static const int kGameServerIpFieldNumber = 3;
@@ -200,19 +270,19 @@ class MatchResponse : public ::google_lalune::protobuf::Message {
   inline ::std::string* release_game_server_ip();
   inline void set_allocated_game_server_ip(::std::string* game_server_ip);
 
-  // required uint32 game_server_port = 4;
+  // optional uint32 game_server_port = 4;
   inline bool has_game_server_port() const;
   inline void clear_game_server_port();
   static const int kGameServerPortFieldNumber = 4;
   inline ::google_lalune::protobuf::uint32 game_server_port() const;
   inline void set_game_server_port(::google_lalune::protobuf::uint32 value);
 
-  // required int32 ret_value = 5;
+  // required .boids.MatchResponse.Value ret_value = 5 [default = Success];
   inline bool has_ret_value() const;
   inline void clear_ret_value();
   static const int kRetValueFieldNumber = 5;
-  inline ::google_lalune::protobuf::int32 ret_value() const;
-  inline void set_ret_value(::google_lalune::protobuf::int32 value);
+  inline ::boids::MatchResponse_Value ret_value() const;
+  inline void set_ret_value(::boids::MatchResponse_Value value);
 
   // optional string ret_info = 6;
   inline bool has_ret_info() const;
@@ -246,7 +316,7 @@ class MatchResponse : public ::google_lalune::protobuf::Message {
   ::std::string* game_uuid_;
   ::std::string* game_server_ip_;
   ::google_lalune::protobuf::uint32 game_server_port_;
-  ::google_lalune::protobuf::int32 ret_value_;
+  int ret_value_;
   ::std::string* ret_info_;
   friend void  protobuf_AddDesc_battle_2eproto();
   friend void protobuf_AssignDesc_battle_2eproto();
@@ -739,35 +809,163 @@ class PvPServerHeartBeat : public ::google_lalune::protobuf::Message {
 
 // MatchRequest
 
-// required uint32 player_id = 1;
-inline bool MatchRequest::has_player_id() const {
+// required string user_id = 1;
+inline bool MatchRequest::has_user_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void MatchRequest::set_has_player_id() {
+inline void MatchRequest::set_has_user_id() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void MatchRequest::clear_has_player_id() {
+inline void MatchRequest::clear_has_user_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void MatchRequest::clear_player_id() {
-  player_id_ = 0u;
-  clear_has_player_id();
+inline void MatchRequest::clear_user_id() {
+  if (user_id_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_id_->clear();
+  }
+  clear_has_user_id();
 }
-inline ::google_lalune::protobuf::uint32 MatchRequest::player_id() const {
-  // @@protoc_insertion_point(field_get:boids.MatchRequest.player_id)
-  return player_id_;
+inline const ::std::string& MatchRequest::user_id() const {
+  // @@protoc_insertion_point(field_get:boids.MatchRequest.user_id)
+  return *user_id_;
 }
-inline void MatchRequest::set_player_id(::google_lalune::protobuf::uint32 value) {
-  set_has_player_id();
-  player_id_ = value;
-  // @@protoc_insertion_point(field_set:boids.MatchRequest.player_id)
+inline void MatchRequest::set_user_id(const ::std::string& value) {
+  set_has_user_id();
+  if (user_id_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_id_ = new ::std::string;
+  }
+  user_id_->assign(value);
+  // @@protoc_insertion_point(field_set:boids.MatchRequest.user_id)
+}
+inline void MatchRequest::set_user_id(const char* value) {
+  set_has_user_id();
+  if (user_id_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_id_ = new ::std::string;
+  }
+  user_id_->assign(value);
+  // @@protoc_insertion_point(field_set_char:boids.MatchRequest.user_id)
+}
+inline void MatchRequest::set_user_id(const char* value, size_t size) {
+  set_has_user_id();
+  if (user_id_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_id_ = new ::std::string;
+  }
+  user_id_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:boids.MatchRequest.user_id)
+}
+inline ::std::string* MatchRequest::mutable_user_id() {
+  set_has_user_id();
+  if (user_id_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_id_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:boids.MatchRequest.user_id)
+  return user_id_;
+}
+inline ::std::string* MatchRequest::release_user_id() {
+  clear_has_user_id();
+  if (user_id_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = user_id_;
+    user_id_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void MatchRequest::set_allocated_user_id(::std::string* user_id) {
+  if (user_id_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete user_id_;
+  }
+  if (user_id) {
+    set_has_user_id();
+    user_id_ = user_id;
+  } else {
+    clear_has_user_id();
+    user_id_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:boids.MatchRequest.user_id)
+}
+
+// required string map_name = 2;
+inline bool MatchRequest::has_map_name() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void MatchRequest::set_has_map_name() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void MatchRequest::clear_has_map_name() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void MatchRequest::clear_map_name() {
+  if (map_name_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    map_name_->clear();
+  }
+  clear_has_map_name();
+}
+inline const ::std::string& MatchRequest::map_name() const {
+  // @@protoc_insertion_point(field_get:boids.MatchRequest.map_name)
+  return *map_name_;
+}
+inline void MatchRequest::set_map_name(const ::std::string& value) {
+  set_has_map_name();
+  if (map_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    map_name_ = new ::std::string;
+  }
+  map_name_->assign(value);
+  // @@protoc_insertion_point(field_set:boids.MatchRequest.map_name)
+}
+inline void MatchRequest::set_map_name(const char* value) {
+  set_has_map_name();
+  if (map_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    map_name_ = new ::std::string;
+  }
+  map_name_->assign(value);
+  // @@protoc_insertion_point(field_set_char:boids.MatchRequest.map_name)
+}
+inline void MatchRequest::set_map_name(const char* value, size_t size) {
+  set_has_map_name();
+  if (map_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    map_name_ = new ::std::string;
+  }
+  map_name_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:boids.MatchRequest.map_name)
+}
+inline ::std::string* MatchRequest::mutable_map_name() {
+  set_has_map_name();
+  if (map_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    map_name_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:boids.MatchRequest.map_name)
+  return map_name_;
+}
+inline ::std::string* MatchRequest::release_map_name() {
+  clear_has_map_name();
+  if (map_name_ == &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = map_name_;
+    map_name_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void MatchRequest::set_allocated_map_name(::std::string* map_name) {
+  if (map_name_ != &::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete map_name_;
+  }
+  if (map_name) {
+    set_has_map_name();
+    map_name_ = map_name;
+  } else {
+    clear_has_map_name();
+    map_name_ = const_cast< ::std::string*>(&::google_lalune::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:boids.MatchRequest.map_name)
 }
 
 // -------------------------------------------------------------------
 
 // MatchResponse
 
-// required bytes game_uuid = 1;
+// optional bytes game_uuid = 1;
 inline bool MatchResponse::has_game_uuid() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -843,7 +1041,7 @@ inline void MatchResponse::set_allocated_game_uuid(::std::string* game_uuid) {
   // @@protoc_insertion_point(field_set_allocated:boids.MatchResponse.game_uuid)
 }
 
-// required string game_server_ip = 3;
+// optional string game_server_ip = 3;
 inline bool MatchResponse::has_game_server_ip() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -919,7 +1117,7 @@ inline void MatchResponse::set_allocated_game_server_ip(::std::string* game_serv
   // @@protoc_insertion_point(field_set_allocated:boids.MatchResponse.game_server_ip)
 }
 
-// required uint32 game_server_port = 4;
+// optional uint32 game_server_port = 4;
 inline bool MatchResponse::has_game_server_port() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -943,7 +1141,7 @@ inline void MatchResponse::set_game_server_port(::google_lalune::protobuf::uint3
   // @@protoc_insertion_point(field_set:boids.MatchResponse.game_server_port)
 }
 
-// required int32 ret_value = 5;
+// required .boids.MatchResponse.Value ret_value = 5 [default = Success];
 inline bool MatchResponse::has_ret_value() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
@@ -957,11 +1155,12 @@ inline void MatchResponse::clear_ret_value() {
   ret_value_ = 0;
   clear_has_ret_value();
 }
-inline ::google_lalune::protobuf::int32 MatchResponse::ret_value() const {
+inline ::boids::MatchResponse_Value MatchResponse::ret_value() const {
   // @@protoc_insertion_point(field_get:boids.MatchResponse.ret_value)
-  return ret_value_;
+  return static_cast< ::boids::MatchResponse_Value >(ret_value_);
 }
-inline void MatchResponse::set_ret_value(::google_lalune::protobuf::int32 value) {
+inline void MatchResponse::set_ret_value(::boids::MatchResponse_Value value) {
+  assert(::boids::MatchResponse_Value_IsValid(value));
   set_has_ret_value();
   ret_value_ = value;
   // @@protoc_insertion_point(field_set:boids.MatchResponse.ret_value)
@@ -1561,6 +1760,11 @@ inline void PvPServerHeartBeat::set_port(::google_lalune::protobuf::uint32 value
 namespace google_lalune {
 namespace protobuf {
 
+template <> struct is_proto_enum< ::boids::MatchResponse_Value> : ::google_lalune::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::boids::MatchResponse_Value>() {
+  return ::boids::MatchResponse_Value_descriptor();
+}
 
 }  // namespace google
 }  // namespace protobuf
