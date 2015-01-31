@@ -216,13 +216,15 @@ void PvpTerminal::startTimer( long interval ) {
 
 void PvpTerminal::triggerUpdate( const boost::system::error_code& error ) {
     if( !error ) {
-        this->startTimer( _resend_interval );
-        this->resendMessages();
         _total_time_no_message += _resend_interval;
         if( _total_time_no_message > DEFAULT_DISCONNECT_TIMOUT ) {
             _timer.cancel();
             this->quitGame();
             _server.lock()->deleteTerminal( shared_from_this() );
+        }
+        else {
+            this->startTimer( _resend_interval );
+            this->resendMessages();
         }
     }
 }
