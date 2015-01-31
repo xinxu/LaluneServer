@@ -79,13 +79,15 @@ void PvpGameServer::triggerUpdate( const boost::system::error_code& error ) {
 }
 
 void PvpGameServer::update( int millisec ) {
-    _game_time += millisec;
     
     std::string operations_string;
     GameMessage game_message;
     game_message.set_type( boids::GameMessage_MessageType_UserOperationPackage );
+	_wrapped_operations->set_timestamp(_game_time);
     game_message.mutable_user_op_package()->CopyFrom( *_wrapped_operations );
     game_message.SerializeToString( &operations_string );
+
+	_game_time += millisec;
     
     for( auto term : _terminals ) {
         PvpMessagePtr wrapped_message = PvpMessagePtr( new PvpMessage() );
