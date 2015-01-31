@@ -130,7 +130,7 @@ void PvpGameServer::handleMessage( PvpMessagePtr message, PvpTerminalPtr termina
                     
                     break;
                 default:
-                    user_op.set_timestamp( _game_time );
+                    //user_op.set_timestamp( _game_time );
                     _wrapped_operations->add_operations()->CopyFrom( user_op );
                     break;
             }
