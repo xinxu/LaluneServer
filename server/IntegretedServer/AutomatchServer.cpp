@@ -74,52 +74,52 @@ void AutoMatchServer::MatchRequest(NetLib_ServerSession_ptr sessionptr, const bo
 
 			ReplyMsg(opponent.first, boids::AUTO_MATCH_RESPONSE, response4user);
 			ReplyMsg(sessionptr, boids::AUTO_MATCH_RESPONSE, response4user);
-
-			return;
 		}
-
-		//产生一局的GameInitData，发给战斗服务
-		boids::CreateGame cg;
-		cg.set_game_id(game_id);
-		boids::GameInitData* init_data = cg.mutable_game_init_data();
-		addForce(init_data, opponent.second);
-		addForce(init_data, user_req.user_id());
-
-		LOGEVENTL("INFO", "match almost success. " << _ln("game_id") << game_id << _ln("player1") << opponent.second << _ln("player2") << user_req.user_id());
-
-		//找一台可用的战斗服务发过去
-		bool found = false;
-		auto it_list = servers_by_region.find(key.first);
-		if (it_list != servers_by_region.end())
+		else
 		{
-			auto& list = *it_list->second;
-			for (auto it_server = list.begin(); it_server != list.end(); ++it_server)
-			{
-				if (it_server->session->IsConnected())
-				{
-					GameInfo game;
-					game.server = it_server->id;
-					game.sessions[0] = opponent.first;
-					game.sessions[1] = sessionptr;
-					games.emplace(game_id, game);
-					ReplyMsg(it_server->session, boids::PVP_SERVER_CREATE_GAME_REQUEST, cg);
-					found = true;
+			//产生一局的GameInitData，发给战斗服务
+			boids::CreateGame cg;
+			cg.set_game_id(game_id);
+			boids::GameInitData* init_data = cg.mutable_game_init_data();
+			addForce(init_data, opponent.second);
+			addForce(init_data, user_req.user_id());
 
-					LOGEVENTL("INFO", "find a server. " << _ln("game_id") << game_id << _ln("server_ip") << it_server->id.Ip);
+			LOGEVENTL("INFO", "match almost success. " << _ln("game_id") << game_id << _ln("player1") << opponent.second << _ln("player2") << user_req.user_id());
+
+			//找一台可用的战斗服务发过去
+			bool found = false;
+			auto it_list = servers_by_region.find(key.first);
+			if (it_list != servers_by_region.end())
+			{
+				auto& list = *it_list->second;
+				for (auto it_server = list.begin(); it_server != list.end(); ++it_server)
+				{
+					if (it_server->session->IsConnected())
+					{
+						GameInfo game;
+						game.server = it_server->id;
+						game.sessions[0] = opponent.first;
+						game.sessions[1] = sessionptr;
+						games.emplace(game_id, game);
+						ReplyMsg(it_server->session, boids::PVP_SERVER_CREATE_GAME_REQUEST, cg);
+						found = true;
+
+						LOGEVENTL("INFO", "find a server. " << _ln("game_id") << game_id << _ln("server_ip") << it_server->id.Ip);
+					}
 				}
 			}
-		}
 
-		if (!found)
-		{
-			boids::MatchResponse response4user;
-			response4user.set_ret_value(boids::MatchResponse_Value_No_Server);
-			response4user.set_ret_info("没有找到可用的服务器");
+			if (!found)
+			{
+				boids::MatchResponse response4user;
+				response4user.set_ret_value(boids::MatchResponse_Value_No_Server);
+				response4user.set_ret_info("没有找到可用的服务器");
 
-			LOGEVENTL("INFO", "no server available. " << _ln("game_id") << game_id);
+				LOGEVENTL("INFO", "no server available. " << _ln("game_id") << game_id);
 
-			ReplyMsg(opponent.first, boids::AUTO_MATCH_RESPONSE, response4user);
-			ReplyMsg(sessionptr, boids::AUTO_MATCH_RESPONSE, response4user);
+				ReplyMsg(opponent.first, boids::AUTO_MATCH_RESPONSE, response4user);
+				ReplyMsg(sessionptr, boids::AUTO_MATCH_RESPONSE, response4user);
+			}
 		}
 
 		session2matchkey.erase(opponent.first);
