@@ -84,7 +84,9 @@ void PvpGameServer::update( int millisec ) {
     GameMessage game_message;
     game_message.set_type( boids::GameMessage_MessageType_UserOperationPackage );
 	_wrapped_operations->set_timestamp(_game_time);
-    game_message.mutable_user_op_package()->CopyFrom( *_wrapped_operations );
+	//std::cout << "_game_time: " << _game_time << _wrapped_operations->timestamp() << std::endl;
+    game_message.mutable_user_op_package()->CopyFrom( *_wrapped_operations ); 	
+	//std::cout << game_message.user_op_package().has_timestamp() << "setted _game_time: " << game_message.user_op_package().timestamp() << std::endl;
     game_message.SerializeToString( &operations_string );
 
 	_game_time += millisec;
