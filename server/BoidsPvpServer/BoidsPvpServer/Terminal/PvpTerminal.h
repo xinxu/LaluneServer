@@ -55,6 +55,7 @@ namespace boids {
         void triggerUpdate( const boost::system::error_code& error );
         
     private:
+        void handleToSendQueue();
         bool directSendMessage( PvpMessagePtr message );
         
         PvpMessagePtr getSentMessage( unsigned short seq_no );
@@ -80,12 +81,14 @@ namespace boids {
         unsigned short _ack_no;
         unsigned int _ack_bits;
         
+        unsigned short _max_seq_no_in_queue;
         unsigned short _seq_no;
         unsigned int _remote_ack_bits;
         
         unsigned int _max_resent_bit;
         
         MessageQueue<PvpMessagePtr> _sent_message;
+        MessageQueue<PvpMessagePtr> _to_send_messages;
     
         long _total_time_no_message;
     };

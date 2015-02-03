@@ -357,6 +357,6 @@ void PvpServer::deleteTerminal( PvpTerminalPtr terminal ) {
 std::string PvpServer::endpointToString( const boost::asio::ip::udp::endpoint& endpoint ) {
     std::stringstream ss;
     ss << endpoint.address().to_string() << ";" << endpoint.port() << ";" << endpoint.protocol().family() << ";" << endpoint.protocol().protocol() << ";" << endpoint.protocol().type();
-    std::cout << "endpoint str:" << ss.str() << std::endl;
+//    std::cout << "endpoint str:" << ss.str() << std::endl;
     return ss.str();
 }

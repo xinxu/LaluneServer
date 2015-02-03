@@ -72,21 +72,19 @@ void PvpGameServer::stop() {
 
 void PvpGameServer::triggerUpdate( const boost::system::error_code& error ) {
 	if (!error) {
-		_timer.expires_from_now(boost::posix_time::microseconds(1000000.0 / _frame_rate));
-		_timer.async_wait(boost::bind(&PvpGameServer::triggerUpdate, this, boost::asio::placeholders::error));
+		_timer.expires_from_now( boost::posix_time::microseconds( 1000000.0 / _frame_rate ) );
+		_timer.async_wait( boost::bind( &PvpGameServer::triggerUpdate, this, boost::asio::placeholders::error ) );
         this->update( int( 1000.0 / _frame_rate ) );
     }
 }
 
 void PvpGameServer::update( int millisec ) {
-    
     std::string operations_string;
     GameMessage game_message;
     game_message.set_type( boids::GameMessage_MessageType_UserOperationPackage );
 	_wrapped_operations->set_timestamp(_game_time);
-	//std::cout << "_game_time: " << _game_time << _wrapped_operations->timestamp() << std::endl;
-    game_message.mutable_user_op_package()->CopyFrom( *_wrapped_operations ); 	
-	//std::cout << game_message.user_op_package().has_timestamp() << "setted _game_time: " << game_message.user_op_package().timestamp() << std::endl;
+    std::cout << "send timestamp:" << _game_time << std::endl;
+    game_message.mutable_user_op_package()->CopyFrom( *_wrapped_operations );
     game_message.SerializeToString( &operations_string );
 
 	_game_time += millisec;
@@ -96,7 +94,8 @@ void PvpGameServer::update( int millisec ) {
         wrapped_message->set_data( operations_string );
         term->sendMessage( wrapped_message );
     }
-    _wrapped_operations->clear_operations();
+    _wrapped_operations->Clear();
+    
     if( _terminals.size() == 0 ) {
         this->stop();
         _pvp_server.lock()->deleteGame( _game_id );
@@ -104,7 +103,7 @@ void PvpGameServer::update( int millisec ) {
 }
 
 void PvpGameServer::handleMessage( PvpMessagePtr message, PvpTerminalPtr terminal ) {
-    std::cout << "received seq no:" << message->seq_no() << " message: " << message->data() << std::endl;
+//    std::cout << "received seq no:" << message->seq_no() << std::endl;
     GameMessage game_message;
     if( game_message.ParseFromString( message->data() ) ) {
         if( game_message.type() == GameMessage_MessageType_UserOperation ) {
