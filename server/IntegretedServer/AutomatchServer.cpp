@@ -32,6 +32,7 @@ void addForce(boids::GameInitData* init_data, const std::string& user_id) //è¿™ä
 	all_heros.push_back("vanhelsing");
 	all_heros.push_back("dracula");
 	all_heros.push_back("zeus");
+	all_heros.push_back("enchantress");
 
 	int r[HERO_PICK_COUNT];
 	for (unsigned i = 0; i < HERO_PICK_COUNT; ++i)
@@ -96,10 +97,11 @@ void AutoMatchServer::MatchRequest(NetLib_ServerSession_ptr sessionptr, const bo
 				{
 					if (it_server->session->IsConnected())
 					{
-						GameInfo game;
-						game.server = it_server->id;
-						game.sessions[0] = opponent.first;
-						game.sessions[1] = sessionptr;
+						GameInfo* game = new GameInfo();
+						game->server = it_server->id;
+						game->game_init_data = *init_data;
+						game->sessions[0] = opponent.first;
+						game->sessions[1] = sessionptr;
 						games.emplace(game_id, game);
 						ReplyMsg(it_server->session, boids::PVP_SERVER_CREATE_GAME_REQUEST, cg);
 						found = true;
@@ -149,16 +151,17 @@ void AutoMatchServer::CreateGameResponseGot(const boids::CreateGameResponse& res
 	auto it_game = games.find(res.game_id());
 	if (it_game != games.end())
 	{
-		auto& game = it_game->second;
+		auto game = it_game->second;
 		boids::MatchResponse res4user;
 		if (res.ret_value() == 0)
 		{
 			res4user.set_ret_value(boids::MatchResponse_Value_Success);
 			res4user.set_game_uuid(res.game_id());
-			res4user.set_game_server_ip(game.server.Ip);
-			res4user.set_game_server_port(game.server.port);
+			res4user.set_game_server_ip(game->server.Ip);
+			res4user.set_game_server_port(game->server.port);
+			*res4user.mutable_game_init_data() = game->game_init_data;
 
-			LOGEVENTL("INFO", "match success. " << _ln("game_id") << res.game_id() << _ln("server_ip") << game.server.Ip);
+			LOGEVENTL("INFO", "match success. " << _ln("game_id") << res.game_id() << _ln("server_ip") << game->server.Ip);
 		}
 		else
 		{
@@ -169,9 +172,10 @@ void AutoMatchServer::CreateGameResponseGot(const boids::CreateGameResponse& res
 		}
 		for (unsigned i = 0; i != 2; ++i)
 		{
-			ReplyMsg(game.sessions[i], boids::AUTO_MATCH_RESPONSE, res4user);
+			ReplyMsg(game->sessions[i], boids::AUTO_MATCH_RESPONSE, res4user);
 		}
 
+		delete game;
 		games.erase(it_game);
 	}
 	else

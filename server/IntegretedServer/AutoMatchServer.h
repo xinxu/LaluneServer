@@ -52,6 +52,7 @@ typedef std::pair<NetLib_ServerSession_ptr, std::string> WaitingUser; //session,
 struct GameInfo
 {
 	IpPort server;
+	boids::GameInitData game_init_data;
 	NetLib_ServerSession_ptr sessions[2]; //现在最多2人局，人多再数组开大点就好
 };
 
@@ -61,7 +62,7 @@ protected:
 	std::map<int, ServerList*> servers_by_region; //用于找服务器
 	std::map<MatchKey, WaitingUser> waiting_users; //用于匹配。以后如果有按积分匹配了，这里就要改，现在算是临时方案
 	std::map<NetLib_ServerSession_ptr, MatchKey> session2matchkey; //反查matchkey的表，用于取消匹配
-	std::map<std::string, GameInfo> games; //用于创建游戏成功后查游戏相关信息
+	std::map<std::string, GameInfo*> games; //用于创建游戏成功后查游戏相关信息
 
 public:
 	~AutoMatchServer();
