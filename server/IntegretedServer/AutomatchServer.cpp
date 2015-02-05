@@ -27,7 +27,7 @@ void addForce(boids::GameInitData* init_data, const std::string& user_id) //è¿™ä
 
 	std::vector<std::string> all_heros;
 	all_heros.push_back("saber");
-	all_heros.push_back("gandalf");
+	//all_heros.push_back("gandalf");
 	all_heros.push_back("panda");
 	all_heros.push_back("vanhelsing");
 	all_heros.push_back("dracula");
